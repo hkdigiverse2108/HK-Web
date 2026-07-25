@@ -34,7 +34,7 @@ export default function HeroSection({ isLoaded, overrideContent }) {
     // 1. Initialize Lenis Smooth Scroll
     const lenis = new Lenis({
       duration: 1.8, // Heavy, luxurious scroll inertia
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       wheelMultiplier: 0.9,
     });
@@ -145,21 +145,21 @@ export default function HeroSection({ isLoaded, overrideContent }) {
     // Lerp loop for fluid 60 FPS scrolling frame renders
     let frameRenderAnimFrameId;
     const updateFrame = () => {
-      const lerpFactor = 0.18; 
+      const lerpFactor = 0.18;
       const diff = targetFrameRef.current - currentFrameRef.current;
-      
+
       if (Math.abs(diff) > 0.01) {
         currentFrameRef.current += diff * lerpFactor;
-        
+
         if (currentFrameRef.current < 0) currentFrameRef.current = 0;
         if (currentFrameRef.current > totalFrames - 1) currentFrameRef.current = totalFrames - 1;
-        
+
         drawFrame(Math.round(currentFrameRef.current));
       }
 
       frameRenderAnimFrameId = requestAnimationFrame(updateFrame);
     };
-    
+
     updateFrame();
 
     return () => {
@@ -179,30 +179,30 @@ export default function HeroSection({ isLoaded, overrideContent }) {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ delay: 0.3 });
 
-      tl.fromTo('.reveal-label', 
+      tl.fromTo('.reveal-label',
         { y: '105%', opacity: 0 },
         { y: '0%', opacity: 1, duration: 1.2, ease: 'power4.out' }
       )
-      .fromTo('.reveal-title-1', 
-        { y: '105%' }, 
-        { y: '0%', duration: 1.4, ease: 'power4.out' },
-        '-=1.0'
-      )
-      .fromTo('.reveal-title-2', 
-        { y: '105%' }, 
-        { y: '0%', duration: 1.4, ease: 'power4.out' },
-        '-=1.2'
-      )
-      .fromTo('.reveal-desc', 
-        { opacity: 0, y: 25, filter: 'blur(8px)' }, 
-        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' },
-        '-=1.0'
-      )
-      .fromTo('.reveal-buttons', 
-        { opacity: 0, y: 20 }, 
-        { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },
-        '-=1.1'
-      );
+        .fromTo('.reveal-title-1',
+          { y: '105%' },
+          { y: '0%', duration: 1.4, ease: 'power4.out' },
+          '-=1.0'
+        )
+        .fromTo('.reveal-title-2',
+          { y: '105%' },
+          { y: '0%', duration: 1.4, ease: 'power4.out' },
+          '-=1.2'
+        )
+        .fromTo('.reveal-desc',
+          { opacity: 0, y: 25, filter: 'blur(8px)' },
+          { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.5, ease: 'power3.out' },
+          '-=1.0'
+        )
+        .fromTo('.reveal-buttons',
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' },
+          '-=1.1'
+        );
     });
 
     return () => ctx.revert();
@@ -218,11 +218,11 @@ export default function HeroSection({ isLoaded, overrideContent }) {
   };
 
   // Calculate alignment classes
-  const alignmentClass = hero.align === 'center' 
-    ? 'items-center text-center mx-auto' 
-    : hero.align === 'right' 
-    ? 'items-end text-right ml-auto' 
-    : 'items-start text-left';
+  const alignmentClass = hero.align === 'center'
+    ? 'items-center text-center mx-auto'
+    : hero.align === 'right'
+      ? 'items-end text-right ml-auto'
+      : 'items-start text-left';
 
   // Calculate overlay style
   const overlayStyle = {
@@ -231,8 +231,8 @@ export default function HeroSection({ isLoaded, overrideContent }) {
   };
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       style={containerStyle}
       className="relative w-full overflow-hidden bg-[#0c0c0c]"
     >
@@ -243,21 +243,21 @@ export default function HeroSection({ isLoaded, overrideContent }) {
       />
 
       {/* Cinematic Overlays */}
-      <div 
+      <div
         style={overlayStyle}
-        className="absolute inset-0 z-[1] pointer-events-none transition-all duration-300" 
+        className="absolute inset-0 z-[1] pointer-events-none transition-all duration-300"
       />
       <div className="cinematic-vignette" />
       <div className="noise-overlay" />
 
       {/* Bottom gradient: blends last frame into the #0c0c0c background of next section */}
-      <div 
+      <div
         className="absolute bottom-0 left-0 right-0 h-[25vh] z-[2] pointer-events-none"
         style={{ background: 'linear-gradient(to bottom, transparent 0%, #0c0c0c 100%)' }}
       />
 
       {/* Hero Content */}
-      <div 
+      <div
         ref={textContainerRef}
         className={`absolute inset-0 z-10 flex flex-col justify-center px-6 sm:px-12 md:px-20 lg:px-28 xl:px-36 max-w-6xl space-y-8 ${alignmentClass}`}
       >
@@ -289,7 +289,7 @@ export default function HeroSection({ isLoaded, overrideContent }) {
         <div className="reveal-buttons flex flex-wrap gap-5 items-center pt-2">
           {hero.primaryBtnText !== '' && (
             <Magnetic speed={1.2} tolerance={0.4}>
-              <a 
+              <a
                 href={hero.primaryBtnLink || '#contact'}
                 className="glass-btn px-10 py-5 rounded-full text-xs uppercase tracking-[0.2em] font-medium text-white shadow-md relative overflow-hidden group/btn cursor-pointer inline-block"
               >
@@ -301,7 +301,7 @@ export default function HeroSection({ isLoaded, overrideContent }) {
 
           {hero.secondaryBtnText !== '' && (
             <Magnetic speed={1.2} tolerance={0.4}>
-              <a 
+              <a
                 href={hero.secondaryBtnLink || '#portfolio'}
                 className="px-10 py-5 rounded-full text-xs uppercase tracking-[0.2em] font-medium text-neutral-400 hover:text-white transition-colors duration-300 cursor-pointer flex items-center gap-2 group/secondary inline-block"
               >
