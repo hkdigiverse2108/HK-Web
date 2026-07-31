@@ -5,6 +5,8 @@ const API_URL = import.meta.env.VITE_API_URL || '';
 
 export const DEFAULT_CONTENT = {
   hero: {
+    frameCount: 315,
+    mobileFrameCount: 848,
     label: "// EST. 2019 — A DIGITAL ATELIER",
     title1: "Architecting the",
     title2: "infinite digital.",
@@ -15,15 +17,15 @@ export const DEFAULT_CONTENT = {
     fontSize: "36px",
     imageSize: "56px",
     list: [
-      { name: "SAPHIRA", logo: "/images/logos/saphira_logo.png" },
-      { name: "NOVA", logo: "/images/logos/nova_logo.png" },
-      { name: "CORE", logo: "/images/logos/core_logo.png" },
-      { name: "AETHER", logo: "/images/logos/aether_logo.png" },
-      { name: "QUANTUM", logo: "/images/logos/quantum_logo.png" },
-      { name: "VERTEX", logo: "/images/logos/vertex_logo.png" },
-      { name: "HELIOS", logo: "/images/logos/helios_logo.png" },
-      { name: "ORION", logo: "/images/logos/orion_logo.png" },
-      { name: "AXIOM", logo: "/images/logos/axiom_logo.png" }
+      { name: "SAPHIRA", logo: "/media/images/logos/saphira_logo.png" },
+      { name: "NOVA", logo: "/media/images/logos/nova_logo.png" },
+      { name: "CORE", logo: "/media/images/logos/core_logo.png" },
+      { name: "AETHER", logo: "/media/images/logos/aether_logo.png" },
+      { name: "QUANTUM", logo: "/media/images/logos/quantum_logo.png" },
+      { name: "VERTEX", logo: "/media/images/logos/vertex_logo.png" },
+      { name: "HELIOS", logo: "/media/images/logos/helios_logo.png" },
+      { name: "ORION", logo: "/media/images/logos/orion_logo.png" },
+      { name: "AXIOM", logo: "/media/images/logos/axiom_logo.png" }
     ]
   },
   stats: [
@@ -40,7 +42,7 @@ export const DEFAULT_CONTENT = {
       description: "Creating high-fidelity, cinematic, and fast-loading web applications that captivate and convert.",
       tags: ["FRONTEND", "DESIGN"],
       href: "#service-web",
-      img: "/images/gallery/design_sprint.png",
+      img: "/media/images/gallery/design_sprint.png",
       gradient: "from-blue-500 via-indigo-500 to-cyan-500"
     },
     {
@@ -50,7 +52,7 @@ export const DEFAULT_CONTENT = {
       description: "Building bespoke native-feeling iOS and Android solutions with fluid gestures and offline sync.",
       tags: ["IOS", "ANDROID"],
       href: "#service-app",
-      img: "/images/gallery/digiverse_workspace.png",
+      img: "/media/images/gallery/digiverse_workspace.png",
       gradient: "from-emerald-500 via-teal-500 to-cyan-500"
     },
     {
@@ -60,7 +62,7 @@ export const DEFAULT_CONTENT = {
       description: "Constructing robust backend panels, CRM matrices, SaaS dashboards, and multi-tenant systems.",
       tags: ["CRM", "ERP"],
       href: "#service-custom-software",
-      img: "/images/quantum_banking.png",
+      img: "/media/images/quantum_banking.png",
       gradient: "from-amber-500 via-orange-500 to-yellow-500"
     },
     {
@@ -70,7 +72,7 @@ export const DEFAULT_CONTENT = {
       description: "Driving traffic and client acquisitions using data-backed strategies, SEO, and paid ads.",
       tags: ["SEO", "GROWTH"],
       href: "#service-digital-marketing",
-      img: "/images/gallery/launch_celebration.png",
+      img: "/media/images/gallery/launch_celebration.png",
       gradient: "from-rose-500 via-pink-500 to-purple-500"
     },
     {
@@ -80,7 +82,7 @@ export const DEFAULT_CONTENT = {
       description: "Crafting brand presence, graphic design guides, and content calendars to elevate recognition.",
       tags: ["BRANDING", "CONTENT"],
       href: "#service-social-media-management",
-      img: "/images/gallery/cinematic_review.png",
+      img: "/media/images/gallery/cinematic_review.png",
       gradient: "from-pink-500 via-fuchsia-500 to-violet-500"
     },
     {
@@ -90,7 +92,7 @@ export const DEFAULT_CONTENT = {
       description: "Developing automated AI agents, vector database search pipelines, and custom LLM integrations.",
       tags: ["LLM", "AGENTS"],
       href: "#service-ai-consulting",
-      img: "/images/gallery/ai_orchestrator.png",
+      img: "/media/images/gallery/ai_orchestrator.png",
       gradient: "from-purple-500 via-violet-500 to-indigo-500"
     },
     {
@@ -100,17 +102,17 @@ export const DEFAULT_CONTENT = {
       description: "Designing Cloud migrations, Docker orchestration files, hardened security, and CI/CD pipelines.",
       tags: ["CLOUD", "DEVOPS"],
       href: "#service-it-consulting",
-      img: "/images/gallery/hardware_calibration.png",
+      img: "/media/images/gallery/hardware_calibration.png",
       gradient: "from-sky-500 via-blue-500 to-indigo-500"
     }
   ],
   caseStudy: {
     show: true,
     client: "AeroCRM Aviation",
-    logo: "/images/logos/aerocrm_logo.png",
+    logo: "/media/images/logos/aerocrm_logo.png",
     title: "Custom Cloud CRM Platform",
     label: "Simulation [CRM.v1]",
-    image: "/images/gallery/digiverse_workspace.png",
+    image: "/media/images/gallery/digiverse_workspace.png",
     linkText: "View Case Study Details",
     linkHref: "#case-study",
     points: [
@@ -129,7 +131,7 @@ export const DEFAULT_CONTENT = {
         role: "VP of Engineering, Saphira Aviation",
         quote: "HariKrushn DigiVerse completely transformed our fleet tracking CRM. Their engineering precision, combined with a meticulous design language, gave us a product that is both cinematic and lightning-fast. They operate at the highest level of craftsmanship.",
         rating: 5,
-        avatar: "/images/gallery/avatar_alexander.png",
+        avatar: "/media/images/gallery/avatar_alexander.png",
         tag: "CUSTOM CRM",
         color: "from-amber-500/10 to-orange-500/5",
         glowColor: "rgba(245,158,11,0.25)",
@@ -141,7 +143,7 @@ export const DEFAULT_CONTENT = {
         role: "Co-Founder, Nova DeFi",
         quote: "Building a Web3 platform requires absolute trust and flawless UX. The team didn't just build our interfaces; they co-architected the user flow. Our transaction success rate increased by 40% after launching the new interface.",
         rating: 5,
-        avatar: "/images/gallery/avatar_elena.png",
+        avatar: "/media/images/gallery/avatar_elena.png",
         tag: "WEB3 PLATFORM",
         color: "from-purple-500/10 to-indigo-500/5",
         glowColor: "rgba(168,85,247,0.25)",
@@ -153,7 +155,7 @@ export const DEFAULT_CONTENT = {
         role: "Head of Product, Core Logistics",
         quote: "Managing a global supply chain demands real-time data visibility. HariKrushn Digiverse built an AI-driven predictive dispatch matrix that integrated seamlessly with our legacy database. Their work is a masterclass in modern systems integration.",
         rating: 5,
-        avatar: "/images/gallery/avatar_marcus.png",
+        avatar: "/media/images/gallery/avatar_marcus.png",
         tag: "AI LOGISTICS",
         color: "from-emerald-500/10 to-teal-500/5",
         glowColor: "rgba(16,185,129,0.25)",
@@ -203,12 +205,12 @@ export const DEFAULT_CONTENT = {
     }
   ],
   gallery: [
-    { title: "The Digiverse Workspace", category: "Studio", size: "col-span-2 row-span-1", image: "/images/gallery/digiverse_workspace.png" },
-    { title: "Design Sprint Session", category: "Team", size: "col-span-1 row-span-1", image: "/images/gallery/design_sprint.png" },
-    { title: "Hardware Calibration", category: "Equipment", size: "col-span-1 row-span-2", image: "/images/gallery/hardware_calibration.png" },
-    { title: "AI Orchestrator Architecture", category: "Engineering", size: "col-span-2 row-span-1", image: "/images/gallery/ai_orchestrator.png" },
-    { title: "Cinematic Review", category: "Studio", size: "col-span-1 row-span-1", image: "/images/gallery/cinematic_review.png" },
-    { title: "Launch Celebration", category: "Team", size: "col-span-2 row-span-1", image: "/images/gallery/launch_celebration.png" }
+    { title: "The Digiverse Workspace", category: "Studio", size: "col-span-2 row-span-1", image: "/media/images/gallery/digiverse_workspace.png" },
+    { title: "Design Sprint Session", category: "Team", size: "col-span-1 row-span-1", image: "/media/images/gallery/design_sprint.png" },
+    { title: "Hardware Calibration", category: "Equipment", size: "col-span-1 row-span-2", image: "/media/images/gallery/hardware_calibration.png" },
+    { title: "AI Orchestrator Architecture", category: "Engineering", size: "col-span-2 row-span-1", image: "/media/images/gallery/ai_orchestrator.png" },
+    { title: "Cinematic Review", category: "Studio", size: "col-span-1 row-span-1", image: "/media/images/gallery/cinematic_review.png" },
+    { title: "Launch Celebration", category: "Team", size: "col-span-2 row-span-1", image: "/media/images/gallery/launch_celebration.png" }
   ],
   site_settings: {
     logo_text: "HK DIGIVERSE",
@@ -243,7 +245,7 @@ export const DEFAULT_CONTENT = {
       { label: "Contact", href: "#contact", show: true }
     ],
     footer: {
-      logo_img: "/images/hk-logo.png",
+      logo_img: "/media/images/hk-logo.png",
       logo_text: "HARIKRUSHN DIGIVERSE LLP",
       description: "Architecting the infinite digital through precision engineering and editorial design.",
       address: "Silver Trade Center, 501 & 502, near Pragati IT Park, Mota Varachha, Surat, Gujarat 394101",
@@ -295,12 +297,12 @@ export const DEFAULT_CONTENT = {
       {name: "Impact", desc: "Aligning software decisions directly with measurable enterprise value."}
     ],
     workspace_rooms: [
-      {title: "The Digiverse Workspace", desc: "Ergonomic layout optimized for developer flow, equipped with dual 4K monitors.", img: "/images/gallery/digiverse_workspace.png", size: "col-span-2 row-span-1"},
-      {title: "Design Sprint Lounge", desc: "Collaborative sandbox where visual assets and wireframe mockups are mapped.", img: "/images/gallery/design_sprint.png", size: "col-span-1 row-span-1"},
-      {title: "Hardware Calibration Lab", desc: "Testing and deploying edge-AI microcomputers and localized sensory controllers.", img: "/images/gallery/hardware_calibration.png", size: "col-span-1 row-span-2"},
-      {title: "AI Orchestration Suite", desc: "Servers dedicated to caching prompts and hosting sandboxed local LLM loops.", img: "/images/gallery/ai_orchestrator.png", size: "col-span-2 row-span-1"},
-      {title: "Cinematic Review Deck", desc: "High-fidelity screens configured to audit front-end animations at 120 FPS.", img: "/images/gallery/cinematic_review.png", size: "col-span-1 row-span-1"},
-      {title: "Launch Celebration Area", desc: "Recreational space dedicated to team milestones and collaborative growth.", img: "/images/gallery/launch_celebration.png", size: "col-span-2 row-span-1"}
+      {title: "The Digiverse Workspace", desc: "Ergonomic layout optimized for developer flow, equipped with dual 4K monitors.", img: "/media/images/gallery/digiverse_workspace.png", size: "col-span-2 row-span-1"},
+      {title: "Design Sprint Lounge", desc: "Collaborative sandbox where visual assets and wireframe mockups are mapped.", img: "/media/images/gallery/design_sprint.png", size: "col-span-1 row-span-1"},
+      {title: "Hardware Calibration Lab", desc: "Testing and deploying edge-AI microcomputers and localized sensory controllers.", img: "/media/images/gallery/hardware_calibration.png", size: "col-span-1 row-span-2"},
+      {title: "AI Orchestration Suite", desc: "Servers dedicated to caching prompts and hosting sandboxed local LLM loops.", img: "/media/images/gallery/ai_orchestrator.png", size: "col-span-2 row-span-1"},
+      {title: "Cinematic Review Deck", desc: "High-fidelity screens configured to audit front-end animations at 120 FPS.", img: "/media/images/gallery/cinematic_review.png", size: "col-span-1 row-span-1"},
+      {title: "Launch Celebration Area", desc: "Recreational space dedicated to team milestones and collaborative growth.", img: "/media/images/gallery/launch_celebration.png", size: "col-span-2 row-span-1"}
     ],
     personal_letter: {
       eyebrow: "// Personal Letter",
@@ -356,12 +358,12 @@ export const DEFAULT_CONTENT = {
     }
   },
   our_culture: [
-    {title: "Continuous Learning", desc: "We encourage curiosity and continuous learning. From new technologies to emerging trends, we invest in our team to stay future-ready.", img: "/images/culture/learning.png", icon: "learning", sort_order: 0, status: "published"},
-    {title: "Collaborative Environment", desc: "We believe the best ideas come from working together. Open communication and teamwork are at the heart of everything we do.", img: "/images/culture/collab.png", icon: "collab", sort_order: 1, status: "published"},
-    {title: "Celebrate Every Moment", desc: "From birthdays to big wins, we celebrate every milestone together. Because memories built together, last forever.", img: "/images/culture/celebrate.png", icon: "celebrate", sort_order: 2, status: "published"},
-    {title: "Client Success Mindset", desc: "Our clients' goals become our mission. We focus on delivering real value and long-term growth through every solution we build.", img: "/images/culture/client.png", icon: "client", sort_order: 3, status: "published"},
-    {title: "Ownership & Accountability", desc: "We take pride in ownership. Every team member is empowered to take initiative and deliver quality with integrity.", img: "/images/culture/ownership.png", icon: "ownership", sort_order: 4, status: "published"},
-    {title: "Grow Without Limits", desc: "We provide the platform, resources, and freedom to grow. Your progress drives our progress. Together, we scale new heights.", img: "/images/culture/grow.png", icon: "grow", sort_order: 5, status: "published"}
+    {title: "Continuous Learning", desc: "We encourage curiosity and continuous learning. From new technologies to emerging trends, we invest in our team to stay future-ready.", img: "/media/images/culture/learning.png", icon: "learning", sort_order: 0, status: "published"},
+    {title: "Collaborative Environment", desc: "We believe the best ideas come from working together. Open communication and teamwork are at the heart of everything we do.", img: "/media/images/culture/collab.png", icon: "collab", sort_order: 1, status: "published"},
+    {title: "Celebrate Every Moment", desc: "From birthdays to big wins, we celebrate every milestone together. Because memories built together, last forever.", img: "/media/images/culture/celebrate.png", icon: "celebrate", sort_order: 2, status: "published"},
+    {title: "Client Success Mindset", desc: "Our clients' goals become our mission. We focus on delivering real value and long-term growth through every solution we build.", img: "/media/images/culture/client.png", icon: "client", sort_order: 3, status: "published"},
+    {title: "Ownership & Accountability", desc: "We take pride in ownership. Every team member is empowered to take initiative and deliver quality with integrity.", img: "/media/images/culture/ownership.png", icon: "ownership", sort_order: 4, status: "published"},
+    {title: "Grow Without Limits", desc: "We provide the platform, resources, and freedom to grow. Your progress drives our progress. Together, we scale new heights.", img: "/media/images/culture/grow.png", icon: "grow", sort_order: 5, status: "published"}
   ],
   people: [
     // Founders (Level 1)
@@ -432,7 +434,7 @@ export const DEFAULT_CONTENT = {
       date: "JUNE 24, 2026",
       category: "ENGINEERING",
       readTime: "5 MIN READ",
-      image: "/images/gallery/ai_orchestrator.png",
+      image: "/media/images/gallery/ai_orchestrator.png",
       author: "Radhe Patel (CEO)",
       longContent: [
         "At HariKrushn DigiVerse, we frequently consult with enterprise firms running legacy monolithic codebases. Over time, these platforms struggle to maintain performance under high concurrent user load, leading to database lockups and downtime. In this deep dive, we walk through our engineering strategy for decomposing a core monolithic financial transactional ledger into a fully distributed microservices mesh.",
@@ -454,7 +456,7 @@ export const DEFAULT_CONTENT = {
       date: "MAY 18, 2026",
       category: "DESIGN",
       readTime: "4 MIN READ",
-      image: "/images/gallery/cinematic_review.png",
+      image: "/media/images/gallery/cinematic_review.png",
       author: "Prince Patel (Partner)",
       longContent: [
         "Traditional web development prioritizes static layout grids. However, high-end brands require digital environments that evoke emotion, establish premium status, and tell a memorable visual story. Cinematic web design bridges this gap by merging classic layout logic with WebGL graphics, custom typography matrices, and dynamic scroll physics.",
@@ -476,7 +478,7 @@ export const DEFAULT_CONTENT = {
       date: "APRIL 02, 2026",
       category: "AI & SYSTEMS",
       readTime: "7 MIN READ",
-      image: "/images/gallery/digiverse_workspace.png",
+      image: "/media/images/gallery/digiverse_workspace.png",
       author: "Radhe Patel (CEO)",
       longContent: [
         "Integrating Large Language Models (LLMs) into customer relationship platforms (CRMs) has evolved beyond basic chatbot widgets. Today's enterprise applications require autonomous AI agents capable of querying live databases, executing workflows, and preparing data briefs without human intervention.",
@@ -500,7 +502,7 @@ export const DEFAULT_CONTENT = {
       category: "platform",
       description: "An automation-rich CRM platform designed for global distribution and supply chains, featuring real-time analytical logs, automated email campaigns, and role-based dashboards.",
       tech: ["React", "FastAPI", "Docker", "PostgreSQL"],
-      img: "/images/casestudies/corelogistics.png",
+      img: "/media/images/casestudies/corelogistics.png",
       color: "emerald",
       accentColor: "#10b981",
       sort_order: 0,
@@ -513,7 +515,7 @@ export const DEFAULT_CONTENT = {
       category: "ai",
       description: "An automated developer metrics platform powered by custom LLM pipelines, pulling analytics directly from vector search and providing AI-generated code review summaries.",
       tech: ["Python", "Vector DB", "FastAPI", "LangChain"],
-      img: "/images/casestudies/novadefi.png",
+      img: "/media/images/casestudies/novadefi.png",
       color: "purple",
       accentColor: "#a855f7",
       sort_order: 1,
@@ -526,7 +528,7 @@ export const DEFAULT_CONTENT = {
       category: "platform",
       description: "A responsive fintech dashboard delivering rapid metric updates, instant payment gates, multi-tenant scaling, and real-time portfolio tracking with Stripe integration.",
       tech: ["React", "Stripe API", "AWS", "Redis"],
-      img: "/images/casestudies/vesper.png",
+      img: "/media/images/casestudies/vesper.png",
       color: "amber",
       accentColor: "#f59e0b",
       sort_order: 2,
@@ -544,7 +546,7 @@ export const DEFAULT_CONTENT = {
       name: "AI Setu",
       tagline: "Bridging India to AI",
       status: "Active",
-      img: "/images/ventures/aisetu.png",
+      img: "/media/images/ventures/aisetu.png",
       color: "cyan",
       accentColor: "#06b6d4",
       glowColor: "rgba(6,182,212,0.20)",
@@ -778,7 +780,7 @@ export const DEFAULT_CONTENT = {
       challenge: "Vesper needed a property showcase that felt like a luxury brand experience, not a generic listing site. Their existing platform had poor mobile performance and lacked visual storytelling.",
       solution: "Built a custom canvas-based scroll scrub engine with optimized frame preloading, lazy-loaded 4K imagery, and GPU-accelerated transitions. Integrated interactive floor plans and virtual walkthrough modules.",
       tech: ["React", "Canvas API", "GSAP", "Vite", "Three.js"],
-      img: "/images/casestudies/vesper.png",
+      img: "/media/images/casestudies/vesper.png",
       metrics: [
         { label: "Conversion Rate", value: "+142%" },
         { label: "Avg. Time on Page", value: "4m 12s" },
@@ -800,7 +802,7 @@ export const DEFAULT_CONTENT = {
       challenge: "AeroCRM was managing fleet operations across spreadsheets and disconnected tools, causing booking conflicts, delayed communications, and zero audit trails.",
       solution: "Architected a unified CRM with real-time booking conflict detection, automated email/SMS triggers, role-based dashboards, and end-to-end encrypted data backups running every 6 hours.",
       tech: ["React", "FastAPI", "PostgreSQL", "Docker", "Redis"],
-      img: "/images/casestudies/aerocrm.png",
+      img: "/media/images/casestudies/aerocrm.png",
       metrics: [
         { label: "Operational Efficiency", value: "+400%" },
         { label: "Booking Failures", value: "0%" },
@@ -822,7 +824,7 @@ export const DEFAULT_CONTENT = {
       challenge: "Nova's existing DeFi interface had a 60% user drop-off at the wallet connection step. Complex transaction flows confused first-time crypto users.",
       solution: "Redesigned the entire UX flow with progressive disclosure patterns, one-click wallet connect, real-time gas estimation, and visual transaction confirmations with animated feedback.",
       tech: ["Next.js", "Ethers.js", "Solidity", "The Graph", "Framer Motion"],
-      img: "/images/casestudies/novadefi.png",
+      img: "/media/images/casestudies/novadefi.png",
       metrics: [
         { label: "Transaction Success", value: "+40%" },
         { label: "User Drop-off", value: "-60%" },
@@ -844,7 +846,7 @@ export const DEFAULT_CONTENT = {
       challenge: "Core Logistics was losing 20% of delivery efficiency due to manual route planning and lack of real-time visibility into fleet locations and warehouse stock levels.",
       solution: "Built an AI route optimizer using historical traffic and weather data, integrated GPS fleet tracking with geofence alerts, and automated inventory scanning with barcode/QR integration.",
       tech: ["Python", "TensorFlow", "React", "Google Maps API", "PostgreSQL"],
-      img: "/images/casestudies/corelogistics.png",
+      img: "/media/images/casestudies/corelogistics.png",
       metrics: [
         { label: "Delivery Efficiency", value: "+38%" },
         { label: "Fuel Cost Savings", value: "12L/yr" },
@@ -866,7 +868,7 @@ export const DEFAULT_CONTENT = {
       challenge: "Pulse MedTech needed a patient management system that met strict HIPAA compliance while being intuitive enough for elderly patients to navigate without assistance.",
       solution: "Created an accessibility-first portal with large-text modes, voice-guided navigation, E2E encrypted data at rest and in transit, and automated appointment reminders via SMS and WhatsApp.",
       tech: ["React", "Express", "MongoDB", "WebGL", "Twilio"],
-      img: "/images/casestudies/pulsehealth.png",
+      img: "/media/images/casestudies/pulsehealth.png",
       metrics: [
         { label: "Patient Satisfaction", value: "4.9/5" },
         { label: "Booking Efficiency", value: "+200%" },
@@ -888,7 +890,7 @@ export const DEFAULT_CONTENT = {
       challenge: "LearnVerse was using Zoom for classes and Google Sheets for tracking, losing student engagement data and unable to personalize the learning experience.",
       solution: "Developed a custom LMS with WebRTC-based live classrooms, adaptive quizzing that adjusts difficulty based on performance, gamified progress dashboards, and auto-generated PDF certificates.",
       tech: ["Next.js", "WebRTC", "FastAPI", "PostgreSQL", "Redis"],
-      img: "/images/casestudies/learnverse.png",
+      img: "/media/images/casestudies/learnverse.png",
       metrics: [
         { label: "Student Retention", value: "+65%" },
         { label: "Course Completion", value: "94%" },
@@ -908,8 +910,8 @@ export const DEFAULT_CONTENT = {
       title: 'Fintech & Banking',
       description: 'Securing transaction ledgers, analytics engines, and automated KYC pipelines.',
       detailDescription: 'We build high-concurrency ledger databases, encrypted trading platforms, and automated compliance routing networks capable of processing millions of transactions securely. We implement zero-latency transaction locking and strict audit logs.',
-      listImg: '/images/industries/fintech.png',
-      detailImg: '/images/industries/fintech.png',
+      listImg: '/media/images/industries/fintech.png',
+      detailImg: '/media/images/industries/fintech.png',
       bg: 'from-emerald-500/10 to-teal-500/10',
       colorClass: 'text-emerald-400',
       borderClass: 'border-emerald-500/20',
@@ -926,8 +928,8 @@ export const DEFAULT_CONTENT = {
       title: 'Real Estate & Properties',
       description: 'Virtual walkthrough platforms, interactive mapping, and organizer systems.',
       detailDescription: 'We craft immersive digital walkthrough experiences, responsive vector-based property maps, and centralized CRM dashboards to streamline buyer-agent interactions and automate lead pipelines.',
-      listImg: '/images/industries/realestate.png',
-      detailImg: '/images/industries/realestate.png',
+      listImg: '/media/images/industries/realestate.png',
+      detailImg: '/media/images/industries/realestate.png',
       bg: 'from-blue-500/10 to-indigo-500/10',
       colorClass: 'text-blue-400',
       borderClass: 'border-blue-500/20',
@@ -944,8 +946,8 @@ export const DEFAULT_CONTENT = {
       title: 'Luxury E-Commerce',
       description: 'Immersive branding layouts, high-performance checkouts, and custom payment systems.',
       detailDescription: 'We develop ultra-premium headless shopping environments featuring 3D product previews, optimized image pipelines, and customized multi-currency Stripe checkouts that eliminate cart drop-offs.',
-      listImg: '/images/industries/ecommerce.png',
-      detailImg: '/images/industries/ecommerce.png',
+      listImg: '/media/images/industries/ecommerce.png',
+      detailImg: '/media/images/industries/ecommerce.png',
       bg: 'from-amber-500/10 to-orange-500/10',
       colorClass: 'text-amber-400',
       borderClass: 'border-amber-500/20',
@@ -962,8 +964,8 @@ export const DEFAULT_CONTENT = {
       title: 'Healthcare & Biotech',
       description: 'Doctor-patient portals, digital records grids, and encrypted backups.',
       detailDescription: 'We construct secure clinical dashboards, HIPAA-compliant patient communication networks, and end-to-end encrypted backup systems to protect patient data pipelines.',
-      listImg: '/images/industries/healthcare.png',
-      detailImg: '/images/industries/healthcare.png',
+      listImg: '/media/images/industries/healthcare.png',
+      detailImg: '/media/images/industries/healthcare.png',
       bg: 'from-sky-500/10 to-cyan-500/10',
       colorClass: 'text-sky-400',
       borderClass: 'border-sky-500/20',
@@ -980,8 +982,8 @@ export const DEFAULT_CONTENT = {
       title: 'AI SaaS Platforms',
       description: 'SaaS landing structures, multi-tenant databases, and custom agent integrations.',
       detailDescription: 'We engineer multi-tenant workspaces, custom semantic search caching networks, and automated prompt monitoring pipelines designed to reduce token cost overheads and scale agent runtimes.',
-      listImg: '/images/industries/aisaas.png',
-      detailImg: '/images/industries/aisaas.png',
+      listImg: '/media/images/industries/aisaas.png',
+      detailImg: '/media/images/industries/aisaas.png',
       bg: 'from-purple-500/10 to-indigo-500/10',
       colorClass: 'text-purple-400',
       borderClass: 'border-purple-500/20',
@@ -998,8 +1000,8 @@ export const DEFAULT_CONTENT = {
       title: 'Education & EdTech',
       description: 'Learning management systems, live classroom portals, and student analytics dashboards.',
       detailDescription: 'We build scalable LMS platforms with real-time video streaming, adaptive quiz engines, progress tracking dashboards, and automated certificate generation pipelines for universities and coaching institutes.',
-      listImg: '/images/industries/education.png',
-      detailImg: '/images/industries/education.png',
+      listImg: '/media/images/industries/education.png',
+      detailImg: '/media/images/industries/education.png',
       bg: 'from-rose-500/10 to-pink-500/10',
       colorClass: 'text-rose-400',
       borderClass: 'border-rose-500/20',
@@ -1016,8 +1018,8 @@ export const DEFAULT_CONTENT = {
       title: 'Logistics & Supply Chain',
       description: 'Fleet tracking systems, warehouse automation, and shipment routing optimizers.',
       detailDescription: 'We develop GPS-integrated fleet monitoring dashboards, automated warehouse inventory scanners, and intelligent route optimization engines that cut delivery times and fuel costs across distribution networks.',
-      listImg: '/images/industries/logistics.png',
-      detailImg: '/images/industries/logistics.png',
+      listImg: '/media/images/industries/logistics.png',
+      detailImg: '/media/images/industries/logistics.png',
       bg: 'from-orange-500/10 to-red-500/10',
       colorClass: 'text-orange-400',
       borderClass: 'border-orange-500/20',
@@ -1034,8 +1036,8 @@ export const DEFAULT_CONTENT = {
       title: 'Hospitality & Travel',
       description: 'Hotel booking engines, guest experience apps, and revenue management tools.',
       detailDescription: 'We craft elegant reservation platforms, guest concierge mobile applications, dynamic pricing engines, and review aggregation dashboards that help hospitality brands deliver five-star digital experiences.',
-      listImg: '/images/industries/hospitality.png',
-      detailImg: '/images/industries/hospitality.png',
+      listImg: '/media/images/industries/hospitality.png',
+      detailImg: '/media/images/industries/hospitality.png',
       bg: 'from-teal-500/10 to-emerald-500/10',
       colorClass: 'text-teal-400',
       borderClass: 'border-teal-500/20',

@@ -2286,7 +2286,7 @@ export default function AdminPanel() {
   // Form view before authorization
   if (!authorized) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-black text-[#e5e2e1] px-6">
+      <div key="admin-auth-screen" translate="no" className="notranslate flex items-center justify-center min-h-screen bg-black text-[#e5e2e1] px-6">
         <div className="w-full max-w-md bg-[#0c0c0c] border border-white/5 p-8 rounded-2xl shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(255,255,255,0.01),transparent)] pointer-events-none" />
           
@@ -2342,7 +2342,7 @@ export default function AdminPanel() {
 
   if (loadingDraft) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-black text-[#e5e2e1]">
+      <div key="admin-loading-screen" translate="no" className="notranslate flex flex-col items-center justify-center min-h-screen bg-black text-[#e5e2e1]">
         <span className="font-mono text-xs text-neutral-400 animate-pulse">// LOADING WORKSPACE SCHEMATICS...</span>
       </div>
     );
@@ -2449,7 +2449,7 @@ export default function AdminPanel() {
   ];
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-black text-[#e5e2e1] overflow-hidden select-none">
+    <div key="admin-main-screen" translate="no" className="notranslate flex flex-col lg:flex-row h-screen bg-black text-[#e5e2e1] overflow-hidden select-none">
       
       {/* LEFT PANEL: CMS CONTROLS (Resizable on desktop, full width on mobile) */}
       <aside 
@@ -2826,7 +2826,7 @@ export default function AdminPanel() {
                   </div>
 
                   <div className="p-4 bg-white/[0.01] border border-white/5 rounded-xl space-y-3">
-                    <label className="font-mono text-[8px] uppercase tracking-widest text-neutral-400 block">Dynamic Canvas Frame Count</label>
+                    <label className="font-mono text-[8px] uppercase tracking-widest text-neutral-400 block">Desktop Canvas Frame Count</label>
                     <div className="flex items-center gap-4">
                       <input
                         type="number"
@@ -2835,7 +2835,22 @@ export default function AdminPanel() {
                         className="w-24 px-4 py-2.5 bg-black border border-white/10 rounded-lg text-white font-mono text-xs focus:outline-none"
                       />
                       <span className="font-mono text-[9px] text-neutral-500 leading-relaxed">
-                        Determines the number of scroll images cached (typically 100-500 frames).
+                        Determines the number of scroll images cached for desktop (typically 100-500 frames).
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-white/[0.01] border border-white/5 rounded-xl space-y-3">
+                    <label className="font-mono text-[8px] uppercase tracking-widest text-neutral-400 block">Mobile Canvas Frame Count</label>
+                    <div className="flex items-center gap-4">
+                      <input
+                        type="number"
+                        value={currentContent.hero.mobileFrameCount || 848}
+                        onChange={(e) => updateHeroField('mobileFrameCount', parseInt(e.target.value) || 848)}
+                        className="w-24 px-4 py-2.5 bg-black border border-white/10 rounded-lg text-white font-mono text-xs focus:outline-none"
+                      />
+                      <span className="font-mono text-[9px] text-neutral-500 leading-relaxed">
+                        Determines the number of scroll images cached for mobile (typically 100-1000 frames).
                       </span>
                     </div>
                   </div>

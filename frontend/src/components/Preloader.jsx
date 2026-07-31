@@ -12,7 +12,10 @@ export default function Preloader({ onComplete }) {
 
   useEffect(() => {
     isMountedRef.current = true;
-    const totalFrames = (content && content.hero && content.hero.frameCount) || 315;
+    const isMobile = window.innerWidth < 768;
+    const totalFrames = isMobile
+      ? (content && content.hero && content.hero.mobileFrameCount) || 848
+      : (content && content.hero && content.hero.frameCount) || 315;
     const frames = [];
     const images = [];
     let loadedCount = 0;
@@ -36,7 +39,7 @@ export default function Preloader({ onComplete }) {
       if (loadedCount === totalFrames) {
         // Expose preloaded frame Image elements globally
         window.preloadedFrames = frames;
-        
+
         // Ensure fonts are loaded before dissolving, with a safeguard timeout
         const startDissolve = () => {
           if (!isMountedRef.current) return;
@@ -77,7 +80,8 @@ export default function Preloader({ onComplete }) {
     for (let i = 0; i < totalFrames; i++) {
       const img = new Image();
       const frameNum = i.toString().padStart(4, '0');
-      img.src = `/images/frames/frame_${frameNum}.jpg`;
+      const dirName = isMobile ? 'frames_mobile' : 'frames';
+      img.src = `/media/images/${dirName}/frame_${frameNum}.jpg`;
       img.onload = () => {
         if (!isMountedRef.current) return;
         frames[i] = img;

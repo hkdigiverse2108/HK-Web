@@ -6,6 +6,7 @@ import HeroSection from './sections/HeroSection';
 import ScrollIndicator from './components/ScrollIndicator';
 import CustomCursor from './components/CustomCursor';
 import Footer from './components/Footer';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Import Provider
 import { ContentProvider } from './context/ContentContext';
@@ -270,7 +271,11 @@ function App() {
     }
     switch (baseHash) {
       case '#admin':
-        return <AdminPanel />;
+        return (
+          <ErrorBoundary>
+            <AdminPanel />
+          </ErrorBoundary>
+        );
       case '#our-story':
         return <OurStory />;
       case '#our-people':
@@ -349,13 +354,15 @@ function App() {
           </main>
         ) : isAdminOrPreview ? (
           /* Fullscreen Admin Panel or Preview container */
-          renderPageContent()
+          <div key={`admin-preview-wrapper-${baseHash}`} translate="no" className="notranslate w-full min-h-screen">
+            {renderPageContent()}
+          </div>
         ) : (
           /* Home Page Cinematic Hero & Sections */
-          <>
+          <div key="home-page-wrapper" className="w-full">
             <HeroSection isLoaded={isLoaded} />
             <HomeSections />
-          </>
+          </div>
         )}
 
         {!isAdminOrPreview && <Footer />}

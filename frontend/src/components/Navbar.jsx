@@ -97,7 +97,9 @@ export default function Navbar() {
         sessionStorage.setItem('adminPassword', passwordInput);
         setShowAuthModal(false);
         setPasswordInput('');
-        window.location.hash = '#admin';
+        setTimeout(() => {
+          window.location.hash = '#admin';
+        }, 50);
       } else {
         const errData = await res.json();
         setAuthError(errData.detail || 'Invalid credentials');

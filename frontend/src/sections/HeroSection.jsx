@@ -17,7 +17,10 @@ export default function HeroSection({ isLoaded, overrideContent }) {
   const textContainerRef = useRef(null);
   const [framesAvailable, setFramesAvailable] = useState(false);
 
-  const totalFrames = hero.frameCount || 315;
+  const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+  const totalFrames = isMobile 
+    ? (hero.mobileFrameCount || 848) 
+    : (hero.frameCount || 315);
   const targetFrameRef = useRef(0);
   const currentFrameRef = useRef(0);
 
@@ -132,7 +135,7 @@ export default function HeroSection({ isLoaded, overrideContent }) {
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
-            end: "+=120%",
+            end: "+=30%",
             scrub: true,
           },
           opacity: 0,
@@ -164,11 +167,14 @@ export default function HeroSection({ isLoaded, overrideContent }) {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
-      lenis.destroy();
+      try {
+        ScrollTrigger.getAll().forEach(t => t.kill(true));
+        ctx.revert();
+      } catch {}
+      if (lenis) lenis.destroy();
       gsap.ticker.remove(tickerUpdate);
       if (animFrameId) cancelAnimationFrame(animFrameId);
       if (frameRenderAnimFrameId) cancelAnimationFrame(frameRenderAnimFrameId);
-      ctx.revert(); // Reverts and cleans up all animations/ScrollTriggers created inside the context
     };
   }, [isLoaded, framesAvailable]);
 

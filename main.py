@@ -12,6 +12,8 @@ except ImportError:
     cv2 = None
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Header
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -139,7 +141,7 @@ DEFAULT_CASE_STUDIES = [
     "challenge": "Vesper needed a property showcase that felt like a luxury brand experience, not a generic listing site. Their existing platform had poor mobile performance and lacked visual storytelling.",
     "solution": "Built a custom canvas-based scroll scrub engine with optimized frame preloading, lazy-loaded 4K imagery, and GPU-accelerated transitions. Integrated interactive floor plans and virtual walkthrough modules.",
     "tech": ["React", "Canvas API", "GSAP", "Vite", "Three.js"],
-    "img": "/images/casestudies/vesper.png",
+    "img": "/media/images/casestudies/vesper.png",
     "metrics": [
       { "label": "Conversion Rate", "value": "+142%" },
       { "label": "Avg. Time on Page", "value": "4m 12s" },
@@ -159,7 +161,7 @@ DEFAULT_CASE_STUDIES = [
     "challenge": "AeroCRM was managing fleet operations across spreadsheets and disconnected tools, causing booking conflicts, delayed communications, and zero audit trails.",
     "solution": "Architected a unified CRM with real-time booking conflict detection, automated email/SMS triggers, role-based dashboards, and end-to-end encrypted data backups running every 6 hours.",
     "tech": ["React", "FastAPI", "PostgreSQL", "Docker", "Redis"],
-    "img": "/images/casestudies/aerocrm.png",
+    "img": "/media/images/casestudies/aerocrm.png",
     "metrics": [
       { "label": "Operational Efficiency", "value": "+400%" },
       { "label": "Booking Failures", "value": "0%" },
@@ -179,7 +181,7 @@ DEFAULT_CASE_STUDIES = [
     "challenge": "Nova's existing DeFi interface had a 60% user drop-off at the wallet connection step. Complex transaction flows confused first-time crypto users.",
     "solution": "Redesigned the entire UX flow with progressive disclosure patterns, one-click wallet connect, real-time gas estimation, and visual transaction confirmations with animated feedback.",
     "tech": ["Next.js", "Ethers.js", "Solidity", "The Graph", "Framer Motion"],
-    "img": "/images/casestudies/novadefi.png",
+    "img": "/media/images/casestudies/novadefi.png",
     "metrics": [
       { "label": "Transaction Success", "value": "+40%" },
       { "label": "User Drop-off", "value": "-60%" },
@@ -199,7 +201,7 @@ DEFAULT_CASE_STUDIES = [
     "challenge": "Core Logistics was losing 20% of delivery efficiency due to manual route planning and lack of real-time visibility into fleet locations and warehouse stock levels.",
     "solution": "Built an AI route optimizer using historical traffic and weather data, integrated GPS fleet tracking with geofence alerts, and automated inventory scanning with barcode/QR integration.",
     "tech": ["Python", "TensorFlow", "React", "Google Maps API", "PostgreSQL"],
-    "img": "/images/casestudies/corelogistics.png",
+    "img": "/media/images/casestudies/corelogistics.png",
     "metrics": [
       { "label": "Delivery Efficiency", "value": "+38%" },
       { "label": "Fuel Cost Savings", "value": "12L/yr" },
@@ -219,7 +221,7 @@ DEFAULT_CASE_STUDIES = [
     "challenge": "Pulse MedTech needed a patient management system that met strict HIPAA compliance while being intuitive enough for elderly patients to navigate without assistance.",
     "solution": "Created an accessibility-first portal with large-text modes, voice-guided navigation, E2E encrypted data at rest and in transit, and automated appointment reminders via SMS and WhatsApp.",
     "tech": ["React", "Express", "MongoDB", "WebGL", "Twilio"],
-    "img": "/images/casestudies/pulsehealth.png",
+    "img": "/media/images/casestudies/pulsehealth.png",
     "metrics": [
       { "label": "Patient Satisfaction", "value": "4.9/5" },
       { "label": "Booking Efficiency", "value": "+200%" },
@@ -239,7 +241,7 @@ DEFAULT_CASE_STUDIES = [
     "challenge": "LearnVerse was using Zoom for classes and Google Sheets for tracking, losing student engagement data and unable to personalize the learning experience.",
     "solution": "Developed a custom LMS with WebRTC-based live classrooms, adaptive quizzing that adjusts difficulty based on performance, gamified progress dashboards, and auto-generated PDF certificates.",
     "tech": ["Next.js", "WebRTC", "FastAPI", "PostgreSQL", "Redis"],
-    "img": "/images/casestudies/learnverse.png",
+    "img": "/media/images/casestudies/learnverse.png",
     "metrics": [
       { "label": "Student Retention", "value": "+65%" },
       { "label": "Course Completion", "value": "94%" },
@@ -284,8 +286,8 @@ DEFAULT_INDUSTRIES = [
     "title": "Fintech & Banking",
     "description": "Securing transaction ledgers, analytics engines, and automated KYC pipelines.",
     "detailDescription": "We build high-concurrency ledger databases, encrypted trading platforms, and automated compliance routing networks capable of processing millions of transactions securely. We implement zero-latency transaction locking and strict audit logs.",
-    "listImg": "/images/industries/fintech.png",
-    "detailImg": "/images/industries/fintech.png",
+    "listImg": "/media/images/industries/fintech.png",
+    "detailImg": "/media/images/industries/fintech.png",
     "bg": "from-emerald-500/10 to-teal-500/10",
     "colorClass": "text-emerald-400",
     "borderClass": "border-emerald-500/20",
@@ -302,8 +304,8 @@ DEFAULT_INDUSTRIES = [
     "title": "Real Estate & Properties",
     "description": "Virtual walkthrough platforms, interactive mapping, and organizer systems.",
     "detailDescription": "We craft immersive digital walkthrough experiences, responsive vector-based property maps, and centralized CRM dashboards to streamline buyer-agent interactions and automate lead pipelines.",
-    "listImg": "/images/industries/realestate.png",
-    "detailImg": "/images/industries/realestate.png",
+    "listImg": "/media/images/industries/realestate.png",
+    "detailImg": "/media/images/industries/realestate.png",
     "bg": "from-blue-500/10 to-indigo-500/10",
     "colorClass": "text-blue-400",
     "borderClass": "border-blue-500/20",
@@ -320,8 +322,8 @@ DEFAULT_INDUSTRIES = [
     "title": "Luxury E-Commerce",
     "description": "Immersive branding layouts, high-performance checkouts, and custom payment systems.",
     "detailDescription": "We develop ultra-premium headless shopping environments featuring 3D product previews, optimized image pipelines, and customized multi-currency Stripe checkouts that eliminate cart drop-offs.",
-    "listImg": "/images/industries/ecommerce.png",
-    "detailImg": "/images/industries/ecommerce.png",
+    "listImg": "/media/images/industries/ecommerce.png",
+    "detailImg": "/media/images/industries/ecommerce.png",
     "bg": "from-amber-500/10 to-orange-500/10",
     "colorClass": "text-amber-400",
     "borderClass": "border-amber-500/20",
@@ -338,8 +340,8 @@ DEFAULT_INDUSTRIES = [
     "title": "Healthcare & Biotech",
     "description": "Doctor-patient portals, digital records grids, and encrypted backups.",
     "detailDescription": "We construct secure clinical dashboards, HIPAA-compliant patient communication networks, and end-to-end encrypted backup systems to protect patient data pipelines.",
-    "listImg": "/images/industries/healthcare.png",
-    "detailImg": "/images/industries/healthcare.png",
+    "listImg": "/media/images/industries/healthcare.png",
+    "detailImg": "/media/images/industries/healthcare.png",
     "bg": "from-sky-500/10 to-cyan-500/10",
     "colorClass": "text-sky-400",
     "borderClass": "border-sky-500/20",
@@ -356,8 +358,8 @@ DEFAULT_INDUSTRIES = [
     "title": "AI SaaS Platforms",
     "description": "SaaS landing structures, multi-tenant databases, and custom agent integrations.",
     "detailDescription": "We engineer multi-tenant workspaces, custom semantic search caching networks, and automated prompt monitoring pipelines designed to reduce token cost overheads and scale agent runtimes.",
-    "listImg": "/images/industries/aisaas.png",
-    "detailImg": "/images/industries/aisaas.png",
+    "listImg": "/media/images/industries/aisaas.png",
+    "detailImg": "/media/images/industries/aisaas.png",
     "bg": "from-purple-500/10 to-indigo-500/10",
     "colorClass": "text-purple-400",
     "borderClass": "border-purple-500/20",
@@ -374,8 +376,8 @@ DEFAULT_INDUSTRIES = [
     "title": "Education & EdTech",
     "description": "Learning management systems, live classroom portals, and student analytics dashboards.",
     "detailDescription": "We build scalable LMS platforms with real-time video streaming, adaptive quiz engines, progress tracking dashboards, and automated certificate generation pipelines for universities and coaching institutes.",
-    "listImg": "/images/industries/education.png",
-    "detailImg": "/images/industries/education.png",
+    "listImg": "/media/images/industries/education.png",
+    "detailImg": "/media/images/industries/education.png",
     "bg": "from-rose-500/10 to-pink-500/10",
     "colorClass": "text-rose-400",
     "borderClass": "border-rose-500/20",
@@ -392,8 +394,8 @@ DEFAULT_INDUSTRIES = [
     "title": "Logistics & Supply Chain",
     "description": "Fleet tracking systems, warehouse automation, and shipment routing optimizers.",
     "detailDescription": "We develop GPS-integrated fleet monitoring dashboards, automated warehouse inventory scanners, and intelligent route optimization engines that cut delivery times and fuel costs across distribution networks.",
-    "listImg": "/images/industries/logistics.png",
-    "detailImg": "/images/industries/logistics.png",
+    "listImg": "/media/images/industries/logistics.png",
+    "detailImg": "/media/images/industries/logistics.png",
     "bg": "from-orange-500/10 to-red-500/10",
     "colorClass": "text-orange-400",
     "borderClass": "border-orange-500/20",
@@ -410,8 +412,8 @@ DEFAULT_INDUSTRIES = [
     "title": "Hospitality & Travel",
     "description": "Hotel booking engines, guest experience apps, and revenue management tools.",
     "detailDescription": "We craft elegant reservation platforms, guest concierge mobile applications, dynamic pricing engines, and review aggregation dashboards that help hospitality brands deliver five-star digital experiences.",
-    "listImg": "/images/industries/hospitality.png",
-    "detailImg": "/images/industries/hospitality.png",
+    "listImg": "/media/images/industries/hospitality.png",
+    "detailImg": "/media/images/industries/hospitality.png",
     "bg": "from-teal-500/10 to-emerald-500/10",
     "colorClass": "text-teal-400",
     "borderClass": "border-teal-500/20",
@@ -640,15 +642,15 @@ DEFAULT_CONTENT = {
         "fontSize": "36px",
         "imageSize": "56px",
         "list": [
-            { "name": "SAPHIRA", "logo": "/images/logos/saphira_logo.png" },
-            { "name": "NOVA", "logo": "/images/logos/nova_logo.png" },
-            { "name": "CORE", "logo": "/images/logos/core_logo.png" },
-            { "name": "AETHER", "logo": "/images/logos/aether_logo.png" },
-            { "name": "QUANTUM", "logo": "/images/logos/quantum_logo.png" },
-            { "name": "VERTEX", "logo": "/images/logos/vertex_logo.png" },
-            { "name": "HELIOS", "logo": "/images/logos/helios_logo.png" },
-            { "name": "ORION", "logo": "/images/logos/orion_logo.png" },
-            { "name": "AXIOM", "logo": "/images/logos/axiom_logo.png" }
+            { "name": "SAPHIRA", "logo": "/media/images/logos/saphira_logo.png" },
+            { "name": "NOVA", "logo": "/media/images/logos/nova_logo.png" },
+            { "name": "CORE", "logo": "/media/images/logos/core_logo.png" },
+            { "name": "AETHER", "logo": "/media/images/logos/aether_logo.png" },
+            { "name": "QUANTUM", "logo": "/media/images/logos/quantum_logo.png" },
+            { "name": "VERTEX", "logo": "/media/images/logos/vertex_logo.png" },
+            { "name": "HELIOS", "logo": "/media/images/logos/helios_logo.png" },
+            { "name": "ORION", "logo": "/media/images/logos/orion_logo.png" },
+            { "name": "AXIOM", "logo": "/media/images/logos/axiom_logo.png" }
         ]
     },
     "stats": [
@@ -658,21 +660,21 @@ DEFAULT_CONTENT = {
         { "value": "98%", "label": "Client Retention" }
     ],
     "services": [
-        { "num": "01/07", "title": "Web Engineering", "desc": "Creating high-fidelity, cinematic, and fast-loading web applications that captivate and convert.", "tags": ["FRONTEND", "DESIGN"], "href": "#service-web", "img": "/images/gallery/design_sprint.png", "gradient": "from-blue-500 via-indigo-500 to-cyan-500" },
-        { "num": "02/07", "title": "Mobile Applications", "desc": "Building bespoke native-feeling iOS and Android solutions with fluid gestures and offline sync.", "tags": ["IOS", "ANDROID"], "href": "#service-app", "img": "/images/gallery/digiverse_workspace.png", "gradient": "from-emerald-500 via-teal-500 to-cyan-500" },
-        { "num": "03/07", "title": "Custom Software", "desc": "Constructing robust backend panels, CRM matrices, SaaS dashboards, and multi-tenant systems.", "tags": ["CRM", "ERP"], "href": "#service-custom-software", "img": "/images/quantum_banking.png", "gradient": "from-amber-500 via-orange-500 to-yellow-500" },
-        { "num": "04/07", "title": "Digital Marketing", "desc": "Driving traffic and client acquisitions using data-backed strategies, SEO, and paid ads.", "tags": ["SEO", "GROWTH"], "href": "#service-digital-marketing", "img": "/images/gallery/launch_celebration.png", "gradient": "from-rose-500 via-pink-500 to-purple-500" },
-        { "num": "05/07", "title": "Social Media Management", "desc": "Crafting brand presence, graphic design guides, and content calendars to elevate recognition.", "tags": ["BRANDING", "CONTENT"], "href": "#service-social-media-management", "img": "/images/gallery/cinematic_review.png", "gradient": "from-pink-500 via-fuchsia-500 to-violet-500" },
-        { "num": "06/07", "title": "AI Consulting", "desc": "Developing automated AI agents, vector database search pipelines, and custom LLM integrations.", "tags": ["LLM", "AGENTS"], "href": "#service-ai-consulting", "img": "/images/gallery/ai_orchestrator.png", "gradient": "from-purple-500 via-violet-500 to-indigo-500" },
-        { "num": "07/07", "title": "IT Consulting", "desc": "Designing Cloud migrations, Docker orchestration files, hardened security, and CI/CD pipelines.", "tags": ["CLOUD", "DEVOPS"], "href": "#service-it-consulting", "img": "/images/gallery/hardware_calibration.png", "gradient": "from-sky-500 via-blue-500 to-indigo-500" }
+        { "num": "01/07", "title": "Web Engineering", "desc": "Creating high-fidelity, cinematic, and fast-loading web applications that captivate and convert.", "tags": ["FRONTEND", "DESIGN"], "href": "#service-web", "img": "/media/images/gallery/design_sprint.png", "gradient": "from-blue-500 via-indigo-500 to-cyan-500" },
+        { "num": "02/07", "title": "Mobile Applications", "desc": "Building bespoke native-feeling iOS and Android solutions with fluid gestures and offline sync.", "tags": ["IOS", "ANDROID"], "href": "#service-app", "img": "/media/images/gallery/digiverse_workspace.png", "gradient": "from-emerald-500 via-teal-500 to-cyan-500" },
+        { "num": "03/07", "title": "Custom Software", "desc": "Constructing robust backend panels, CRM matrices, SaaS dashboards, and multi-tenant systems.", "tags": ["CRM", "ERP"], "href": "#service-custom-software", "img": "/media/images/quantum_banking.png", "gradient": "from-amber-500 via-orange-500 to-yellow-500" },
+        { "num": "04/07", "title": "Digital Marketing", "desc": "Driving traffic and client acquisitions using data-backed strategies, SEO, and paid ads.", "tags": ["SEO", "GROWTH"], "href": "#service-digital-marketing", "img": "/media/images/gallery/launch_celebration.png", "gradient": "from-rose-500 via-pink-500 to-purple-500" },
+        { "num": "05/07", "title": "Social Media Management", "desc": "Crafting brand presence, graphic design guides, and content calendars to elevate recognition.", "tags": ["BRANDING", "CONTENT"], "href": "#service-social-media-management", "img": "/media/images/gallery/cinematic_review.png", "gradient": "from-pink-500 via-fuchsia-500 to-violet-500" },
+        { "num": "06/07", "title": "AI Consulting", "desc": "Developing automated AI agents, vector database search pipelines, and custom LLM integrations.", "tags": ["LLM", "AGENTS"], "href": "#service-ai-consulting", "img": "/media/images/gallery/ai_orchestrator.png", "gradient": "from-purple-500 via-violet-500 to-indigo-500" },
+        { "num": "07/07", "title": "IT Consulting", "desc": "Designing Cloud migrations, Docker orchestration files, hardened security, and CI/CD pipelines.", "tags": ["CLOUD", "DEVOPS"], "href": "#service-it-consulting", "img": "/media/images/gallery/hardware_calibration.png", "gradient": "from-sky-500 via-blue-500 to-indigo-500" }
     ],
     "caseStudy": {
         "show": True,
         "client": "AeroCRM Aviation",
-        "logo": "/images/logos/aerocrm_logo.png",
+        "logo": "/media/images/logos/aerocrm_logo.png",
         "title": "Custom Cloud CRM Platform",
         "label": "Simulation [CRM.v1]",
-        "image": "/images/gallery/digiverse_workspace.png",
+        "image": "/media/images/gallery/digiverse_workspace.png",
         "linkText": "View Case Study Details",
         "linkHref": "#case-study",
         "points": [
@@ -691,7 +693,7 @@ DEFAULT_CONTENT = {
                 "role": "VP of Engineering, Saphira Aviation",
                 "quote": "HariKrushn DigiVerse completely transformed our fleet tracking CRM. Their engineering precision, combined with a meticulous design language, gave us a product that is both cinematic and lightning-fast. They operate at the highest level of craftsmanship.",
                 "rating": 5,
-                "avatar": "/images/gallery/avatar_alexander.png",
+                "avatar": "/media/images/gallery/avatar_alexander.png",
                 "tag": "CUSTOM CRM",
                 "color": "from-amber-500/10 to-orange-500/5",
                 "glowColor": "rgba(245,158,11,0.25)",
@@ -703,7 +705,7 @@ DEFAULT_CONTENT = {
                 "role": "Co-Founder, Nova DeFi",
                 "quote": "Building a Web3 platform requires absolute trust and flawless UX. The team didn't just build our interfaces; they co-architected the user flow. Our transaction success rate increased by 40% after launching the new interface.",
                 "rating": 5,
-                "avatar": "/images/gallery/avatar_elena.png",
+                "avatar": "/media/images/gallery/avatar_elena.png",
                 "tag": "WEB3 PLATFORM",
                 "color": "from-purple-500/10 to-indigo-500/5",
                 "glowColor": "rgba(168,85,247,0.25)",
@@ -715,7 +717,7 @@ DEFAULT_CONTENT = {
                 "role": "Head of Product, Core Logistics",
                 "quote": "Managing a global supply chain demands real-time data visibility. HariKrushn Digiverse built an AI-driven predictive dispatch matrix that integrated seamlessly with our legacy database. Their work is a masterclass in modern systems integration.",
                 "rating": 5,
-                "avatar": "/images/gallery/avatar_marcus.png",
+                "avatar": "/media/images/gallery/avatar_marcus.png",
                 "tag": "AI LOGISTICS",
                 "color": "from-emerald-500/10 to-teal-500/5",
                 "glowColor": "rgba(16,185,129,0.25)",
@@ -739,12 +741,12 @@ DEFAULT_CONTENT = {
         { "year": "2021", "title": "The Spark of Innovation", "description": "HariKrushn Digiverse LLP was founded with a single mission: to merge fine design aesthetics with robust software engineering." }
     ],
     "gallery": [
-        { "title": "The Digiverse Workspace", "category": "Studio", "size": "col-span-2 row-span-1", "image": "/images/gallery/digiverse_workspace.png" },
-        { "title": "Design Sprint Session", "category": "Team", "size": "col-span-1 row-span-1", "image": "/images/gallery/design_sprint.png" },
-        { "title": "Hardware Calibration", "category": "Equipment", "size": "col-span-1 row-span-2", "image": "/images/gallery/hardware_calibration.png" },
-        { "title": "AI Orchestrator Architecture", "category": "Engineering", "size": "col-span-2 row-span-1", "image": "/images/gallery/ai_orchestrator.png" },
-        { "title": "Cinematic Review", "category": "Studio", "size": "col-span-1 row-span-1", "image": "/images/gallery/cinematic_review.png" },
-        { "title": "Launch Celebration", "category": "Team", "size": "col-span-2 row-span-1", "image": "/images/gallery/launch_celebration.png" }
+        { "title": "The Digiverse Workspace", "category": "Studio", "size": "col-span-2 row-span-1", "image": "/media/images/gallery/digiverse_workspace.png" },
+        { "title": "Design Sprint Session", "category": "Team", "size": "col-span-1 row-span-1", "image": "/media/images/gallery/design_sprint.png" },
+        { "title": "Hardware Calibration", "category": "Equipment", "size": "col-span-1 row-span-2", "image": "/media/images/gallery/hardware_calibration.png" },
+        { "title": "AI Orchestrator Architecture", "category": "Engineering", "size": "col-span-2 row-span-1", "image": "/media/images/gallery/ai_orchestrator.png" },
+        { "title": "Cinematic Review", "category": "Studio", "size": "col-span-1 row-span-1", "image": "/media/images/gallery/cinematic_review.png" },
+        { "title": "Launch Celebration", "category": "Team", "size": "col-span-2 row-span-1", "image": "/media/images/gallery/launch_celebration.png" }
     ],
     "site_settings": DEFAULT_SITE_SETTINGS,
     "about_us": DEFAULT_ABOUT_US,
@@ -1226,7 +1228,7 @@ async def upload_resume(file: UploadFile = File(...)):
     with open(resume_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
-    resume_url = f"/uploads/resumes/{resume_filename}"
+    resume_url = f"/media/uploads/resumes/{resume_filename}"
     return {
         "status": "success",
         "resumeUrl": resume_url,
@@ -1250,7 +1252,7 @@ async def upload_image(file: UploadFile = File(...)):
     with open(image_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
-    image_url = f"/images/uploads/{image_filename}"
+    image_url = f"/media/images/uploads/{image_filename}"
     return {
         "status": "success",
         "imageUrl": image_url
@@ -1306,7 +1308,7 @@ async def upload_video(file: UploadFile = File(...)):
         
     cap.release()
     
-    video_url = f"/images/uploads/{video_filename}"
+    video_url = f"/media/images/uploads/{video_filename}"
     return {
         "status": "success",
         "videoUrl": video_url,
@@ -1776,7 +1778,7 @@ async def upload_media_file(
     with open(saved_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
         
-    file_url = f"/images/uploads/{saved_filename}"
+    file_url = f"/media/images/uploads/{saved_filename}"
     file_size = os.path.getsize(saved_path)
     
     coll = get_collection("media_library")
@@ -1931,34 +1933,49 @@ if env_mode == "production":
         if os.path.exists(assets_dir):
             app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
-        # Serve static public files (images, uploads) from dist
-        images_dir = os.path.join(dist_dir, "images")
-        if os.path.exists(images_dir):
-            app.mount("/images", StaticFiles(directory=images_dir), name="images")
+        # Serve centralized media files
+        media_dir = os.path.join(dist_dir, "media")
+        if os.path.exists(media_dir):
+            app.mount("/media", StaticFiles(directory=media_dir), name="media")
+            
+            # Legacy backwards compatibility for database entries
+            legacy_images_dir = os.path.join(media_dir, "images")
+            if os.path.exists(legacy_images_dir):
+                app.mount("/images", StaticFiles(directory=legacy_images_dir), name="legacy_images")
+                
+            legacy_uploads_dir = os.path.join(media_dir, "uploads")
+            if os.path.exists(legacy_uploads_dir):
+                app.mount("/uploads", StaticFiles(directory=legacy_uploads_dir), name="legacy_uploads")
 
-        uploads_dir = os.path.join(dist_dir, "uploads")
-        if os.path.exists(uploads_dir):
-            app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
-
-        # Catch-all fallback route to support React SPA Routing (e.g. /our-people, /about-us)
+        # Catch-all fallback route to support React SPA Routing and root files
         @app.get("/{catchall:path}")
         async def serve_spa_frontend(catchall: str):
             if catchall.startswith("api/") or catchall == "api" or catchall == "health" or catchall.startswith("docs") or catchall.startswith("openapi.json"):
                 raise HTTPException(status_code=404)
+            
+            # Check if it's a file in the root of dist (e.g. favicon, robots.txt)
+            target_path = os.path.join(dist_dir, catchall)
+            if os.path.isfile(target_path):
+                return FileResponse(target_path)
+                
             index_file = os.path.join(dist_dir, "index.html")
             if os.path.exists(index_file):
                 return FileResponse(index_file)
             raise HTTPException(status_code=404)
 else:
-    # In development mode, mount images and uploads directly from frontend/public if available
+    # In development mode, mount media directly from frontend/public if available
     public_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "frontend", "public"))
-    images_dir = os.path.join(public_dir, "images")
-    if os.path.exists(images_dir):
-        app.mount("/images", StaticFiles(directory=images_dir), name="images")
-
-    uploads_dir = os.path.join(public_dir, "uploads")
-    if os.path.exists(uploads_dir):
-        app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
+    media_dir = os.path.join(public_dir, "media")
+    if os.path.exists(media_dir):
+        app.mount("/media", StaticFiles(directory=media_dir), name="media")
+        
+        legacy_images_dir = os.path.join(media_dir, "images")
+        if os.path.exists(legacy_images_dir):
+            app.mount("/images", StaticFiles(directory=legacy_images_dir), name="legacy_images")
+            
+        legacy_uploads_dir = os.path.join(media_dir, "uploads")
+        if os.path.exists(legacy_uploads_dir):
+            app.mount("/uploads", StaticFiles(directory=legacy_uploads_dir), name="legacy_uploads")
 
 # 4. Process Runner Orchestrator
 if __name__ == "__main__":
@@ -1989,25 +2006,35 @@ if __name__ == "__main__":
 
 
 
-    # Run build synchronously first
-    print("[System] Generating frontend production build...")
-    try:
-        subprocess.run([npm_cmd, "run", "build"], cwd=frontend_dir, check=True, shell=(os.name == 'nt'))
-        print("[System] Production build created successfully!")
-    except Exception as e:
-        print(f"[System] Warning: Production build failed ({e}). Starting dev services anyway...")
+    # Run build synchronously first if in development or if dist is missing
+    dist_dir = os.path.join(frontend_dir, "dist")
+    if env_mode != "production" or not os.path.exists(dist_dir):
+        print("[System] Generating frontend production build...")
+        try:
+            subprocess.run([npm_cmd, "run", "build"], cwd=frontend_dir, check=True, shell=(os.name == 'nt'))
+            print("[System] Production build created successfully!")
+        except Exception as e:
+            print(f"[System] Warning: Production build failed ({e}). Starting dev services anyway...")
 
     # Define commands
-    # Use reload, but ignore frontend files to prevent restart loops
     backend_port = os.getenv("PORT", "8008")
     frontend_port = os.getenv("FRONTEND_PORT", "5173")
-    backend_cmd = [
-        python_exe, "-m", "uvicorn", "main:app",
-        "--host", "0.0.0.0",
-        "--port", backend_port,
-        "--reload"
-    ]
-    frontend_cmd = [npm_cmd, "run", "dev", "--", "--port", frontend_port]
+    
+    if env_mode == "production":
+        backend_cmd = [
+            python_exe, "-m", "uvicorn", "main:app",
+            "--host", "0.0.0.0",
+            "--port", backend_port
+        ]
+        frontend_cmd = None
+    else:
+        backend_cmd = [
+            python_exe, "-m", "uvicorn", "main:app",
+            "--host", "0.0.0.0",
+            "--port", backend_port,
+            "--reload"
+        ]
+        frontend_cmd = [npm_cmd, "run", "dev", "--", "--port", frontend_port]
 
     processes = []
 
@@ -2062,12 +2089,15 @@ if __name__ == "__main__":
         print("[System] Starting Backend (FastAPI)...")
         backend_proc = run_service(backend_cmd, os.path.dirname(__file__), "[Backend]")
 
-        print("[System] Starting Frontend (Vite)...")
-        frontend_proc = run_service(frontend_cmd, os.path.join(os.path.dirname(__file__), "frontend"), "[Frontend]")
+        frontend_proc = None
+        if frontend_cmd:
+            print("[System] Starting Frontend (Vite)...")
+            frontend_proc = run_service(frontend_cmd, os.path.join(os.path.dirname(__file__), "frontend"), "[Frontend]")
 
         print("\n" + "=" * 60)
         print(f"  - Backend:  http://localhost:{backend_port}")
-        print(f"  - Frontend: http://localhost:{frontend_port}")
+        if frontend_cmd:
+            print(f"  - Frontend: http://localhost:{frontend_port}")
         print("  - CTRL+C to terminate both servers")
         print("=" * 60 + "\n")
 
@@ -2077,7 +2107,7 @@ if __name__ == "__main__":
             if backend_proc.poll() is not None:
                 print(f"[System] Backend stopped with code {backend_proc.returncode}")
                 break
-            if frontend_proc.poll() is not None:
+            if frontend_proc and frontend_proc.poll() is not None:
                 print(f"[System] Frontend stopped with code {frontend_proc.returncode}")
                 break
 
