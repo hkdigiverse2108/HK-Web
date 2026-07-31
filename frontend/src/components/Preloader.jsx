@@ -15,7 +15,7 @@ export default function Preloader({ onComplete }) {
     const isMobile = window.innerWidth < 768;
     const totalFrames = isMobile
       ? (content && content.hero && content.hero.mobileFrameCount) || 848
-      : (content && content.hero && content.hero.frameCount) || 315;
+      : (content && content.hero && content.hero.frameCount) || 391;
     const frames = [];
     const images = [];
     let loadedCount = 0;

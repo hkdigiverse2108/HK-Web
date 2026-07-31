@@ -13,7 +13,7 @@ def install_and_import(package):
 
 cv2 = install_and_import('opencv-python')
 
-video_path = r"D:\HK WEBSITE\frontend\public\media\videos\01.mp4"
+video_path = r"D:\HK WEBSITE\frontend\public\media\videos\055.mp4"
 output_dir = r"D:\HK WEBSITE\frontend\public\media\images\frames"
 
 if not os.path.exists(output_dir):

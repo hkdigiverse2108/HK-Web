@@ -20,7 +20,7 @@ export default function HeroSection({ isLoaded, overrideContent }) {
   const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
   const totalFrames = isMobile 
     ? (hero.mobileFrameCount || 848) 
-    : (hero.frameCount || 315);
+    : (hero.frameCount || 391);
   const targetFrameRef = useRef(0);
   const currentFrameRef = useRef(0);
 
