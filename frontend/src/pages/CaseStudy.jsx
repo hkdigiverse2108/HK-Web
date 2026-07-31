@@ -13,7 +13,7 @@ const DEFAULT_CASES = [
     challenge: 'Vesper needed a property showcase that felt like a luxury brand experience, not a generic listing site. Their existing platform had poor mobile performance and lacked visual storytelling.',
     solution: 'Built a custom canvas-based scroll scrub engine with optimized frame preloading, lazy-loaded 4K imagery, and GPU-accelerated transitions. Integrated interactive floor plans and virtual walkthrough modules.',
     tech: ['React', 'Canvas API', 'GSAP', 'Vite', 'Three.js'],
-    img: '/images/casestudies/vesper.png',
+    img: '/media/images/casestudies/vesper.png',
     metrics: [
       { label: 'Conversion Rate', value: '+142%' },
       { label: 'Avg. Time on Page', value: '4m 12s' },
@@ -33,7 +33,7 @@ const DEFAULT_CASES = [
     challenge: 'AeroCRM was managing fleet operations across spreadsheets and disconnected tools, causing booking conflicts, delayed communications, and zero audit trails.',
     solution: 'Architected a unified CRM with real-time booking conflict detection, automated email/SMS triggers, role-based dashboards, and end-to-end encrypted data backups running every 6 hours.',
     tech: ['React', 'FastAPI', 'PostgreSQL', 'Docker', 'Redis'],
-    img: '/images/casestudies/aerocrm.png',
+    img: '/media/images/casestudies/aerocrm.png',
     metrics: [
       { label: 'Operational Efficiency', value: '+400%' },
       { label: 'Booking Failures', value: '0%' },
@@ -53,7 +53,7 @@ const DEFAULT_CASES = [
     challenge: 'Nova\'s existing DeFi interface had a 60% user drop-off at the wallet connection step. Complex transaction flows confused first-time crypto users.',
     solution: 'Redesigned the entire UX flow with progressive disclosure patterns, one-click wallet connect, real-time gas estimation, and visual transaction confirmations with animated feedback.',
     tech: ['Next.js', 'Ethers.js', 'Solidity', 'The Graph', 'Framer Motion'],
-    img: '/images/casestudies/novadefi.png',
+    img: '/media/images/casestudies/novadefi.png',
     metrics: [
       { label: 'Transaction Success', value: '+40%' },
       { label: 'User Drop-off', value: '-60%' },
@@ -73,7 +73,7 @@ const DEFAULT_CASES = [
     challenge: 'Core Logistics was losing 20% of delivery efficiency due to manual route planning and lack of real-time visibility into fleet locations and warehouse stock levels.',
     solution: 'Built an AI route optimizer using historical traffic and weather data, integrated GPS fleet tracking with geofence alerts, and automated inventory scanning with barcode/QR integration.',
     tech: ['Python', 'TensorFlow', 'React', 'Google Maps API', 'PostgreSQL'],
-    img: '/images/casestudies/corelogistics.png',
+    img: '/media/images/casestudies/corelogistics.png',
     metrics: [
       { label: 'Delivery Efficiency', value: '+38%' },
       { label: 'Fuel Cost Savings', value: '₹12L/yr' },
@@ -93,7 +93,7 @@ const DEFAULT_CASES = [
     challenge: 'Pulse MedTech needed a patient management system that met strict HIPAA compliance while being intuitive enough for elderly patients to navigate without assistance.',
     solution: 'Created an accessibility-first portal with large-text modes, voice-guided navigation, E2E encrypted data at rest and in transit, and automated appointment reminders via SMS and WhatsApp.',
     tech: ['React', 'Express', 'MongoDB', 'WebRTC', 'Twilio'],
-    img: '/images/casestudies/pulsehealth.png',
+    img: '/media/images/casestudies/pulsehealth.png',
     metrics: [
       { label: 'Patient Satisfaction', value: '4.9/5' },
       { label: 'Booking Efficiency', value: '+200%' },
@@ -113,7 +113,7 @@ const DEFAULT_CASES = [
     challenge: 'LearnVerse was using Zoom for classes and Google Sheets for tracking, losing student engagement data and unable to personalize the learning experience.',
     solution: 'Developed a custom LMS with WebRTC-based live classrooms, adaptive quizzing that adjusts difficulty based on performance, gamified progress dashboards, and auto-generated PDF certificates.',
     tech: ['Next.js', 'WebRTC', 'FastAPI', 'PostgreSQL', 'Redis'],
-    img: '/images/casestudies/learnverse.png',
+    img: '/media/images/casestudies/learnverse.png',
     metrics: [
       { label: 'Student Retention', value: '+65%' },
       { label: 'Course Completion', value: '94%' },

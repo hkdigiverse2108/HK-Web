@@ -535,7 +535,7 @@ export default function AboutUs() {
             <div className="absolute w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#050508] border border-amber-500/20 flex items-center justify-center z-20 shadow-[0_0_35px_rgba(251,191,36,0.15)] p-5">
               <div className="absolute inset-0 rounded-full border border-amber-500/10 animate-ping opacity-25 pointer-events-none" />
               <img 
-                src="/images/hk-logo.png" 
+                src="/media/images/hk-logo.png" 
                 alt="HariKrushn Logo" 
                 className="w-full h-full object-contain"
               />

@@ -5,13 +5,13 @@ const API_URL = import.meta.env.VITE_API_URL || '';
 
 const getServiceDefaultPreview = (num, index) => {
   const defaults = {
-    "01/07": { img: "/images/gallery/design_sprint.png", gradient: "from-blue-500 via-indigo-500 to-cyan-500" },
-    "02/07": { img: "/images/gallery/digiverse_workspace.png", gradient: "from-emerald-500 via-teal-500 to-cyan-500" },
-    "03/07": { img: "/images/quantum_banking.png", gradient: "from-amber-500 via-orange-500 to-yellow-500" },
-    "04/07": { img: "/images/gallery/launch_celebration.png", gradient: "from-rose-500 via-pink-500 to-purple-500" },
-    "05/07": { img: "/images/gallery/cinematic_review.png", gradient: "from-pink-500 via-fuchsia-500 to-violet-500" },
-    "06/07": { img: "/images/gallery/ai_orchestrator.png", gradient: "from-purple-500 via-violet-500 to-indigo-500" },
-    "07/07": { img: "/images/gallery/hardware_calibration.png", gradient: "from-sky-500 via-blue-500 to-indigo-500" }
+    "01/07": { img: "/media/images/gallery/design_sprint.png", gradient: "from-blue-500 via-indigo-500 to-cyan-500" },
+    "02/07": { img: "/media/images/gallery/digiverse_workspace.png", gradient: "from-emerald-500 via-teal-500 to-cyan-500" },
+    "03/07": { img: "/media/images/quantum_banking.png", gradient: "from-amber-500 via-orange-500 to-yellow-500" },
+    "04/07": { img: "/media/images/gallery/launch_celebration.png", gradient: "from-rose-500 via-pink-500 to-purple-500" },
+    "05/07": { img: "/media/images/gallery/cinematic_review.png", gradient: "from-pink-500 via-fuchsia-500 to-violet-500" },
+    "06/07": { img: "/media/images/gallery/ai_orchestrator.png", gradient: "from-purple-500 via-violet-500 to-indigo-500" },
+    "07/07": { img: "/media/images/gallery/hardware_calibration.png", gradient: "from-sky-500 via-blue-500 to-indigo-500" }
   };
   if (defaults[num]) return defaults[num];
   const keys = Object.keys(defaults);
@@ -733,7 +733,7 @@ export default function AdminPanel() {
     const nextContent = JSON.parse(JSON.stringify(currentContent));
     if (!nextContent.brands) nextContent.brands = { show: true, fontSize: "36px", imageSize: "56px", list: [] };
     if (!nextContent.brands.list) nextContent.brands.list = [];
-    nextContent.brands.list.push({ name: "NEW PARTNER", logo: "/images/logos/saphira_logo.png" });
+    nextContent.brands.list.push({ name: "NEW PARTNER", logo: "/media/images/logos/saphira_logo.png" });
     pushState(nextContent);
   };
 
@@ -1328,7 +1328,7 @@ export default function AdminPanel() {
     nextContent.our_culture.push({
       title: 'New Culture Aspect',
       desc: 'Detail this cultural aspect...',
-      img: '/images/culture/learning.png',
+      img: '/media/images/culture/learning.png',
       icon: 'learning'
     });
     pushState(nextContent);
@@ -1465,7 +1465,7 @@ export default function AdminPanel() {
       date: 'JULY 05, 2026',
       category: 'ENGINEERING',
       readTime: '5 MIN READ',
-      image: '/images/gallery/ai_orchestrator.png',
+      image: '/media/images/gallery/ai_orchestrator.png',
       author: 'Radhe Patel (CEO)',
       longContent: ['Full paragraph narrative here...'],
       highlights: ['Key takeaway highlight...']
@@ -1493,7 +1493,7 @@ export default function AdminPanel() {
       title: 'New Image',
       category: 'Studio',
       size: 'col-span-1 row-span-1',
-      image: '/images/gallery/cinematic_review.png'
+      image: '/media/images/gallery/cinematic_review.png'
     });
     pushState(nextContent);
   };
@@ -1564,7 +1564,7 @@ export default function AdminPanel() {
       features: [],
       liveUrl: '',
       tech: ['React', 'FastAPI'],
-      img: '/images/casestudies/novadefi.png',
+      img: '/media/images/casestudies/novadefi.png',
       color: 'blue',
       accentColor: '#3b82f6'
     });
@@ -1601,7 +1601,7 @@ export default function AdminPanel() {
       challenge: '',
       solution: '',
       tech: ['React', 'Node.js'],
-      img: '/images/casestudies/novadefi.png',
+      img: '/media/images/casestudies/novadefi.png',
       metrics: [
         { label: 'Conversion Rate', value: '+50%' }
       ],
@@ -1635,7 +1635,7 @@ export default function AdminPanel() {
       name: 'New Venture Name',
       tagline: 'Venture Tagline',
       status: 'Active',
-      img: '/images/ventures/aisetu.png',
+      img: '/media/images/ventures/aisetu.png',
       color: 'cyan',
       accentColor: '#06b6d4',
       glowColor: 'rgba(6,182,212,0.20)',
@@ -1939,8 +1939,8 @@ export default function AdminPanel() {
       description: 'Short description of the vertical.',
       detailDescription: 'Bespoke detailed description of the custom engineering, databases, and pipelines we build for this industry.',
       accentColor: '#10b981',
-      listImg: '/images/industries/fintech.png',
-      detailImg: '/images/industries/fintech.png',
+      listImg: '/media/images/industries/fintech.png',
+      detailImg: '/media/images/industries/fintech.png',
       metrics: [
         { label: 'Metric One', value: 'Value' }
       ]
@@ -3255,7 +3255,7 @@ export default function AdminPanel() {
                       value={service.img || ''}
                       onChange={(e) => updateServiceItem(index, 'img', e.target.value)}
                       className="w-full px-3 py-2 bg-black border border-white/10 rounded-lg text-white text-xs focus:outline-none"
-                      placeholder="/images/gallery/default.png"
+                      placeholder="/media/images/gallery/default.png"
                     />
                     
                     {service.img && (
@@ -3653,7 +3653,7 @@ export default function AdminPanel() {
                     <div className="flex gap-4 items-center pt-2 border-t border-white/[0.03]">
                       <div className="w-12 h-12 bg-black/40 border border-white/10 rounded-lg flex items-center justify-center p-1.5">
                         <img 
-                          src={brand.logo || "/images/logos/saphira_logo.png"} 
+                          src={brand.logo || "/media/images/logos/saphira_logo.png"} 
                           alt="Logo Preview" 
                           className="w-full h-full object-contain mix-blend-screen opacity-80"
                         />
@@ -3997,7 +3997,7 @@ export default function AdminPanel() {
                       quote: "Describe the client's perspective here.",
                       rating: 5,
                       tag: "CUSTOM WORK",
-                      avatar: "/images/gallery/avatar_alexander.png",
+                      avatar: "/media/images/gallery/avatar_alexander.png",
                       color: "from-amber-500/10 to-orange-500/5",
                       glowColor: "rgba(245,158,11,0.25)",
                       tagClass: "text-amber-400 bg-amber-500/10 border-amber-500/20",
@@ -6779,7 +6779,7 @@ export default function AdminPanel() {
                           type="text"
                           value={item.img || ''}
                           onChange={(e) => updateVentureItem(index, 'img', e.target.value)}
-                          placeholder="/images/ventures/..."
+                          placeholder="/media/images/ventures/..."
                           className="w-full px-3 py-1.5 bg-black border border-white/10 rounded text-white text-xs focus:outline-none"
                         />
                         <label className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 rounded text-[9px] font-mono text-emerald-400 hover:text-emerald-300 transition-colors flex items-center justify-center shrink-0 cursor-pointer">
@@ -9297,13 +9297,13 @@ export default function AdminPanel() {
                   <label className="font-mono text-[8px] uppercase tracking-widest text-neutral-500 block">Logo Image</label>
                   <div className="flex gap-3 items-center">
                     <img 
-                      src={currentContent.site_settings?.footer?.logo_img ?? "/images/hk-logo.png"} 
+                      src={currentContent.site_settings?.footer?.logo_img ?? "/media/images/hk-logo.png"} 
                       alt="Footer Logo Preview" 
                       className="w-10 h-10 object-contain bg-neutral-900 border border-white/10 rounded p-1"
                     />
                     <input
                       type="text"
-                      value={currentContent.site_settings?.footer?.logo_img ?? '/images/hk-logo.png'}
+                      value={currentContent.site_settings?.footer?.logo_img ?? '/media/images/hk-logo.png'}
                       onChange={(e) => {
                         const nextContent = JSON.parse(JSON.stringify(currentContent));
                         if (!nextContent.site_settings) nextContent.site_settings = {};

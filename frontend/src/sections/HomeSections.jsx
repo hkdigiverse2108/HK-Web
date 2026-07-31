@@ -11,7 +11,7 @@ const testimonialsData = [
     role: "VP of Engineering, Saphira Aviation",
     quote: "HariKrushn DigiVerse completely transformed our fleet tracking CRM. Their engineering precision, combined with a meticulous design language, gave us a product that is both cinematic and lightning-fast. They operate at the highest level of craftsmanship.",
     rating: 5,
-    avatar: "/images/gallery/avatar_alexander.png",
+    avatar: "/media/images/gallery/avatar_alexander.png",
     color: "from-amber-500/10 to-orange-500/5",
     borderColor: "group-hover:border-amber-500/30",
     glowColor: "rgba(245,158,11,0.25)",
@@ -26,7 +26,7 @@ const testimonialsData = [
     role: "Co-Founder, Nova DeFi",
     quote: "Building a Web3 platform requires absolute trust and flawless UX. The team didn't just build our interfaces; they co-architected the user flow. Our transaction success rate increased by 40% after launching the new interface.",
     rating: 5,
-    avatar: "/images/gallery/avatar_elena.png",
+    avatar: "/media/images/gallery/avatar_elena.png",
     color: "from-purple-500/10 to-indigo-500/5",
     borderColor: "group-hover:border-purple-500/30",
     glowColor: "rgba(168,85,247,0.25)",
@@ -41,7 +41,7 @@ const testimonialsData = [
     role: "Head of Product, Core Logistics",
     quote: "Most agencies can code, but very few understand product flow like HariKrushn. They constructed our custom supply chain matrix from scratch, integrating AI-driven route prediction. Their work is clean, robust, and beautiful.",
     rating: 5,
-    avatar: "/images/gallery/avatar_marcus.png",
+    avatar: "/media/images/gallery/avatar_marcus.png",
     color: "from-emerald-500/10 to-teal-500/5",
     borderColor: "group-hover:border-emerald-500/30",
     glowColor: "rgba(16,185,129,0.25)",
@@ -80,31 +80,31 @@ const cardVariants = {
 /* ───────────────────── SERVICE PREVIEWS DATA ───────────────────── */
 const servicePreviews = {
   "01/07": {
-    img: "/images/gallery/design_sprint.png",
+    img: "/media/images/gallery/design_sprint.png",
     gradient: "from-blue-500 via-indigo-500 to-cyan-500"
   },
   "02/07": {
-    img: "/images/gallery/digiverse_workspace.png",
+    img: "/media/images/gallery/digiverse_workspace.png",
     gradient: "from-emerald-500 via-teal-500 to-cyan-500"
   },
   "03/07": {
-    img: "/images/quantum_banking.png",
+    img: "/media/images/quantum_banking.png",
     gradient: "from-amber-500 via-orange-500 to-yellow-500"
   },
   "04/07": {
-    img: "/images/gallery/launch_celebration.png",
+    img: "/media/images/gallery/launch_celebration.png",
     gradient: "from-rose-500 via-pink-500 to-purple-500"
   },
   "05/07": {
-    img: "/images/gallery/cinematic_review.png",
+    img: "/media/images/gallery/cinematic_review.png",
     gradient: "from-pink-500 via-fuchsia-500 to-violet-500"
   },
   "06/07": {
-    img: "/images/gallery/ai_orchestrator.png",
+    img: "/media/images/gallery/ai_orchestrator.png",
     gradient: "from-purple-500 via-violet-500 to-indigo-500"
   },
   "07/07": {
-    img: "/images/gallery/hardware_calibration.png",
+    img: "/media/images/gallery/hardware_calibration.png",
     gradient: "from-sky-500 via-blue-500 to-indigo-500"
   }
 };
@@ -145,15 +145,15 @@ export default function HomeSections({ overrideContent }) {
     fontSize: "36px",
     imageSize: "56px",
     list: [
-      { name: "SAPHIRA", logo: "/images/logos/saphira_logo.png" },
-      { name: "NOVA", logo: "/images/logos/nova_logo.png" },
-      { name: "CORE", logo: "/images/logos/core_logo.png" },
-      { name: "AETHER", logo: "/images/logos/aether_logo.png" },
-      { name: "QUANTUM", logo: "/images/logos/quantum_logo.png" },
-      { name: "VERTEX", logo: "/images/logos/vertex_logo.png" },
-      { name: "HELIOS", logo: "/images/logos/helios_logo.png" },
-      { name: "ORION", logo: "/images/logos/orion_logo.png" },
-      { name: "AXIOM", logo: "/images/logos/axiom_logo.png" }
+      { name: "SAPHIRA", logo: "/media/images/logos/saphira_logo.png" },
+      { name: "NOVA", logo: "/media/images/logos/nova_logo.png" },
+      { name: "CORE", logo: "/media/images/logos/core_logo.png" },
+      { name: "AETHER", logo: "/media/images/logos/aether_logo.png" },
+      { name: "QUANTUM", logo: "/media/images/logos/quantum_logo.png" },
+      { name: "VERTEX", logo: "/media/images/logos/vertex_logo.png" },
+      { name: "HELIOS", logo: "/media/images/logos/helios_logo.png" },
+      { name: "ORION", logo: "/media/images/logos/orion_logo.png" },
+      { name: "AXIOM", logo: "/media/images/logos/axiom_logo.png" }
     ]
   };
   const activeBrands = brands || defaultBrands;
@@ -444,10 +444,10 @@ export default function HomeSections({ overrideContent }) {
         const activeCaseStudy = activeContent?.caseStudy || {
           show: true,
           client: "AeroCRM Aviation",
-          logo: "/images/logos/aerocrm_logo.png",
+          logo: "/media/images/logos/aerocrm_logo.png",
           title: "Custom Cloud CRM Platform",
           label: "Simulation [CRM.v1]",
-          image: "/images/gallery/digiverse_workspace.png",
+          image: "/media/images/gallery/digiverse_workspace.png",
           linkText: "View Case Study Details",
           linkHref: "#case-study",
           points: [

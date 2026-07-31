@@ -10,7 +10,7 @@ const DEFAULT_POSTS = [
     date: "JUNE 24, 2026",
     category: "ENGINEERING",
     readTime: "5 MIN READ",
-    image: "/images/gallery/ai_orchestrator.png",
+    image: "/media/images/gallery/ai_orchestrator.png",
     author: "Radhe Patel (CEO)",
     longContent: [
       "At HariKrushn DigiVerse, we frequently consult with enterprise firms running legacy monolithic codebases. Over time, these platforms struggle to maintain performance under high concurrent user load, leading to database lockups and downtime. In this deep dive, we walk through our engineering strategy for decomposing a core monolithic financial transactional ledger into a fully distributed microservices mesh.",
@@ -31,7 +31,7 @@ const DEFAULT_POSTS = [
     date: "MAY 18, 2026",
     category: "DESIGN",
     readTime: "4 MIN READ",
-    image: "/images/gallery/cinematic_review.png",
+    image: "/media/images/gallery/cinematic_review.png",
     author: "Prince Patel (Partner)",
     longContent: [
       "Traditional web development prioritizes static layout grids. However, high-end brands require digital environments that evoke emotion, establish premium status, and tell a memorable visual story. Cinematic web design bridges this gap by merging classic layout logic with WebGL graphics, custom typography matrices, and dynamic scroll physics.",
@@ -52,7 +52,7 @@ const DEFAULT_POSTS = [
     date: "APRIL 02, 2026",
     category: "AI & SYSTEMS",
     readTime: "7 MIN READ",
-    image: "/images/gallery/digiverse_workspace.png",
+    image: "/media/images/gallery/digiverse_workspace.png",
     author: "Radhe Patel (CEO)",
     longContent: [
       "Integrating Large Language Models (LLMs) into customer relationship platforms (CRMs) has evolved beyond basic chatbot widgets. Today's enterprise applications require autonomous AI agents capable of querying live databases, executing workflows, and preparing data briefs without human intervention.",

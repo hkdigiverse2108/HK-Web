@@ -591,7 +591,7 @@ function PersonCard({ node, isActive, isDimmed, onHover, onClick, accent, hovere
       >
         {node.name === 'HariKrushn DigiVerse LLP' ? (
           <img 
-            src="/images/hk-logo.png" 
+            src="/media/images/hk-logo.png" 
             alt="HariKrushn DigiVerse LLP"
             className="w-full h-full object-contain p-1 bg-[#050508]"
             loading="lazy"
@@ -711,7 +711,7 @@ function DesktopTree({
     bio: 'HariKrushn DigiVerse LLP is a premium digital craftsmanship studio and technology consultancy specializing in high-end web applications, AI automation agents, and custom enterprise systems.',
     level: 1,
     dept: 'ENTERPRISE',
-    image: '/images/hk-logo.png'
+    image: '/media/images/hk-logo.png'
   };
 
   // 2. Separate hierarchy tree members from floating members

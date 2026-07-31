@@ -14,7 +14,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Built a unified CRM platform with real-time order tracking, automated email campaigns triggered by pipeline stages, role-based dashboards for each distributor tier, and comprehensive analytical reporting.',
     features: ['Real-time Order Tracking', 'Automated Email Campaigns', 'Role-based Dashboards', 'Distributor Analytics', 'Inventory Management'],
     tech: ['React', 'FastAPI', 'Docker', 'PostgreSQL'],
-    img: '/images/casestudies/corelogistics.png',
+    img: '/media/images/casestudies/corelogistics.png',
     liveUrl: '',
     color: 'emerald',
     accentColor: '#10b981'
@@ -29,7 +29,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Designed custom LLM pipelines with vector search integration that automatically analyzes code commits, generates review summaries, and provides actionable developer productivity dashboards.',
     features: ['LLM Code Reviews', 'Vector Search Analytics', 'Developer Metrics', 'Automated Reports', 'Team Insights'],
     tech: ['Python', 'Vector DB', 'FastAPI', 'LangChain'],
-    img: '/images/casestudies/novadefi.png',
+    img: '/media/images/casestudies/novadefi.png',
     liveUrl: '',
     color: 'purple',
     accentColor: '#a855f7'
@@ -44,7 +44,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Architected a high-performance fintech dashboard with WebSocket-driven real-time updates, Stripe payment integration, multi-tenant architecture, and Redis-cached portfolio calculations.',
     features: ['Real-time Portfolio Tracking', 'Stripe Payment Gates', 'Multi-tenant Architecture', 'Market Data Feeds', 'Transaction History'],
     tech: ['React', 'Stripe API', 'AWS', 'Redis'],
-    img: '/images/casestudies/vesper.png',
+    img: '/media/images/casestudies/vesper.png',
     liveUrl: '',
     color: 'amber',
     accentColor: '#f59e0b'
@@ -59,7 +59,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Created a custom branded ordering platform with stunning food photography layouts, real-time kitchen order tracking, table reservation calendar, and zero-commission payment processing.',
     features: ['Online Ordering', 'Table Reservations', 'Real-time Tracking', 'Menu Management', 'Payment Gateway'],
     tech: ['Next.js', 'Stripe', 'Firebase', 'Tailwind'],
-    img: '/images/portfolio/restaurant.png',
+    img: '/media/images/portfolio/restaurant.png',
     liveUrl: '',
     color: 'orange',
     accentColor: '#f97316'
@@ -74,7 +74,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Built a comprehensive fitness platform with AI-suggested workout plans, body composition tracking charts, trainer scheduling, and a visual progress timeline with photo comparisons.',
     features: ['Workout Plans', 'Body Metrics Dashboard', 'Trainer Booking', 'Progress Photos', 'Nutrition Tracking'],
     tech: ['React', 'Node.js', 'MongoDB', 'Chart.js'],
-    img: '/images/portfolio/fitness.png',
+    img: '/media/images/portfolio/fitness.png',
     liveUrl: '',
     color: 'red',
     accentColor: '#ef4444'
@@ -89,7 +89,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Designed an elegant booking platform with service showcases, stylist portfolio galleries, interactive appointment calendar, and automated WhatsApp/SMS reminder sequences.',
     features: ['Online Booking', 'Stylist Profiles', 'Appointment Calendar', 'SMS Reminders', 'Service Gallery'],
     tech: ['React', 'Express', 'PostgreSQL', 'Twilio'],
-    img: '/images/portfolio/salon.png',
+    img: '/media/images/portfolio/salon.png',
     liveUrl: '',
     color: 'pink',
     accentColor: '#ec4899'
@@ -104,7 +104,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Built a high-end fashion store with smooth product animations, AI-powered size recommendations, multi-currency Stripe checkout, and real-time inventory sync across all warehouses.',
     features: ['Product Quick-view', 'Size Recommendations', 'Multi-currency Checkout', 'Wishlist System', 'Inventory Management'],
     tech: ['Next.js', 'Shopify API', 'Stripe', 'GraphQL'],
-    img: '/images/portfolio/ecommerce.png',
+    img: '/media/images/portfolio/ecommerce.png',
     liveUrl: '',
     color: 'neutral',
     accentColor: '#a3a3a3'
@@ -119,7 +119,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Created a branded travel platform with interactive destination maps, custom itinerary builder, group booking management, and corporate retreat planning tools.',
     features: ['Destination Discovery', 'Itinerary Builder', 'Group Booking', 'Flight/Hotel Search', 'Corporate Retreats'],
     tech: ['React', 'Node.js', 'Google Maps API', 'PostgreSQL'],
-    img: '/images/portfolio/travel.png',
+    img: '/media/images/portfolio/travel.png',
     liveUrl: '',
     color: 'teal',
     accentColor: '#14b8a6'
@@ -134,7 +134,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Architected an all-in-one event platform with interactive venue maps, tiered ticket sales, WebRTC live streaming, speaker profile management, and real-time attendance analytics.',
     features: ['Ticket Booking', 'Venue Maps', 'Live Streaming', 'Speaker Profiles', 'Event Analytics'],
     tech: ['Next.js', 'Stripe', 'WebRTC', 'Redis'],
-    img: '/images/portfolio/event.png',
+    img: '/media/images/portfolio/event.png',
     liveUrl: '',
     color: 'violet',
     accentColor: '#8b5cf6'
@@ -149,7 +149,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Built a multi-tenant SaaS grid with isolated agent workspaces, custom orchestration pipelines, real-time token consumption dashboards, and usage-based billing integration.',
     features: ['Agent Orchestration', 'Multi-tenant Workspaces', 'Usage-based Billing', 'Token Metrics', 'Context Management'],
     tech: ['React', 'FastAPI', 'PostgreSQL', 'Vector DB'],
-    img: '/images/casestudies/aerocrm.png',
+    img: '/media/images/casestudies/aerocrm.png',
     liveUrl: '',
     color: 'blue',
     accentColor: '#3b82f6'
@@ -164,7 +164,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Engineered a high-throughput ledger engine with encrypted audit trails, real-time compliance report generation, multi-layer transaction validation, and automated regulatory filing.',
     features: ['10K TPS Processing', 'Encrypted Audit Trails', 'Compliance Reports', 'Transaction Validation', 'Regulatory Filing'],
     tech: ['FastAPI', 'Redis', 'Docker', 'PostgreSQL'],
-    img: '/images/casestudies/novadefi.png',
+    img: '/media/images/casestudies/novadefi.png',
     liveUrl: '',
     color: 'cyan',
     accentColor: '#06b6d4'
@@ -179,7 +179,7 @@ const DEFAULT_PROJECTS = [
     solution: 'Created a CRM dashboard with virtual property walkthroughs, AI-powered lead scoring, automated follow-up email sequences, and agent performance tracking dashboards.',
     features: ['Virtual Walkthroughs', 'Lead Scoring', 'Automated Follow-ups', 'Agent Dashboards', 'Property Matching'],
     tech: ['Next.js', 'Tailwind', 'PostgreSQL', 'Mapbox'],
-    img: '/images/casestudies/vesper.png',
+    img: '/media/images/casestudies/vesper.png',
     liveUrl: '',
     color: 'indigo',
     accentColor: '#6366f1'

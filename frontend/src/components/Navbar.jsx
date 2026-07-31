@@ -160,7 +160,7 @@ export default function Navbar() {
           {/* Logo */}
           <a href="#" onClick={handleLogoClick} aria-label="Homepage and Admin Portal Trigger" className="flex items-center gap-3 group relative cursor-pointer z-50">
             <img 
-              src="/images/hk-logo.png" 
+              src="/media/images/hk-logo.png" 
               alt="HK Logo" 
               className="w-9 h-9 object-contain transition-transform duration-500 group-hover:scale-110"
             />
