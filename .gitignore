@@ -30,3 +30,5 @@ crop_*.png
 # Agent configurations
 .agents/
 .gemini/
+
+frontend/public/media/
