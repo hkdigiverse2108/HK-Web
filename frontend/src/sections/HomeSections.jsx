@@ -5,7 +5,7 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 
 const resolveImgUrl = (url) => {
   if (!url) return '';
-  return (import.meta.env.DEV && !url.startsWith('http')) ? `http://localhost:8008${url}` : url;
+  return (import.meta.env.DEV && !url.startsWith('http') && window.location.hostname === 'localhost') ? `http://localhost:8008${url}` : url;
 };
 
 /* ───────────────────── TESTIMONIALS DATA ───────────────────── */
