@@ -10469,6 +10469,7 @@ export default function AdminPanel() {
                   className="flex-1 w-full border-none bg-black select-none pointer-events-auto"
                   title="Live CMS Web Preview"
                   key={iframeHash}
+                  onLoad={() => syncIframe(currentContent)}
                 />
               </div>
 

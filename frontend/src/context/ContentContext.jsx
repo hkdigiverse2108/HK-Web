@@ -1310,7 +1310,10 @@ export function ContentProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    fetchContent();
+    // Skip API call if we are in preview mode (iframe)
+    if (!window.location.hash.startsWith('#preview')) {
+      fetchContent();
+    }
   }, [fetchContent]);
 
   useEffect(() => {
