@@ -1990,15 +1990,14 @@ if __name__ == "__main__":
 
 
 
-    # Run build synchronously first if in development or if dist is missing
+    # Always rebuild frontend to ensure latest code is served
     dist_dir = os.path.join(frontend_dir, "dist")
-    if env_mode != "production" or not os.path.exists(dist_dir):
-        print("[System] Generating frontend production build...")
-        try:
-            subprocess.run([npm_cmd, "run", "build"], cwd=frontend_dir, check=True, shell=(os.name == 'nt'))
-            print("[System] Production build created successfully!")
-        except Exception as e:
-            print(f"[System] Warning: Production build failed ({e}). Starting dev services anyway...")
+    print("[System] Generating frontend production build...")
+    try:
+        subprocess.run([npm_cmd, "run", "build"], cwd=frontend_dir, check=True, shell=(os.name == 'nt'))
+        print("[System] Production build created successfully!")
+    except Exception as e:
+        print(f"[System] Warning: Production build failed ({e}). Starting dev services anyway...")
 
     # Define commands
     backend_port = os.getenv("PORT", "8008")
