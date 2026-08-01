@@ -31,4 +31,5 @@ crop_*.png
 .agents/
 .gemini/
 
-frontend/public/media/
+# Media uploads and generated images
+media/

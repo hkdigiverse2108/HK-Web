@@ -3,6 +3,11 @@ import { useContent } from '../context/ContentContext';
 import Magnetic from '../components/Magnetic';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
+const resolveImgUrl = (url) => {
+  if (!url) return '';
+  return (import.meta.env.DEV && !url.startsWith('http')) ? `http://localhost:8008${url}` : url;
+};
+
 /* ───────────────────── TESTIMONIALS DATA ───────────────────── */
 const testimonialsData = [
   {
@@ -118,9 +123,10 @@ const getServicePreview = (num, idx) => {
 
 const BrandLogo = ({ logo, name, size }) => {
   if (!logo) return null;
+  const imgUrl = resolveImgUrl(logo);
   return (
     <img 
-      src={logo} 
+      src={imgUrl} 
       alt={`${name} Logo`} 
       style={{ width: size, height: size, filter: 'grayscale(100%)' }}
       className="object-contain mr-3 mix-blend-screen opacity-70" 
@@ -428,7 +434,7 @@ export default function HomeSections({ overrideContent }) {
             }}
           >
             <div className="bg-[#050508]/90 border border-white/10 p-2.5 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.8)] backdrop-blur-xl animate-fadeIn">
-              <img src={activeImage} alt="Service Preview" className="w-[200px] h-[140px] object-cover rounded-xl border border-white/5" />
+              <img src={resolveImgUrl(activeImage)} alt="Service Preview" className="w-[200px] h-[140px] object-cover rounded-xl border border-white/5" />
               <div className="mt-2 text-center">
                 <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-neutral-400">
                   Explore Capability
@@ -478,11 +484,12 @@ export default function HomeSections({ overrideContent }) {
                     {/* Generated Mockup Image */}
                     {activeCaseStudy.image && (
                       <img 
-                        src={activeCaseStudy.image} 
+                        src={resolveImgUrl(activeCaseStudy.image)} 
                         alt={`${activeCaseStudy.client} Workspace`} 
                         className={`w-full h-full object-cover transition-all duration-1000 scale-100 group-hover:scale-[1.02] ${
                           isCaseStudyVisible ? 'grayscale-0' : 'grayscale'
                         }`}
+                        onError={(e) => { e.target.style.display = 'none'; }}
                       />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
@@ -499,7 +506,7 @@ export default function HomeSections({ overrideContent }) {
                     <div className="flex items-center gap-4">
                       {activeCaseStudy.logo && (
                         <img 
-                          src={activeCaseStudy.logo} 
+                          src={resolveImgUrl(activeCaseStudy.logo)} 
                           alt={`${activeCaseStudy.client} Logo`} 
                           className="w-14 h-14 object-contain mix-blend-screen opacity-90"
                           onError={(e) => { e.target.style.display = 'none'; }}
@@ -651,9 +658,10 @@ export default function HomeSections({ overrideContent }) {
                           {testimonial.avatar && (
                             <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-white/30 transition-all shadow-lg">
                               <img 
-                                src={testimonial.avatar} 
+                                src={resolveImgUrl(testimonial.avatar)} 
                                 alt={testimonial.name}
                                 className="w-full h-full object-cover" 
+                                onError={(e) => { e.target.style.display = 'none'; }}
                               />
                             </div>
                           )}

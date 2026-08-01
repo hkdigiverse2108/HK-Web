@@ -903,7 +903,8 @@ def compile_full_content(base_content: dict) -> dict:
 def load_content() -> dict:
     collection = get_mongo_collection()
     if collection is None:
-        raise HTTPException(status_code=503, detail="Database connection failed. System unavailable.")
+        print("[Fallback] Serving local JSON content for load_content")
+        return compile_full_content(load_local_content())
     try:
         # Check for published content
         doc = collection.find_one({"identifier": "website_content_published"})
@@ -932,7 +933,8 @@ def load_content() -> dict:
 def load_draft() -> dict:
     collection = get_mongo_collection()
     if collection is None:
-        raise HTTPException(status_code=503, detail="Database connection failed. System unavailable.")
+        print("[Fallback] Serving local JSON content for load_draft")
+        return compile_full_content(load_local_content())
     try:
         doc = collection.find_one({"identifier": "website_content_draft"})
         if doc:
@@ -1218,7 +1220,7 @@ async def upload_resume(file: UploadFile = File(...)):
     if ext not in [".pdf", ".doc", ".docx", ".png", ".jpg", ".jpeg"]:
         raise HTTPException(status_code=400, detail="Only PDF, Word documents (.doc/.docx), or image formats are allowed.")
         
-    uploads_dir = os.path.join("frontend", "public", "uploads", "resumes")
+    uploads_dir = os.path.join("media", "uploads", "resumes")
     os.makedirs(uploads_dir, exist_ok=True)
     
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -1241,7 +1243,7 @@ async def upload_image(file: UploadFile = File(...)):
     if not filename.lower().endswith((".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg")):
         raise HTTPException(status_code=400, detail="Only standard image files are allowed.")
         
-    uploads_dir = os.path.join("frontend", "public", "images", "uploads")
+    uploads_dir = os.path.join("media", "images", "uploads")
     os.makedirs(uploads_dir, exist_ok=True)
     
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -1264,7 +1266,7 @@ async def upload_video(file: UploadFile = File(...)):
     if not filename.lower().endswith(".mp4"):
         raise HTTPException(status_code=400, detail="Only MP4 video files are allowed.")
         
-    uploads_dir = os.path.join("frontend", "public", "images", "uploads")
+    uploads_dir = os.path.join("media", "images", "uploads")
     os.makedirs(uploads_dir, exist_ok=True)
     
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -1766,7 +1768,7 @@ async def upload_media_file(
     if not filename.lower().endswith(allowed):
         raise HTTPException(status_code=400, detail="Unsupported file format.")
         
-    uploads_dir = os.path.join("frontend", "public", "images", "uploads")
+    uploads_dir = os.path.join("media", "images", "uploads")
     os.makedirs(uploads_dir, exist_ok=True)
     
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -1822,8 +1824,9 @@ async def delete_media_file(
             {"$set": {"deleted_at": datetime.datetime.utcnow().isoformat() + "Z"}}
         )
         
-    filename = file_url.split("/")[-1]
-    saved_path = os.path.join("frontend", "public", "images", "uploads", filename)
+    # Extract filename and delete
+    filename = os.path.basename(file_url)
+    saved_path = os.path.join("media", "images", "uploads", filename)
     if os.path.exists(saved_path):
         try:
             os.remove(saved_path)
@@ -1921,10 +1924,16 @@ async def restore_backup(req: dict, user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=500, detail=str(e))
 
 # 3. Production & Development Static Files / SPA Server Setup
-env_mode = os.getenv("ENV", "development")
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
+# Universal Media Mount (Development & Production)
+# All static images and uploads are consolidated under the single 'media' folder.
+root_media_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "media"))
+os.makedirs(root_media_dir, exist_ok=True)
+app.mount("/media", StaticFiles(directory=root_media_dir), name="root_media")
+
+env_mode = os.getenv("ENV", "development")
 if env_mode == "production":
     dist_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "frontend", "dist"))
     if os.path.exists(dist_dir):
@@ -1932,20 +1941,6 @@ if env_mode == "production":
         assets_dir = os.path.join(dist_dir, "assets")
         if os.path.exists(assets_dir):
             app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
-
-        # Serve centralized media files
-        media_dir = os.path.join(dist_dir, "media")
-        if os.path.exists(media_dir):
-            app.mount("/media", StaticFiles(directory=media_dir), name="media")
-            
-            # Legacy backwards compatibility for database entries
-            legacy_images_dir = os.path.join(media_dir, "images")
-            if os.path.exists(legacy_images_dir):
-                app.mount("/images", StaticFiles(directory=legacy_images_dir), name="legacy_images")
-                
-            legacy_uploads_dir = os.path.join(media_dir, "uploads")
-            if os.path.exists(legacy_uploads_dir):
-                app.mount("/uploads", StaticFiles(directory=legacy_uploads_dir), name="legacy_uploads")
 
         # Catch-all fallback route to support React SPA Routing and root files
         @app.get("/{catchall:path}")
@@ -1963,19 +1958,8 @@ if env_mode == "production":
                 return FileResponse(index_file)
             raise HTTPException(status_code=404)
 else:
-    # In development mode, mount media directly from frontend/public if available
-    public_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "frontend", "public"))
-    media_dir = os.path.join(public_dir, "media")
-    if os.path.exists(media_dir):
-        app.mount("/media", StaticFiles(directory=media_dir), name="media")
-        
-        legacy_images_dir = os.path.join(media_dir, "images")
-        if os.path.exists(legacy_images_dir):
-            app.mount("/images", StaticFiles(directory=legacy_images_dir), name="legacy_images")
-            
-        legacy_uploads_dir = os.path.join(media_dir, "uploads")
-        if os.path.exists(legacy_uploads_dir):
-            app.mount("/uploads", StaticFiles(directory=legacy_uploads_dir), name="legacy_uploads")
+    # In development mode, API routes are proxied via Vite (no fallback needed)
+    pass
 
 # 4. Process Runner Orchestrator
 if __name__ == "__main__":

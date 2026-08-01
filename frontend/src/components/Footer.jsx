@@ -1,6 +1,11 @@
 import React from 'react';
 import { useContent } from '../context/ContentContext';
 
+const resolveImgUrl = (url) => {
+  if (!url) return '';
+  return (import.meta.env.DEV && !url.startsWith('http')) ? `http://localhost:8008${url}` : url;
+};
+
 export default function Footer() {
   const { content } = useContent();
   const footerData = content?.site_settings?.footer || {};
@@ -11,7 +16,7 @@ export default function Footer() {
       <div className="max-w-[1600px] w-full mx-auto grid grid-cols-12 gap-8 lg:gap-12">
         <div className="col-span-12 lg:col-span-4 space-y-6">
           <div className="flex items-center gap-3">
-            <img src={footerData.logo_img || "/media/images/hk-logo.png"} alt="HariKrushn DigiVerse Logo" className="w-10 h-10 object-contain" />
+            <img src={resolveImgUrl(footerData.logo_img || "/media/images/hk-logo.png")} alt="HariKrushn DigiVerse Logo" className="w-10 h-10 object-contain" />
             <span className="font-display text-xl font-bold text-white tracking-tight">{footerData.logo_text || logoText}</span>
           </div>
           <p className="leading-relaxed max-w-xs text-neutral-400 text-sm sm:text-[15px] whitespace-pre-line">
