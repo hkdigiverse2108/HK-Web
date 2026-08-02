@@ -876,7 +876,8 @@ function DesktopTree({
   };
 
   const canvasWidth = containerWidth;
-  const canvasHeight = maxY + 350;
+  // Reduce empty space at the bottom by dynamically calculating height
+  const canvasHeight = floatingNodes.length > 0 ? maxY + 450 : maxY + 150;
 
   // 5. Track mouse coordinates during live connections/dragging
   const handleMouseMove = (e) => {
