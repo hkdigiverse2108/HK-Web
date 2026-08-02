@@ -1235,6 +1235,18 @@ export function ContentProvider({ children }) {
           }));
         }
         setContent(data);
+        
+        // Option 1: Preload profile pictures in the background
+        if (data.people && Array.isArray(data.people)) {
+          setTimeout(() => {
+            data.people.forEach(p => {
+              if (p.image && typeof window !== 'undefined') {
+                const img = new window.Image();
+                img.src = p.image;
+              }
+            });
+          }, 500); // Small delay to prioritize critical rendering
+        }
       } else {
         setApiError("Database connection failed. System unavailable.");
       }
@@ -1243,6 +1255,17 @@ export function ContentProvider({ children }) {
       if (e.name === 'AbortError') {
         console.warn("API fetch timed out. Falling back to default content.");
         setContent(DEFAULT_CONTENT);
+        // Preload defaults
+        if (DEFAULT_CONTENT.people) {
+          setTimeout(() => {
+            DEFAULT_CONTENT.people.forEach(p => {
+              if (p.image && typeof window !== 'undefined') {
+                const img = new window.Image();
+                img.src = p.image;
+              }
+            });
+          }, 500);
+        }
       } else {
         setApiError("Database connection failed. System unavailable.");
       }

@@ -408,6 +408,7 @@ function PersonCard({ node, isActive, isDimmed, onHover, onClick, accent, hovere
 
   const cardId = `node-${node.name.replace(/\s+/g, '-').toLowerCase()}`;
   const [offset, setOffset] = useState(CARD_OFFSETS[node.name] || { x: 0, y: 0 });
+  const [imgLoaded, setImgLoaded] = useState(false);
   
   const tooltipPositionClasses = tooltipSide === 'left'
     ? 'right-full top-1/2 -translate-y-1/2 mr-4'
@@ -590,23 +591,25 @@ function PersonCard({ node, isActive, isDimmed, onHover, onClick, accent, hovere
       
       {/* Profile picture on top with colored outline */}
       <div 
-        className="w-16 h-16 rounded-full overflow-hidden border-2 flex-shrink-0 transition-transform duration-500 group-hover:scale-105 mb-3 flex items-center justify-center"
+        className="relative w-16 h-16 rounded-full overflow-hidden border-2 flex-shrink-0 transition-transform duration-500 group-hover:scale-105 mb-3 flex items-center justify-center bg-neutral-900"
         style={{ borderColor: accent.glowColor }}
       >
         {node.name === 'HariKrushn DigiVerse LLP' ? (
           <img 
             src="/media/images/hk-logo.png" 
             alt="HariKrushn DigiVerse LLP"
-            className="w-full h-full object-contain p-1 bg-[#050508]"
+            className={`w-full h-full object-contain p-1 bg-[#050508] transition-all duration-700 ease-out ${imgLoaded ? 'opacity-100 blur-none scale-100' : 'opacity-30 blur-md scale-110'}`}
             loading="lazy"
+            onLoad={() => setImgLoaded(true)}
           />
         ) : (
           <img 
             src={node.image} 
             alt={node.name}
-            className="w-full h-full object-cover bg-neutral-900"
+            className={`w-full h-full object-cover transition-all duration-700 ease-out ${imgLoaded ? 'opacity-100 blur-none scale-100' : 'opacity-30 blur-md scale-110'}`}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             loading="lazy"
+            onLoad={() => setImgLoaded(true)}
           />
         )}
       </div>
