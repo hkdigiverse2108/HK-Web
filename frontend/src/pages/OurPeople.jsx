@@ -1044,6 +1044,10 @@ function DesktopTree({
       {treeNodes.map((node) => {
         const pos = positions[node.name] || { x: 0, y: 0 };
         const accent = levelAccents[node.level] || levelAccents[3];
+        const actualX = getX(node.name);
+        
+        // If the node is on the right side of the screen, open tooltip to the left to avoid cutoff
+        const tooltipSide = actualX > canvasWidth - 450 ? 'left' : 'right';
 
         return (
           <div
@@ -1051,7 +1055,7 @@ function DesktopTree({
             id={`node-${node.name.replace(/\s+/g, '-').toLowerCase()}`}
             className="absolute transition-all duration-300"
             style={{ 
-              left: `${getX(node.name)}px`, 
+              left: `${actualX}px`, 
               top: `${pos.y}px`,
               zIndex: (hoveredNode === node.name || activeMember === node.name) ? 150 : 10
             }}
@@ -1069,6 +1073,7 @@ function DesktopTree({
               onDelete={onDelete}
               connectMode={connectMode}
               hoveredNode={hoveredNode}
+              tooltipSide={tooltipSide}
             />
           </div>
         );
