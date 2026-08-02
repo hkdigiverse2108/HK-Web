@@ -319,7 +319,11 @@ const parentMap = {
   "Meera Nair": ["Dev Patel", "Simran Kaur", "Krushn Patel", "Radhe Patel", "HariKrushn DigiVerse LLP"],
   "Zara Khan": ["Isha Verma", "Diya Joshi", "Arjun Shah", "Radhe Patel", "HariKrushn DigiVerse LLP"],
   "Kabir Das": ["Rohan Das", "Kabir Malhotra", "Pooja Mehta", "Prince Patel", "HariKrushn DigiVerse LLP"],
-  "Simran Sen": ["Ananya Sen", "Yash Wardhan", "Neha Sharma", "Prince Patel", "HariKrushn DigiVerse LLP"]
+  "Simran Sen": ["Ananya Sen", "Yash Wardhan", "Neha Sharma", "Prince Patel", "HariKrushn DigiVerse LLP"],
+
+  "Hari Node": ["HariKrushn DigiVerse LLP"],
+  "Krushn Node": ["HariKrushn DigiVerse LLP"],
+  "Hari Krushn Child Node": ["Hari Node", "Krushn Node", "HariKrushn DigiVerse LLP"]
 };
 
 /* ───────────────────── DEPT LABEL COMPONENT ───────────────────── */
@@ -720,7 +724,8 @@ function DesktopTree({
 
   peopleList.forEach(p => {
     // Member belongs to the tree if parent exists in the list or is level 1
-    const parentExists = p.parent_id && (p.parent_id === rootNode.name || peopleList.some(x => x.name === p.parent_id));
+    const parentIds = String(p.parent_id || '').split(',').map(s => s.trim()).filter(Boolean);
+    const parentExists = parentIds.some(id => id === rootNode.name || peopleList.some(x => x.name === id));
     if (p.level === 1 || parentExists) {
       const parentId = p.parent_id || (p.level === 1 ? rootNode.name : null);
       treeNodes.push({ ...p, parent_id: parentId });
@@ -736,7 +741,8 @@ function DesktopTree({
   const runAutoLayout = (nodes, rootId = 'HariKrushn DigiVerse LLP') => {
     const childrenMap = {};
     nodes.forEach(n => {
-      const parentId = n.name === rootId ? null : (n.parent_id || rootId);
+      const parentIds = n.name === rootId ? [] : String(n.parent_id || '').split(',').map(s => s.trim()).filter(Boolean);
+      const parentId = parentIds.length > 0 ? parentIds[0] : (n.name === rootId ? null : rootId);
       if (parentId) {
         if (!childrenMap[parentId]) childrenMap[parentId] = [];
         childrenMap[parentId].push(n);
@@ -788,6 +794,41 @@ function DesktopTree({
     };
 
     layoutSubtree(rootId, 1);
+
+    // POST-PROCESS: Center nodes with multiple parents between them
+    // Sort nodes by level to ensure we adjust parent nodes first, then child nodes
+    const sortedNodes = [...nodes].sort((a, b) => (a.level || 0) - (b.level || 0));
+    
+    sortedNodes.forEach(n => {
+      if (n.name === rootId) return;
+      const parentIds = String(n.parent_id || '').split(',').map(s => s.trim()).filter(Boolean);
+      if (parentIds.length > 1) {
+        const parentXs = parentIds.map(pId => positions[pId]?.x).filter(x => x !== undefined);
+        if (parentXs.length > 0) {
+          const averageX = parentXs.reduce((sum, val) => sum + val, 0) / parentXs.length;
+          const oldX = positions[n.name]?.x || averageX;
+          const shift = averageX - oldX;
+          
+          // Apply shift to this node
+          if (positions[n.name]) {
+            positions[n.name].x = averageX;
+          }
+          
+          // Shift children recursively if any
+          const shiftChildren = (nodeId) => {
+            const children = childrenMap[nodeId] || [];
+            children.forEach(child => {
+              if (positions[child.name]) {
+                positions[child.name].x += shift;
+              }
+              shiftChildren(child.name);
+            });
+          };
+          shiftChildren(n.name);
+        }
+      }
+    });
+
     return positions;
   };
 
@@ -870,60 +911,64 @@ function DesktopTree({
     >
       {/* SVG Canvas for dynamic connection lines */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible">
-        {treeNodes.map((node) => {
-          if (!node.parent_id) return null;
-          const parentPos = positions[node.parent_id];
-          const childPos = positions[node.name];
-          if (!parentPos || !childPos) return null;
+        {treeNodes.flatMap((node, idx) => {
+          if (!node.parent_id) return [];
+          const parentNames = String(node.parent_id).split(',').map(s => s.trim()).filter(Boolean);
 
-          const fromPoint = { x: getX(node.parent_id) + CARD_WIDTH / 2, y: parentPos.y + CARD_HEIGHT };
-          const toPoint = { x: getX(node.name) + CARD_WIDTH / 2, y: childPos.y };
+          return parentNames.map((pName, pIdx) => {
+            const parentPos = positions[pName];
+            const childPos = positions[node.name];
+            if (!parentPos || !childPos) return null;
 
-          const fromActive = isInActivePath(node.parent_id);
-          const toActive = isInActivePath(node.name);
-          const isActive = hoveredNode ? (fromActive && toActive) : true;
+            const fromPoint = { x: getX(pName) + CARD_WIDTH / 2, y: parentPos.y + CARD_HEIGHT };
+            const toPoint = { x: getX(node.name) + CARD_WIDTH / 2, y: childPos.y };
 
-          const strokeOpacity = hoveredNode ? (isActive ? 0.95 : 0.06) : 0.22;
-          const strokeWidth = hoveredNode ? (isActive ? 2.5 : 1) : 1.25;
+            const fromActive = isInActivePath(pName);
+            const toActive = isInActivePath(node.name);
+            const isActive = hoveredNode ? (fromActive && toActive) : true;
 
-          let color = "rgba(255, 255, 255, 0.2)";
-          if (node.level === 2) color = "#fbbf24";
-          else if (node.level === 3) color = "#8b5cf6";
-          else if (node.level === 4) color = "#10b981";
-          else if (node.level === 5) color = "#38bdf8";
+            const strokeOpacity = hoveredNode ? (isActive ? 0.95 : 0.06) : 0.22;
+            const strokeWidth = hoveredNode ? (isActive ? 2.5 : 1) : 1.25;
 
-          const dy = toPoint.y - fromPoint.y;
-          const controlY1 = fromPoint.y + dy * 0.45;
-          const controlY2 = fromPoint.y + dy * 0.55;
-          const pathD = `M ${fromPoint.x} ${fromPoint.y} C ${fromPoint.x} ${controlY1}, ${toPoint.x} ${controlY2}, ${toPoint.x} ${toPoint.y}`;
+            let color = "rgba(255, 255, 255, 0.2)";
+            if (node.level === 2) color = "#fbbf24";
+            else if (node.level === 3) color = "#8b5cf6";
+            else if (node.level === 4) color = "#10b981";
+            else if (node.level === 5) color = "#38bdf8";
 
-          return (
-            <g key={node.name}>
-              {isActive && hoveredNode && (
+            const dy = toPoint.y - fromPoint.y;
+            const controlY1 = fromPoint.y + dy * 0.45;
+            const controlY2 = fromPoint.y + dy * 0.55;
+            const pathD = `M ${fromPoint.x} ${fromPoint.y} C ${fromPoint.x} ${controlY1}, ${toPoint.x} ${controlY2}, ${toPoint.x} ${toPoint.y}`;
+
+            return (
+              <g key={`${node.name}-${pName}-${pIdx}`}>
+                {isActive && hoveredNode && (
+                  <path
+                    d={pathD}
+                    fill="none"
+                    stroke={color}
+                    strokeWidth={5}
+                    strokeOpacity={0.35}
+                    className="blur-[3px] transition-all duration-300"
+                  />
+                )}
                 <path
                   d={pathD}
                   fill="none"
                   stroke={color}
-                  strokeWidth={5}
-                  strokeOpacity={0.35}
-                  className="blur-[3px] transition-all duration-300"
+                  strokeWidth={strokeWidth}
+                  strokeOpacity={strokeOpacity}
+                  className="transition-all duration-300"
                 />
-              )}
-              <path
-                d={pathD}
-                fill="none"
-                stroke={color}
-                strokeWidth={strokeWidth}
-                strokeOpacity={strokeOpacity}
-                className="transition-all duration-300"
-              />
-              {node.level <= 3 && isActive && (
-                <circle r="3" fill="#ffffff" style={{ filter: `drop-shadow(0 0 4px ${color})` }}>
-                  <animateMotion dur="4s" repeatCount="indefinite" path={pathD} />
-                </circle>
-              )}
-            </g>
-          );
+                {node.level <= 3 && isActive && (
+                  <circle r="3" fill="#ffffff" style={{ filter: `drop-shadow(0 0 4px ${color})` }}>
+                    <animateMotion dur="4s" repeatCount="indefinite" path={pathD} />
+                  </circle>
+                )}
+              </g>
+            );
+          }).filter(Boolean);
         })}
 
         {/* Live animated connection line preview */}
@@ -1131,14 +1176,21 @@ export default function OurPeople({ overrideContent }) {
   peopleList.forEach(p => {
     const ancestors = [];
     const visited = new Set();
-    let current = p;
-    while (current && current.parent_id && !visited.has(current.name)) {
-      visited.add(current.name);
-      ancestors.push(current.parent_id);
-      current = peopleList.find(x => x.name === current.parent_id);
-    }
+    const collectAncestors = (node) => {
+      if (!node || visited.has(node.name)) return;
+      visited.add(node.name);
+      if (node.parent_id) {
+        const parents = String(node.parent_id).split(',').map(s => s.trim()).filter(Boolean);
+        for (const pName of parents) {
+          ancestors.push(pName);
+          const parentNode = peopleList.find(x => x.name === pName);
+          collectAncestors(parentNode);
+        }
+      }
+    };
+    collectAncestors(p);
     ancestors.push("HariKrushn DigiVerse LLP");
-    parentMap[p.name] = ancestors;
+    parentMap[p.name] = [...new Set(ancestors)];
   });
 
   const assignedNames = new Set([

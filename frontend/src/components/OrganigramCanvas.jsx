@@ -95,12 +95,17 @@ export default function OrganigramCanvas({
 
   // Helper to detect cyclic hierarchy
   const isDescendant = (parentName, childName) => {
-    let current = people.find(p => p.name === childName);
-    while (current && current.parent_id) {
-      if (current.parent_id === parentName) return true;
-      current = people.find(p => p.name === current.parent_id);
-    }
-    return false;
+    const visited = new Set();
+    const check = (name) => {
+      if (name === parentName) return true;
+      if (visited.has(name)) return false;
+      visited.add(name);
+      const node = people.find(p => p.name === name);
+      if (!node || !node.parent_id) return false;
+      const parents = String(node.parent_id).split(',').map(s => s.trim()).filter(Boolean);
+      return parents.some(pName => check(pName));
+    };
+    return check(childName);
   };
 
   // Keyboard Shortcuts for Undo/Redo/Delete
@@ -183,10 +188,19 @@ export default function OrganigramCanvas({
 
   const deleteNode = (name) => {
     saveStateToHistory();
+    const hasManager = (p, managerName) => {
+      return String(p.parent_id || '').split(',').map(s => s.trim()).filter(Boolean).includes(managerName);
+    };
+
+    const removeManager = (parentIdsStr, managerNameToRemove) => {
+      const ids = String(parentIdsStr || '').split(',').map(s => s.trim()).filter(Boolean);
+      const updatedIds = ids.filter(id => id !== managerNameToRemove);
+      return updatedIds.join(', ') || null;
+    };
+
     const nextPeople = people.filter(p => p.name !== name).map(p => {
-      // If deleted node was a parent, orphan its children or set to null
-      if (p.parent_id === name) {
-        return { ...p, parent_id: null };
+      if (hasManager(p, name)) {
+        return { ...p, parent_id: removeManager(p.parent_id, name) };
       }
       return p;
     });
@@ -270,45 +284,49 @@ export default function OrganigramCanvas({
       >
         {/* Connection Lines (SVG) */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible z-0">
-          {people.map((p, idx) => {
-            if (!p.parent_id) return null;
-            const parent = people.find(parent => parent.name === p.parent_id);
-            if (!parent) return null;
+          {people.flatMap((p, idx) => {
+            if (!p.parent_id) return [];
+            const parentNames = String(p.parent_id).split(',').map(s => s.trim()).filter(Boolean);
 
-            const from = getNodeCenter(parent);
-            const to = getNodeCenter(p);
+            return parentNames.map((pName, pIdx) => {
+              const parent = people.find(parent => parent.name === pName);
+              if (!parent) return null;
 
-            // Bézier path calculation
-            const dy = to.y - from.y;
-            const controlY1 = from.y + dy * 0.45;
-            const controlY2 = from.y + dy * 0.55;
-            const pathD = `M ${from.x} ${from.y} C ${from.x} ${controlY1}, ${to.x} ${controlY2}, ${to.x} ${to.y}`;
+              const from = getNodeCenter(parent);
+              const to = getNodeCenter(p);
 
-            return (
-              <g key={idx}>
-                {/* Glowing glow line */}
-                <path
-                  d={pathD}
-                  fill="none"
-                  stroke="#fbbf24"
-                  strokeWidth="3"
-                  strokeOpacity="0.25"
-                  className="blur-[2px]"
-                />
-                {/* Core line */}
-                <path
-                  d={pathD}
-                  fill="none"
-                  stroke="#fbbf24"
-                  strokeWidth="1.5"
-                  strokeOpacity="0.6"
-                />
-                {/* Flowing animated dot */}
-                <circle r="3" fill="#ffffff">
-                  <animateMotion dur="4s" repeatCount="indefinite" path={pathD} />
-                </circle>
-              </g>
-            );
+              // Bézier path calculation
+              const dy = to.y - from.y;
+              const controlY1 = from.y + dy * 0.45;
+              const controlY2 = from.y + dy * 0.55;
+              const pathD = `M ${from.x} ${from.y} C ${from.x} ${controlY1}, ${to.x} ${controlY2}, ${to.x} ${to.y}`;
+
+              return (
+                <g key={`${idx}-${pIdx}`}>
+                  {/* Glowing glow line */}
+                  <path
+                    d={pathD}
+                    fill="none"
+                    stroke="#fbbf24"
+                    strokeWidth="3"
+                    strokeOpacity="0.25"
+                    className="blur-[2px]"
+                  />
+                  {/* Core line */}
+                  <path
+                    d={pathD}
+                    fill="none"
+                    stroke="#fbbf24"
+                    strokeWidth="1.5"
+                    strokeOpacity="0.6"
+                  />
+                  {/* Flowing animated dot */}
+                  <circle r="3" fill="#ffffff">
+                    <animateMotion dur="4s" repeatCount="indefinite" path={pathD} />
+                  </circle>
+                </g>
+              );
+            }).filter(Boolean);
           })}
 
           {/* Render active connection line if linking */}
