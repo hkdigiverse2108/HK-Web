@@ -641,7 +641,7 @@ function PersonCard({ node, isActive, isDimmed, onHover, onClick, accent, hovere
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="rounded-2xl bg-[#08080d]/95 backdrop-blur-2xl p-5 relative overflow-hidden text-left font-sans">
+          <div className="rounded-2xl bg-[#08080d]/95 backdrop-blur-2xl pt-5 px-5 pb-7 relative overflow-hidden text-left font-sans">
             <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ backgroundColor: accent.glowColor }} />
             <div
               className="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl opacity-20 pointer-events-none"
@@ -673,11 +673,13 @@ function PersonCard({ node, isActive, isDimmed, onHover, onClick, accent, hovere
             <div className="pt-3 mt-3 border-t border-white/5 relative z-10 text-left">
               <span className="text-[10px] uppercase font-mono tracking-widest text-neutral-500 block">Focus Area</span>
               <span className="text-xs text-neutral-300 block mt-1 font-medium">
-                {node.level === 1 ? 'Strategic Vision' :
+                {node.focus_area || (
+                 node.level === 1 ? 'Strategic Vision' :
                  node.level === 2 ? 'Executive Leadership' :
                  node.role.includes('Tech') || node.role.includes('Dev') || node.role.includes('QA') ? 'System & Logic' :
                  node.role.includes('Design') || node.role.includes('UI') ? 'UI/UX Craft' :
-                 node.role.includes('AI') || node.role.includes('ML') ? 'AI Research' : 'Growth & Brand'}
+                 node.role.includes('AI') || node.role.includes('ML') ? 'AI Research' : 'Growth & Brand'
+                )}
               </span>
             </div>
           </div>
@@ -997,7 +999,7 @@ function DesktopTree({
             style={{ 
               left: `${getX(node.name)}px`, 
               top: `${pos.y}px`,
-              zIndex: 10
+              zIndex: (hoveredNode === node.name || activeMember === node.name) ? 150 : 10
             }}
           >
             <PersonCard 
@@ -1012,6 +1014,7 @@ function DesktopTree({
               onReParent={onReParent}
               onDelete={onDelete}
               connectMode={connectMode}
+              hoveredNode={hoveredNode}
             />
           </div>
         );
@@ -1493,7 +1496,7 @@ export default function OurPeople({ overrideContent }) {
             <StarParticles />
           </div>
 
-          <div className="w-full max-w-full px-6 lg:px-16 xl:px-24 relative z-10">
+          <div className="w-full max-w-full relative z-10">
             <DesktopTree 
               activeMember={activeMember} 
               onSelect={(member) => {

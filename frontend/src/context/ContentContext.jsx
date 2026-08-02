@@ -1220,7 +1220,11 @@ export function ContentProvider({ children }) {
     try {
       setLoading(true);
       setApiError(null);
-      const res = await fetch(API_URL + '/api/content');
+      // Add timeout so fetch doesn't hang the loading screen forever
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const res = await fetch(API_URL + '/api/content', { signal: controller.signal });
+      clearTimeout(timeoutId);
       if (res.ok) {
         const data = await res.json();
         if (data.career_jobs) data.careers = data.career_jobs;
@@ -1236,7 +1240,12 @@ export function ContentProvider({ children }) {
       }
     } catch (e) {
       console.error("Failed to fetch dynamic content from API:", e);
-      setApiError("Database connection failed. System unavailable.");
+      if (e.name === 'AbortError') {
+        console.warn("API fetch timed out. Falling back to default content.");
+        setContent(DEFAULT_CONTENT);
+      } else {
+        setApiError("Database connection failed. System unavailable.");
+      }
     } finally {
       setLoading(false);
       setInitialLoadDone(true);
@@ -1330,6 +1339,21 @@ export function ContentProvider({ children }) {
       setLoading(false);
       setInitialLoadDone(true);
     }
+
+    // Hard safety fallback: if loading screen is still showing after 8s, force render
+    const safetyTimeout = setTimeout(() => {
+      setInitialLoadDone(prev => {
+        if (!prev) {
+          console.warn("ContentProvider safety timeout: forcing render with default content.");
+          setContent(current => current || DEFAULT_CONTENT);
+          setLoading(false);
+          return true;
+        }
+        return prev;
+      });
+    }, 8000);
+
+    return () => clearTimeout(safetyTimeout);
   }, [fetchContent]);
 
   useEffect(() => {

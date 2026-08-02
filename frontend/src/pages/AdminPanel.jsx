@@ -5684,6 +5684,17 @@ export default function AdminPanel() {
                     </div>
 
                     <div>
+                      <label className="font-mono text-[8px] text-neutral-500 block mb-0.5">Focus Area</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. System Architecture (leave blank for auto)"
+                        value={selectedItem.focus_area || ''}
+                        onChange={(e) => updatePeopleItem(selectedIndex, 'focus_area', e.target.value)}
+                        className="w-full px-3 py-1.5 bg-black border border-white/10 rounded text-white text-xs focus:outline-none mb-3"
+                      />
+                    </div>
+
+                    <div>
                       <label className="font-mono text-[8px] text-neutral-500 block mb-0.5">Short Bio</label>
                       <textarea
                         rows={3}
