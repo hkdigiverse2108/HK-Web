@@ -969,8 +969,8 @@ function DesktopTree({
                   strokeOpacity={strokeOpacity}
                   className="transition-all duration-300"
                 />
-                {/* Department label on the connecting line (Only for Level 4 and below) */}
-                {node.dept && node.level > 3 && (() => {
+                {/* Department label on the connecting line */}
+                {node.dept && node.dept !== 'FOUNDER' && node.dept !== 'HR' && (() => {
                   // Position the label exactly in the middle of the perfectly straight vertical drop
                   const labelX = toPoint.x;
                   const labelY = toPoint.y - (straightDrop / 2); 
