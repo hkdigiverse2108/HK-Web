@@ -938,10 +938,16 @@ function DesktopTree({
             else if (node.level === 4) color = "#10b981";
             else if (node.level === 5) color = "#38bdf8";
 
-            const dy = toPoint.y - fromPoint.y;
-            const controlY1 = fromPoint.y + dy * 0.45;
-            const controlY2 = fromPoint.y + dy * 0.55;
-            const pathD = `M ${fromPoint.x} ${fromPoint.y} C ${fromPoint.x} ${controlY1}, ${toPoint.x} ${controlY2}, ${toPoint.x} ${toPoint.y}`;
+            const fullDy = toPoint.y - fromPoint.y;
+            // Guarantee a straight vertical drop at the bottom for the label
+            const straightDrop = Math.min(50, fullDy / 2); 
+            const curveEndY = toPoint.y - straightDrop;
+            const curveDy = curveEndY - fromPoint.y;
+            
+            // Smooth S-curve followed by a perfectly straight line
+            const controlY1 = fromPoint.y + curveDy * 0.5;
+            const controlY2 = fromPoint.y + curveDy * 0.5;
+            const pathD = `M ${fromPoint.x} ${fromPoint.y} C ${fromPoint.x} ${controlY1}, ${toPoint.x} ${controlY2}, ${toPoint.x} ${curveEndY} L ${toPoint.x} ${toPoint.y}`;
 
             return (
               <g key={`${node.name}-${pName}-${pIdx}`}>
@@ -963,6 +969,54 @@ function DesktopTree({
                   strokeOpacity={strokeOpacity}
                   className="transition-all duration-300"
                 />
+                {/* Department label on the connecting line (Only for Level 4 and below) */}
+                {node.dept && node.level > 3 && (() => {
+                  // Position the label exactly in the middle of the perfectly straight vertical drop
+                  const labelX = toPoint.x;
+                  const labelY = toPoint.y - (straightDrop / 2); 
+                  
+                  // Calculate dynamic width based on text length
+                  const textWidth = node.dept.length * 6 + 12;
+                  const rectWidth = Math.max(textWidth, 40); // Minimum width
+                  
+                  return (
+                    <g style={{ pointerEvents: 'none', filter: 'drop-shadow(0px 8px 16px rgba(0,0,0,0.8))' }}>
+                      <rect
+                        x={labelX - rectWidth / 2}
+                        y={labelY - 12}
+                        width={rectWidth}
+                        height={20}
+                        rx={10}
+                        fill="#030305"
+                        stroke={color}
+                        strokeWidth={isActive ? 1.5 : 1}
+                        strokeOpacity={strokeOpacity}
+                        style={{
+                          filter: isActive ? `drop-shadow(0 0 6px ${color}90)` : 'none',
+                          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                        }}
+                      />
+                      <text
+                        x={labelX}
+                        y={labelY + 3}
+                        textAnchor="middle"
+                        fill={isActive ? "#ffffff" : color}
+                        fontSize="9"
+                        fontWeight="700"
+                        fontFamily="'JetBrains Mono', 'SF Mono', monospace"
+                        letterSpacing="1.5"
+                        opacity={Math.max(strokeOpacity, 0.6)}
+                        style={{
+                          filter: isActive ? `drop-shadow(0 0 5px ${color}) drop-shadow(0 0 10px ${color})` : 'none',
+                          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                        }}
+                        className="select-none"
+                      >
+                        {node.dept}
+                      </text>
+                    </g>
+                  );
+                })()}
                 {node.level <= 3 && isActive && (
                   <circle r="3" fill="#ffffff" style={{ filter: `drop-shadow(0 0 4px ${color})` }}>
                     <animateMotion dur="4s" repeatCount="indefinite" path={pathD} />
