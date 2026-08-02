@@ -180,10 +180,18 @@ html.lenis, html.lenis body {
   animation: ticker-scroll 25s linear infinite;
 }
 
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
 .animate-scroll-reverse {
   display: flex;
   width: max-content;
   animation: ticker-scroll 25s linear infinite reverse;
+}
+
+.animate-scroll-reverse:hover {
+  animation-play-state: paused;
 }
 
 /* ─── Constellation Team Tree Styles ─── */

@@ -42,7 +42,7 @@ import HomeSections from './sections/HomeSections';
 // Live Iframe Preview Container Component
 function PreviewContainer({ currentHash }) {
   const [previewContent, setPreviewContent] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const previewContentRef = React.useRef(previewContent);
 
   const handlePreloadComplete = useCallback(() => {
@@ -76,12 +76,7 @@ function PreviewContainer({ currentHash }) {
       if (event.origin !== window.location.origin) return;
       if (event.data && event.data.type === 'UPDATE_CMS_PREVIEW') {
         const nextContent = event.data.content;
-        const currentContent = previewContentRef.current;
         setPreviewContent(nextContent);
-        // If the video URL changed, we need to trigger re-loading
-        if (currentContent && currentContent.hero && nextContent.hero && nextContent.hero.videoUrl !== currentContent.hero.videoUrl) {
-          setIsLoaded(false);
-        }
         if (event.data.activeTab) {
           scrollToActiveTab(event.data.activeTab);
         }
@@ -92,11 +87,29 @@ function PreviewContainer({ currentHash }) {
 
     window.addEventListener('message', handleMessage);
 
+    // Fallback: If parent doesn't send content within 1.5s, fetch it directly
+    const fallbackTimeout = setTimeout(async () => {
+      if (!previewContentRef.current) {
+        try {
+          const res = await fetch('/api/content/draft');
+          if (res.ok) {
+            const data = await res.json();
+            setPreviewContent(data);
+          }
+        } catch (e) {
+          console.error("Failed to fetch fallback preview content", e);
+        }
+      }
+    }, 1500);
+
     if (window.parent) {
       window.parent.postMessage({ type: 'CMS_PREVIEW_READY' }, '*');
     }
 
-    return () => window.removeEventListener('message', handleMessage);
+    return () => {
+      window.removeEventListener('message', handleMessage);
+      clearTimeout(fallbackTimeout);
+    };
   }, [scrollToActiveTab]);
 
   if (!previewContent) {

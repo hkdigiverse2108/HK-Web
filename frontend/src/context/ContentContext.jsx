@@ -1313,14 +1313,31 @@ export function ContentProvider({ children }) {
     // Skip API call if we are in preview mode (iframe)
     if (!window.location.hash.startsWith('#preview')) {
       fetchContent();
+    } else {
+      setLoading(false);
+      setInitialLoadDone(true);
     }
   }, [fetchContent]);
+
+  useEffect(() => {
+    const checkHash = () => {
+      if (window.location.hash.startsWith('#preview')) {
+        setLoading(false);
+        setInitialLoadDone(true);
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    return () => window.removeEventListener('hashchange', checkHash);
+  }, []);
 
   useEffect(() => {
     const handleMessage = (event) => {
       if (event.origin !== window.location.origin) return;
       if (event.data && event.data.type === 'UPDATE_CMS_PREVIEW') {
         setContent(event.data.content);
+        setLoading(false);
+        setInitialLoadDone(true);
       }
     };
     window.addEventListener('message', handleMessage);
