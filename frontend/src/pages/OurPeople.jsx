@@ -1272,25 +1272,29 @@ export default function OurPeople({ overrideContent }) {
 
   const unassignedPeople = peopleList.filter(p => !assignedNames.has(p.name));
 
-  const mobileTreeData = [
-    {
-      ...founders[0],
-      children: [
-        {
-          ...cLevels.cto,
-          children: [clonedDeps[0].lead, clonedDeps[1].lead]
-        }
-      ]
-    },
-    {
-      ...founders[1],
-      children: [
-        { ...cLevels.cdo, children: [clonedDeps[2].lead] },
-        { ...cLevels.caio, children: [clonedDeps[3].lead] },
-        { ...cLevels.cmo, children: [clonedDeps[4].lead] }
-      ]
-    }
-  ];
+  const buildMobileTree = () => {
+    const rootNode = { name: 'HariKrushn DigiVerse LLP', level: 1 };
+    const nodeMap = { [rootNode.name]: { ...rootNode, children: [] } };
+    
+    peopleList.forEach(p => {
+      nodeMap[p.name] = { ...p, children: [] };
+    });
+
+    peopleList.forEach(p => {
+      const parentIds = String(p.parent_id || '').split(',').map(s => s.trim()).filter(Boolean);
+      const parentId = parentIds.length > 0 ? parentIds[0] : (p.level === 1 ? rootNode.name : null);
+      
+      if (parentId && nodeMap[parentId]) {
+        nodeMap[parentId].children.push(nodeMap[p.name]);
+      } else if (p.level === 1 || parentIds.includes(rootNode.name)) {
+        nodeMap[rootNode.name].children.push(nodeMap[p.name]);
+      }
+    });
+
+    return nodeMap[rootNode.name].children;
+  };
+
+  const mobileTreeData = buildMobileTree();
 
   const [activeMember, setActiveMember] = useState(null);
   const [hoveredNode, setHoveredNode] = useState(null);
