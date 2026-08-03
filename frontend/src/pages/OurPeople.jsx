@@ -533,10 +533,10 @@ function PersonCard({ node, isActive, isDimmed, onHover, onClick, accent, hovere
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onUp);
       }}
-      className={`w-44 p-4 rounded-2xl bg-[#09090e]/75 backdrop-blur-xl border transition-all duration-400 flex flex-col items-center text-center relative group ${
+      className={`${tooltipSide === 'bottom' && showTooltip ? 'w-[85vw] max-w-[280px]' : 'w-44'} p-4 rounded-2xl bg-[#09090e]/75 backdrop-blur-xl border transition-all duration-400 flex flex-col items-center text-center relative group ${
         isDimmed 
-          ? `opacity-20 scale-[0.96] blur-[0.5px] ${isPreviewMode ? '' : 'pointer-events-none'}` 
-          : 'opacity-100 hover:scale-[1.04]'
+          ? `opacity-20 lg:scale-[0.96] blur-[0.5px] ${isPreviewMode ? '' : 'pointer-events-none'}` 
+          : 'opacity-100 lg:hover:scale-[1.04]'
       }`}
       style={{
         borderColor: isSelected ? '#f43f5e' : isActive ? accent.glowColor : 'rgba(255,255,255,0.06)',
@@ -636,12 +636,23 @@ function PersonCard({ node, isActive, isDimmed, onHover, onClick, accent, hovere
       {/* Details Popover */}
       {showTooltip && (
         <div
-          className={`absolute ${tooltipPositionClasses} w-[300px] rounded-2xl p-[1px] z-[200] animate-fadeIn pointer-events-auto`}
-          style={{
-            ...tooltipTopStyle,
-            background: `linear-gradient(135deg, ${accent.glowColor}, transparent 70%)`,
-            boxShadow: `0 25px 80px rgba(0,0,0,0.8), 0 0 40px ${accent.glowColor}30`,
-          }}
+          className={
+            tooltipSide === 'bottom'
+              ? `relative mt-4 w-full rounded-2xl p-[1px] z-[200] animate-fadeIn pointer-events-auto`
+              : `absolute ${tooltipPositionClasses} w-[300px] rounded-2xl p-[1px] z-[200] animate-fadeIn pointer-events-auto`
+          }
+          style={
+            tooltipSide === 'bottom'
+            ? {
+                background: `linear-gradient(135deg, ${accent.glowColor}, transparent 70%)`,
+                boxShadow: `0 15px 40px rgba(0,0,0,0.5), 0 0 30px ${accent.glowColor}20`,
+              }
+            : {
+                ...tooltipTopStyle,
+                background: `linear-gradient(135deg, ${accent.glowColor}, transparent 70%)`,
+                boxShadow: `0 25px 80px rgba(0,0,0,0.8), 0 0 40px ${accent.glowColor}30`,
+              }
+          }
           onClick={(e) => e.stopPropagation()}
         >
           <div className="rounded-2xl bg-[#08080d]/95 backdrop-blur-2xl pt-5 px-5 pb-7 relative overflow-hidden text-left font-sans">
