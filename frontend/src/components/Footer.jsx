@@ -66,7 +66,9 @@ export default function Footer() {
         
         <div className="col-span-12 pt-16 mt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-neutral-500 text-xs sm:text-sm">
-            {footerData.copyright || "© 2026 HariKrushn DigiVerse LLP. Architecting the Infinite Digital."}
+            {footerData.copyright 
+              ? footerData.copyright.replace(/202\d/, new Date().getFullYear())
+              : `© ${new Date().getFullYear()} HariKrushn DigiVerse LLP. Architecting the Infinite Digital.`}
           </p>
           <div className="flex gap-6 text-neutral-500 text-xs sm:text-sm">
             {(footerData.social_links || [])
