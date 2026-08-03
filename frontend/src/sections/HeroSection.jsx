@@ -119,7 +119,7 @@ export default function HeroSection({ isLoaded, overrideContent }) {
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top top",
-        end: "+=300%", // 300% viewport scroll track for smooth 315-frame scrub
+        end: "+=500%", // 500% viewport scroll track for smooth 593-frame scrub
         pin: true,
         scrub: 0.5,
         onUpdate: (self) => {
