@@ -14,8 +14,8 @@ export default function Preloader({ onComplete }) {
     isMountedRef.current = true;
     const isMobile = window.innerWidth < 768;
     const totalFrames = isMobile
-      ? (content && content.hero && content.hero.mobileFrameCount) || 848
-      : (content && content.hero && content.hero.frameCount) || 391;
+      ? (content && content.hero && content.hero.mobileFrameCount) || 593
+      : (content && content.hero && content.hero.frameCount) || 593;
       
     // Wait for at most 40 frames to unblock UI quickly
     const targetFramesToWait = Math.min(totalFrames, 40);

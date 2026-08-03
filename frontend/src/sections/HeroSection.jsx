@@ -19,8 +19,8 @@ export default function HeroSection({ isLoaded, overrideContent }) {
 
   const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
   const totalFrames = isMobile 
-    ? (hero.mobileFrameCount || 848) 
-    : (hero.frameCount || 391);
+    ? (hero.mobileFrameCount || 593) 
+    : (hero.frameCount || 593);
   const targetFrameRef = useRef(0);
   const currentFrameRef = useRef(0);
 
@@ -125,24 +125,19 @@ export default function HeroSection({ isLoaded, overrideContent }) {
         onUpdate: (self) => {
           // Map scroll progress (0 to 1) directly to total frame indices
           targetFrameRef.current = self.progress * (totalFrames - 1);
+          
+          // Fast fade out for text container in the first 2% of scroll
+          const content = textContainerRef.current;
+          if (content) {
+            const p = Math.min(1, self.progress / 0.02);
+            content.style.opacity = 1 - p;
+            content.style.transform = `translateY(${-40 * p}px)`;
+            content.style.pointerEvents = p === 1 ? 'none' : 'auto';
+          }
         }
       });
 
-      // Fade out hero text during scroll
-      const content = textContainerRef.current;
-      if (content) {
-        gsap.to(content, {
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top top",
-            end: "+=30%",
-            scrub: true,
-          },
-          opacity: 0,
-          y: -60,
-          ease: "none"
-        });
-      }
+      // The text fade out is now handled mathematically in the main ScrollTrigger onUpdate above.
     });
 
     // Lerp loop for fluid 60 FPS scrolling frame renders

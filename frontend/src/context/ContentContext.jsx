@@ -5,8 +5,8 @@ const API_URL = import.meta.env.VITE_API_URL || '';
 
 export const DEFAULT_CONTENT = {
   hero: {
-    frameCount: 315,
-    mobileFrameCount: 848,
+    frameCount: 593,
+    mobileFrameCount: 593,
     label: "// EST. 2019 — A DIGITAL ATELIER",
     title1: "Architecting the",
     title2: "infinite digital.",
