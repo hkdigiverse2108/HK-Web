@@ -129,7 +129,7 @@ const BrandLogo = ({ logo, name, size }) => {
       src={imgUrl} 
       alt={`${name} Logo`} 
       style={{ width: size, height: size }}
-      className="object-contain mr-3 mix-blend-screen opacity-70 filter grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer" 
+      className="object-contain mr-3 transition-all duration-300 cursor-pointer rounded-full" 
       onError={(e) => {
         // Fallback in case image is missing
         e.target.style.display = 'none';

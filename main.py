@@ -49,6 +49,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Pre-warm MongoDB connection on startup so first request doesn't block
+@app.on_event("startup")
+async def startup_event():
+    """Pre-warm MongoDB connection in background thread to avoid cold-start timeouts."""
+    def _warmup():
+        try:
+            print("[Startup] Pre-warming MongoDB connection...")
+            coll = get_mongo_collection()
+            if coll is not None:
+                print("[Startup] MongoDB connection ready!")
+            else:
+                print("[Startup] MongoDB not available, will use local fallback.")
+        except Exception as e:
+            print(f"[Startup] MongoDB warmup failed: {e}")
+    
+    warmup_thread = threading.Thread(target=_warmup, daemon=True)
+    warmup_thread.start()
+
+
 # Pydantic models for admin auth and content
 class VerifyRequest(BaseModel):
     password: str
@@ -635,7 +654,9 @@ DEFAULT_CONTENT = {
         "label": "// EST. 2019 — A DIGITAL ATELIER",
         "title1": "Architecting the",
         "title2": "infinite digital.",
-        "desc": "HariKrushn DigiVerse is an engineering & design partnership building custom software, AI systems and digital brand presence for ambitious global teams."
+        "desc": "HariKrushn DigiVerse is an engineering & design partnership building custom software, AI systems and digital brand presence for ambitious global teams.",
+        "frameCount": 792,
+        "mobileFrameCount": 868
     },
     "brands": {
         "show": True,

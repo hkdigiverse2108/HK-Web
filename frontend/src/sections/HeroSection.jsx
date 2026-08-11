@@ -15,24 +15,21 @@ export default function HeroSection({ isLoaded, overrideContent }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const textContainerRef = useRef(null);
-  const [framesAvailable, setFramesAvailable] = useState(false);
+  const [videoAvailable, setVideoAvailable] = useState(false);
 
   const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
-  const totalFrames = isMobile 
-    ? (hero.mobileFrameCount || 593) 
-    : (hero.frameCount || 593);
   const targetFrameRef = useRef(0);
   const currentFrameRef = useRef(0);
 
-  // Detect once preloader has exposed the frames
+  // Detect once preloader is ready
   useEffect(() => {
-    if (isLoaded && window.preloadedFrames && window.preloadedFrames.length > 0) {
-      setFramesAvailable(true);
+    if (isLoaded) {
+      setVideoAvailable(true);
     }
   }, [isLoaded]);
 
   useEffect(() => {
-    if (!isLoaded || !framesAvailable) return;
+    if (!isLoaded || !videoAvailable) return;
 
     // 1. Initialize Lenis Smooth Scroll
     const lenis = new Lenis({
@@ -63,29 +60,25 @@ export default function HeroSection({ isLoaded, overrideContent }) {
     const ctxCanvas = canvas.getContext('2d');
     if (!ctxCanvas) return;
 
-    // Frame drawing logic (respects cover sizing)
-    const drawFrame = (index) => {
-      const frames = window.preloadedFrames;
-      if (!frames || frames.length === 0) return;
+    // Create video element for scrubbing
+    const video = document.createElement('video');
+    video.src = window.preloadedVideoURL || (isMobile ? '/media/videos/hero_scroll_mobile.mp4' : '/media/videos/hero_scroll.mp4');
+    video.preload = 'auto';
+    video.playsInline = true;
+    video.muted = true;
+    video.loop = false;
+    
+    let isVideoReady = false;
 
-      let img = frames[index];
-      if (!img) {
-        for (let i = index; i >= 0; i--) {
-          if (frames[i]) { img = frames[i]; break; }
-        }
-        if (!img) {
-          for (let i = index; i < frames.length; i++) {
-            if (frames[i]) { img = frames[i]; break; }
-          }
-        }
-      }
-      if (!img) return;
+    // Video frame drawing logic (respects cover sizing)
+    const drawFrame = () => {
+      if (!isVideoReady) return;
 
       const canvasWidth = window.innerWidth;
       const canvasHeight = window.innerHeight;
 
-      const imgWidth = img.naturalWidth || 1920;
-      const imgHeight = img.naturalHeight || 1080;
+      const imgWidth = video.videoWidth || 1920;
+      const imgHeight = video.videoHeight || 1080;
 
       // Cover scaling math
       const scale = Math.max(canvasWidth / imgWidth, canvasHeight / imgHeight);
@@ -93,8 +86,21 @@ export default function HeroSection({ isLoaded, overrideContent }) {
       const y = (canvasHeight - imgHeight * scale) / 2;
 
       ctxCanvas.clearRect(0, 0, canvasWidth, canvasHeight);
-      ctxCanvas.drawImage(img, x, y, imgWidth * scale, imgHeight * scale);
+      try {
+        ctxCanvas.drawImage(video, x, y, imgWidth * scale, imgHeight * scale);
+      } catch (err) {
+        console.error("Error drawing video frame to canvas:", err);
+      }
     };
+
+    const onMetadataLoaded = () => {
+      isVideoReady = true;
+      resizeCanvas();
+      drawFrame();
+    };
+
+    video.addEventListener('loadedmetadata', onMetadataLoaded);
+    video.addEventListener('seeked', drawFrame);
 
     // Canvas sizing setup with pixel ratio density
     const resizeCanvas = () => {
@@ -104,14 +110,18 @@ export default function HeroSection({ isLoaded, overrideContent }) {
       canvas.style.height = `${window.innerHeight}px`;
 
       ctxCanvas.scale(window.devicePixelRatio, window.devicePixelRatio);
-      drawFrame(Math.round(currentFrameRef.current));
+      drawFrame();
     };
 
     window.addEventListener('resize', resizeCanvas);
-    resizeCanvas(); // Trigger initial sizing
-
-    // Draw first frame immediately
-    drawFrame(0);
+    
+    // Trigger load and check if metadata already available (e.g. from Blob URL cache)
+    video.load();
+    if (video.readyState >= 1) {
+      onMetadataLoaded();
+    } else {
+      resizeCanvas();
+    }
 
     // Scope GSAP and ScrollTrigger in a gsap.context()
     const ctx = gsap.context(() => {
@@ -119,12 +129,14 @@ export default function HeroSection({ isLoaded, overrideContent }) {
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top top",
-        end: "+=500%", // 500% viewport scroll track for smooth 593-frame scrub
+        end: "+=500%", // 500% viewport scroll track for smooth scrub
         pin: true,
         scrub: 0.5,
         onUpdate: (self) => {
-          // Map scroll progress (0 to 1) directly to total frame indices
-          targetFrameRef.current = self.progress * (totalFrames - 1);
+          if (video.duration) {
+            // Map scroll progress (0 to 1) directly to video duration
+            targetFrameRef.current = self.progress * video.duration;
+          }
           
           // Fast fade out for text container in the first 2% of scroll
           const content = textContainerRef.current;
@@ -136,23 +148,24 @@ export default function HeroSection({ isLoaded, overrideContent }) {
           }
         }
       });
-
-      // The text fade out is now handled mathematically in the main ScrollTrigger onUpdate above.
     });
 
     // Lerp loop for fluid 60 FPS scrolling frame renders
     let frameRenderAnimFrameId;
     const updateFrame = () => {
-      const lerpFactor = 0.18;
+      const lerpFactor = 0.15; // Smooth scroll tracking lerp
       const diff = targetFrameRef.current - currentFrameRef.current;
 
-      if (Math.abs(diff) > 0.01) {
+      if (Math.abs(diff) > 0.001) {
         currentFrameRef.current += diff * lerpFactor;
 
         if (currentFrameRef.current < 0) currentFrameRef.current = 0;
-        if (currentFrameRef.current > totalFrames - 1) currentFrameRef.current = totalFrames - 1;
+        if (video.duration && currentFrameRef.current > video.duration) {
+          currentFrameRef.current = video.duration;
+        }
 
-        drawFrame(Math.round(currentFrameRef.current));
+        // Apply time seeking
+        video.currentTime = currentFrameRef.current;
       }
 
       frameRenderAnimFrameId = requestAnimationFrame(updateFrame);
@@ -162,6 +175,8 @@ export default function HeroSection({ isLoaded, overrideContent }) {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      video.removeEventListener('loadedmetadata', onMetadataLoaded);
+      video.removeEventListener('seeked', drawFrame);
       try {
         ScrollTrigger.getAll().forEach(t => t.kill(true));
         ctx.revert();
@@ -171,11 +186,11 @@ export default function HeroSection({ isLoaded, overrideContent }) {
       if (animFrameId) cancelAnimationFrame(animFrameId);
       if (frameRenderAnimFrameId) cancelAnimationFrame(frameRenderAnimFrameId);
     };
-  }, [isLoaded, framesAvailable]);
+  }, [isLoaded, videoAvailable]);
 
   // Content entrance animations on loaded trigger
   useEffect(() => {
-    if (!isLoaded || !framesAvailable) return;
+    if (!isLoaded || !videoAvailable) return;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ delay: 0.3 });
@@ -207,7 +222,7 @@ export default function HeroSection({ isLoaded, overrideContent }) {
     });
 
     return () => ctx.revert();
-  }, [isLoaded, framesAvailable]);
+  }, [isLoaded, videoAvailable]);
 
   if (hero.show === false) {
     return null;

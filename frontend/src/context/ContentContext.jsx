@@ -1216,13 +1216,14 @@ export function ContentProvider({ children }) {
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [apiError, setApiError] = useState(null);
 
-  const fetchContent = useCallback(async () => {
+  const fetchContent = useCallback(async (retryCount = 0) => {
+    const MAX_RETRIES = 3;
     try {
       setLoading(true);
       setApiError(null);
-      // Add timeout so fetch doesn't hang the loading screen forever
+      // Use a generous timeout to handle cold-start MongoDB Atlas connections
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
       const res = await fetch(API_URL + '/api/content', { signal: controller.signal });
       clearTimeout(timeoutId);
       if (res.ok) {
@@ -1236,7 +1237,7 @@ export function ContentProvider({ children }) {
         }
         setContent(data);
         
-        // Option 1: Preload profile pictures in the background
+        // Preload profile pictures in the background
         if (data.people && Array.isArray(data.people)) {
           setTimeout(() => {
             data.people.forEach(p => {
@@ -1248,24 +1249,33 @@ export function ContentProvider({ children }) {
           }, 500); // Small delay to prioritize critical rendering
         }
       } else {
+        // If we still have retries left, retry after a delay
+        if (retryCount < MAX_RETRIES) {
+          const delay = Math.min(2000 * Math.pow(2, retryCount), 10000);
+          console.warn(`API returned ${res.status}. Retrying in ${delay}ms... (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+          setTimeout(() => fetchContent(retryCount + 1), delay);
+          return; // Don't set error yet, retry is pending
+        }
         setApiError("Database connection failed. System unavailable.");
       }
     } catch (e) {
       console.error("Failed to fetch dynamic content from API:", e);
-      if (e.name === 'AbortError') {
-        console.warn("API fetch timed out. Falling back to default content.");
-        setContent(DEFAULT_CONTENT);
-        // Preload defaults
-        if (DEFAULT_CONTENT.people) {
-          setTimeout(() => {
-            DEFAULT_CONTENT.people.forEach(p => {
-              if (p.image && typeof window !== 'undefined') {
-                const img = new window.Image();
-                img.src = p.image;
-              }
-            });
-          }, 500);
+      if (e.name === 'AbortError' || e.message?.includes('fetch')) {
+        // Network error or timeout — retry if possible
+        if (retryCount < MAX_RETRIES) {
+          const delay = Math.min(3000 * Math.pow(2, retryCount), 15000);
+          console.warn(`API fetch failed (${e.name}). Retrying in ${delay}ms... (attempt ${retryCount + 1}/${MAX_RETRIES})`);
+          // Show content immediately so user isn't stuck on loading screen
+          if (retryCount === 0) {
+            setContent(prev => prev || DEFAULT_CONTENT);
+            setInitialLoadDone(true);
+            setLoading(false);
+          }
+          setTimeout(() => fetchContent(retryCount + 1), delay);
+          return;
         }
+        console.warn("All API retries exhausted. Using default content.");
+        setContent(prev => prev || DEFAULT_CONTENT);
       } else {
         setApiError("Database connection failed. System unavailable.");
       }
@@ -1363,7 +1373,7 @@ export function ContentProvider({ children }) {
       setInitialLoadDone(true);
     }
 
-    // Hard safety fallback: if loading screen is still showing after 8s, force render
+    // Hard safety fallback: if loading screen is still showing after 35s, force render
     const safetyTimeout = setTimeout(() => {
       setInitialLoadDone(prev => {
         if (!prev) {
@@ -1374,7 +1384,7 @@ export function ContentProvider({ children }) {
         }
         return prev;
       });
-    }, 8000);
+    }, 35000);
 
     return () => clearTimeout(safetyTimeout);
   }, [fetchContent]);

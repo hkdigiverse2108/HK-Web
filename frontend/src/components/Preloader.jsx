@@ -13,27 +13,17 @@ export default function Preloader({ onComplete }) {
   useEffect(() => {
     isMountedRef.current = true;
     const isMobile = window.innerWidth < 768;
-    const totalFrames = isMobile
-      ? (content && content.hero && content.hero.mobileFrameCount) || 593
-      : (content && content.hero && content.hero.frameCount) || 593;
+    const videoUrl = isMobile
+      ? '/media/videos/hero_scroll_mobile.mp4'
+      : '/media/videos/hero_scroll.mp4';
       
-    // Wait for at most 40 frames to unblock UI quickly
-    const targetFramesToWait = Math.min(totalFrames, 40);
-    
-    // Use globally cached frames if they exist
-    const frames = window.preloadedFrames || [];
-    const images = [];
-    let loadedCount = 0;
     let isDissolving = false;
 
     const startDissolve = () => {
       if (!isMountedRef.current || isDissolving) return;
       isDissolving = true;
       setProgress(100);
-      setStatus("Ready");
-      
-      // Expose globally so HeroSection can use them even if not all frames are loaded yet
-      window.preloadedFrames = frames;
+      setStatus("Calibrating hardware...");
 
       timeoutRef.current = setTimeout(() => {
         if (!isMountedRef.current) return;
@@ -51,25 +41,45 @@ export default function Preloader({ onComplete }) {
       }, 600);
     };
 
-    const updateProgress = () => {
-      if (!isMountedRef.current || isDissolving) return;
-      loadedCount++;
-      
-      const percent = Math.min(100, Math.round((loadedCount / targetFramesToWait) * 100));
-      setProgress(percent);
-
-      if (percent < 25) {
+    const loadVideo = async () => {
+      try {
         setStatus("Preloading cinematic assets...");
-      } else if (percent < 60) {
-        setStatus("Rendering canvas frames...");
-      } else if (percent < 90) {
-        setStatus("Synchronizing interactions...");
-      } else {
-        setStatus("Calibrating hardware...");
-      }
-
-      if (loadedCount >= targetFramesToWait) {
-        const fontTimeout = setTimeout(startDissolve, 800);
+        const response = await fetch(videoUrl);
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        
+        const reader = response.body.getReader();
+        const contentLength = +(response.headers.get('Content-Length') || 0);
+        
+        let receivedLength = 0;
+        let chunks = [];
+        
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          receivedLength += value.length;
+          
+          if (contentLength) {
+            const percent = Math.min(99, Math.round((receivedLength / contentLength) * 100));
+            setProgress(percent);
+            
+            if (percent < 30) {
+              setStatus("Buffering cinematic stream...");
+            } else if (percent < 70) {
+              setStatus("Decompressing visual vectors...");
+            } else {
+              setStatus("Synchronizing interactions...");
+            }
+          } else {
+            setProgress(prev => Math.min(99, prev + 1));
+          }
+        }
+        
+        const blob = new Blob(chunks, { type: 'video/mp4' });
+        const objectURL = URL.createObjectURL(blob);
+        window.preloadedVideoURL = objectURL;
+        
+        const fontTimeout = setTimeout(startDissolve, 400);
         document.fonts.ready
           .then(() => {
             clearTimeout(fontTimeout);
@@ -79,45 +89,22 @@ export default function Preloader({ onComplete }) {
             clearTimeout(fontTimeout);
             startDissolve();
           });
+      } catch (err) {
+        console.error("Video preloading failed, falling back to direct URL", err);
+        window.preloadedVideoURL = videoUrl;
+        startDissolve();
       }
     };
 
-    // Extreme Fallback: If 4 seconds pass, force dissolve anyway
+    // Extreme Fallback: If 8 seconds pass, force dissolve anyway
     const maxWaitTimeout = setTimeout(() => {
       if (!isDissolving) {
-        console.warn("Preloader timeout reached. Forcing dissolve.");
+        console.warn("Preloader safety timeout reached.");
         startDissolve();
       }
-    }, 4000);
+    }, 8000);
 
-    // Preload each frame image
-    for (let i = 0; i < totalFrames; i++) {
-      // If frame already exists from a previous load, use it
-      if (frames[i] && frames[i].complete) {
-        if (!isDissolving) updateProgress();
-        continue;
-      }
-      
-      const img = new Image();
-      const frameNum = i.toString().padStart(4, '0');
-      const dirName = isMobile ? 'frames_mobile' : 'frames';
-      img.src = `/media/images/${dirName}/frame_${frameNum}.jpg`;
-      
-      img.onload = () => {
-        frames[i] = img;
-        if (!isMountedRef.current) return;
-        // Even if we are dissolving, we keep loading them in the background and adding to frames
-        if (!isDissolving) updateProgress();
-      };
-      
-      img.onerror = () => {
-        console.error(`Failed to load frame ${frameNum}`);
-        if (!isMountedRef.current) return;
-        if (!isDissolving) updateProgress();
-      };
-      
-      images.push(img);
-    }
+    loadVideo();
 
     return () => {
       isMountedRef.current = false;
