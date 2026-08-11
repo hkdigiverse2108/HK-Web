@@ -13,7 +13,7 @@ def compile_video(frames_dir, output_path, frame_pattern):
         '-i', os.path.join(frames_dir, frame_pattern),
         '-c:v', 'libx264',
         '-pix_fmt', 'yuv420p',
-        '-crf', '32',
+        '-crf', '24',
         '-g', '1',
         '-movflags', '+faststart',
         output_path

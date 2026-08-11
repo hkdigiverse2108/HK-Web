@@ -7,6 +7,7 @@ import ScrollIndicator from './components/ScrollIndicator';
 import CustomCursor from './components/CustomCursor';
 import Footer from './components/Footer';
 import ErrorBoundary from './components/ErrorBoundary';
+import WhatsAppWidget from './components/WhatsAppWidget';
 
 // Import Provider
 import { ContentProvider } from './context/ContentContext';
@@ -382,6 +383,9 @@ function App() {
 
         {/* Sleek bottom scroll hint - only shown on Home page */}
         {!isSubpage && !isAdminOrPreview && <ScrollIndicator />}
+
+        {/* Floating 3D WhatsApp Mascot Widget */}
+        {!isAdminOrPreview && <WhatsAppWidget />}
       </div>
     </ContentProvider>
   );

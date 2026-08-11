@@ -96,13 +96,13 @@ export default function Preloader({ onComplete }) {
       }
     };
 
-    // Extreme Fallback: If 8 seconds pass, force dissolve anyway
+    // Extreme Fallback: If 30 seconds pass, force dissolve anyway
     const maxWaitTimeout = setTimeout(() => {
       if (!isDissolving) {
         console.warn("Preloader safety timeout reached.");
         startDissolve();
       }
-    }, 8000);
+    }, 30000);
 
     loadVideo();
 
