@@ -13,9 +13,10 @@ export default function Preloader({ onComplete }) {
   useEffect(() => {
     isMountedRef.current = true;
     const isMobile = window.innerWidth < 768;
-    const videoUrl = isMobile
-      ? '/media/videos/hero_scroll_mobile.mp4'
-      : '/media/videos/hero_scroll.mp4';
+    const totalFrames = isMobile ? 289 : 264;
+    const folder = isMobile
+      ? '/media/images/frames_webp_mobile'
+      : '/media/images/frames_webp';
       
     let isDissolving = false;
 
@@ -38,73 +39,80 @@ export default function Preloader({ onComplete }) {
         tl.to('.preloader-logo', { opacity: 0, scale: 0.95, duration: 0.8, ease: "power4.out" })
           .to('.preloader-progress', { opacity: 0, y: 10, duration: 0.5, ease: "power4.out" }, "-=0.6")
           .to('.preloader-bg', { clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)", duration: 1.2, ease: "power4.inOut" }, "-=0.3");
-      }, 600);
+      }, 400);
     };
 
-    const loadVideo = async () => {
-      try {
-        setStatus("Preloading cinematic assets...");
-        const response = await fetch(videoUrl);
-        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+    const loadFrames = () => {
+      setStatus("Preloading visual frames...");
+      const images = new Array(totalFrames);
+      let loadedCount = 0;
+      let nextIndex = 1;
+      const CONCURRENCY = 16;
+
+      const handleFrameFinished = (index, img) => {
+        if (!isMountedRef.current) return;
+        images[index - 1] = img;
+        loadedCount++;
         
-        const reader = response.body.getReader();
-        const contentLength = +(response.headers.get('Content-Length') || 0);
+        const pct = Math.min(99, Math.round((loadedCount / totalFrames) * 100));
+        setProgress(pct);
         
-        let receivedLength = 0;
-        let chunks = [];
-        
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          chunks.push(value);
-          receivedLength += value.length;
-          
-          if (contentLength) {
-            const percent = Math.min(99, Math.round((receivedLength / contentLength) * 100));
-            setProgress(percent);
-            
-            if (percent < 30) {
-              setStatus("Buffering cinematic stream...");
-            } else if (percent < 70) {
-              setStatus("Decompressing visual vectors...");
-            } else {
-              setStatus("Synchronizing interactions...");
-            }
-          } else {
-            setProgress(prev => Math.min(99, prev + 1));
-          }
+        if (pct < 30) {
+          setStatus("Buffering visual assets...");
+        } else if (pct < 70) {
+          setStatus("Calibrating canvas matrices...");
+        } else {
+          setStatus("Synchronizing interactions...");
         }
+
+        if (loadedCount >= totalFrames) {
+          window.preloadedFrames = images;
+          window.preloadedFrameCount = totalFrames;
+
+          const fontTimeout = setTimeout(startDissolve, 300);
+          document.fonts.ready
+            .then(() => {
+              clearTimeout(fontTimeout);
+              startDissolve();
+            })
+            .catch(() => {
+              clearTimeout(fontTimeout);
+              startDissolve();
+            });
+        }
+      };
+
+      const loadNext = () => {
+        if (nextIndex > totalFrames) return;
+        const i = nextIndex++;
+        const img = new Image();
+        const pad = String(i).padStart(4, '0');
+        img.src = `${folder}/frame_${pad}.webp`;
         
-        const blob = new Blob(chunks, { type: 'video/mp4' });
-        const objectURL = URL.createObjectURL(blob);
-        window.preloadedVideoURL = objectURL;
-        
-        const fontTimeout = setTimeout(startDissolve, 400);
-        document.fonts.ready
-          .then(() => {
-            clearTimeout(fontTimeout);
-            startDissolve();
-          })
-          .catch(() => {
-            clearTimeout(fontTimeout);
-            startDissolve();
-          });
-      } catch (err) {
-        console.error("Video preloading failed, falling back to direct URL", err);
-        window.preloadedVideoURL = videoUrl;
-        startDissolve();
+        img.onload = () => {
+          handleFrameFinished(i, img);
+          loadNext();
+        };
+        img.onerror = () => {
+          handleFrameFinished(i, null);
+          loadNext();
+        };
+      };
+
+      for (let c = 0; c < CONCURRENCY; c++) {
+        loadNext();
       }
     };
 
-    // Extreme Fallback: If 30 seconds pass, force dissolve anyway
+    // Extreme Fallback: If 20 seconds pass, force dissolve anyway
     const maxWaitTimeout = setTimeout(() => {
       if (!isDissolving) {
         console.warn("Preloader safety timeout reached.");
         startDissolve();
       }
-    }, 30000);
+    }, 20000);
 
-    loadVideo();
+    loadFrames();
 
     return () => {
       isMountedRef.current = false;

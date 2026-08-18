@@ -2,7 +2,7 @@ import os
 import subprocess
 import imageio_ffmpeg
 
-def compile_video(frames_dir, output_path, frame_pattern):
+def compile_video(frames_dir, output_path, frame_pattern, resolution=None):
     exe = imageio_ffmpeg.get_ffmpeg_exe()
     
     # We use -g 1 to force keyframe on every single frame. This is crucial for scroll seeking.
@@ -10,14 +10,20 @@ def compile_video(frames_dir, output_path, frame_pattern):
     cmd = [
         exe, '-y',
         '-framerate', '30',
-        '-i', os.path.join(frames_dir, frame_pattern),
+        '-i', os.path.join(frames_dir, frame_pattern)
+    ]
+    
+    if resolution:
+        cmd.extend(['-vf', f'scale={resolution}'])
+        
+    cmd.extend([
         '-c:v', 'libx264',
         '-pix_fmt', 'yuv420p',
-        '-crf', '24',
+        '-crf', '28',
         '-g', '1',
         '-movflags', '+faststart',
         output_path
-    ]
+    ])
     
     print(f"Compiling video for {frames_dir}...")
     print("Command:", " ".join(cmd))
@@ -35,5 +41,6 @@ if __name__ == '__main__':
     
     os.makedirs(r'D:\HK WEBSITE\media\videos', exist_ok=True)
     
-    compile_video(desk_dir, r'D:\HK WEBSITE\media\videos\hero_scroll.mp4', 'frame_%04d.jpg')
-    compile_video(mob_dir, r'D:\HK WEBSITE\media\videos\hero_scroll_mobile.mp4', 'frame_%04d.jpg')
+    # 720p for desktop and 576x1024 for mobile at CRF 28 for optimal preloading speed
+    compile_video(desk_dir, r'D:\HK WEBSITE\media\videos\hero_scroll.mp4', 'frame_%04d.jpg', '1280:720')
+    compile_video(mob_dir, r'D:\HK WEBSITE\media\videos\hero_scroll_mobile.mp4', 'frame_%04d.jpg', '576:1024')
