@@ -373,65 +373,6 @@ export default function AboutUs() {
                 <p key={idx}>{p}</p>
               ))}
             </div>
-            
-            {/* Dynamic Hand-drawn Signatures */}
-            <div className="flex gap-12 pt-8 border-t border-white/5 items-center">
-              <div className="space-y-1">
-                {/* SVG path or Image representing Radhe Patel signature */}
-                {personalLetter.founders?.[0]?.signatureImg ? (
-                  <div className="h-8 flex items-center mb-1">
-                    <img 
-                      src={resolveImageUrl(personalLetter.founders[0].signatureImg)} 
-                      alt="Radhe Patel Signature" 
-                      className="h-full object-contain max-h-8 max-w-[120px]" 
-                    />
-                  </div>
-                ) : (
-                  <svg className="w-28 h-8 text-neutral-300" viewBox="0 0 150 40" fill="none">
-                    <motion.path
-                      d="M 15 25 Q 30 10 45 25 T 75 22 T 105 18 T 135 25"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      initial={{ pathLength: 0 }}
-                      whileInView={{ pathLength: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.8, delay: 0.4, ease: "easeInOut" }}
-                    />
-                  </svg>
-                )}
-                <p className="font-mono text-[10px] uppercase tracking-widest text-neutral-500">{personalLetter.founders?.[0]?.signatureTitle || "Radhe Patel, CEO"}</p>
-              </div>
-              <div className="w-[1px] h-8 bg-white/10" />
-              <div className="space-y-1">
-                {/* SVG path or Image representing Prince Patel signature */}
-                {personalLetter.founders?.[1]?.signatureImg ? (
-                  <div className="h-8 flex items-center mb-1">
-                    <img 
-                      src={resolveImageUrl(personalLetter.founders[1].signatureImg)} 
-                      alt="Prince Patel Signature" 
-                      className="h-full object-contain max-h-8 max-w-[120px]" 
-                    />
-                  </div>
-                ) : (
-                  <svg className="w-28 h-8 text-neutral-300" viewBox="0 0 150 40" fill="none">
-                    <motion.path
-                      d="M 20 20 C 40 38 65 12 85 28 T 115 18 T 130 22"
-                      stroke="currentColor"
-                      strokeWidth="1.75"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      initial={{ pathLength: 0 }}
-                      whileInView={{ pathLength: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.8, delay: 0.5, ease: "easeInOut" }}
-                    />
-                  </svg>
-                )}
-                <p className="font-mono text-[10px] uppercase tracking-widest text-neutral-500">{personalLetter.founders?.[1]?.signatureTitle || "Prince Patel, Partner"}</p>
-              </div>
-            </div>
           </div>
 
         </div>
