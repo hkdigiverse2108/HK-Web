@@ -244,6 +244,7 @@ export const DEFAULT_CONTENT = {
       { label: "Ventures", href: "#ventures", show: true },
       { label: "Contact", href: "#contact", show: true }
     ],
+    section_visibility: {},
     footer: {
       logo_img: "/media/images/hk-logo.png",
       logo_text: "HARIKRUSHN DIGIVERSE LLP",

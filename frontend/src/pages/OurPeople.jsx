@@ -1173,6 +1173,13 @@ function MobileTreeNode({ node, activeMember, onSelect }) {
 export default function OurPeople({ overrideContent }) {
   const { content: globalContent } = useContent();
   const activeContent = overrideContent || globalContent;
+  const sv = activeContent?.site_settings?.section_visibility || {};
+  const isPreviewMode = typeof window !== 'undefined' && window.location.hash.startsWith('#preview');
+
+  if (sv.ourpeople_team === false && !isPreviewMode) {
+    return null;
+  }
+
   const peopleList = activeContent?.people || [];
 
   // Compute structures dynamically
@@ -1316,8 +1323,7 @@ export default function OurPeople({ overrideContent }) {
     CMO: true
   });
 
-  // Preview / Editor State
-  const isPreviewMode = window.location.hash.includes('preview');
+  // Sync live mode with hash change
   const [viewMode, setViewMode] = useState('tree'); // 'map' or 'tree'
   const [selectedNodeName, setSelectedNodeName] = useState(null);
 

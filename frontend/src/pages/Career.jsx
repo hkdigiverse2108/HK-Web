@@ -232,6 +232,7 @@ const renderPhilosophyIcon = (iconName, color) => {
 
 export default function Career() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
   const stats = content?.career_stats || DEFAULT_STATS;
   const perks = content?.career_perks || DEFAULT_PERKS;
   const testimonials = content?.career_testimonials || DEFAULT_TESTIMONIALS;
@@ -493,6 +494,7 @@ export default function Career() {
       {/* ══════════════════════════════════════════════════
           I. HERO HEADER
           ══════════════════════════════════════════════════ */}
+      {sv.career_hero !== false && (
       <div className="text-center mb-20 pt-8 relative z-10">
         <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-neutral-500 font-light block mb-3">
           // Join Our Team
@@ -504,10 +506,12 @@ export default function Career() {
           {careerSettings.subtitle}
         </p>
       </div>
+      )}
 
       {/* ══════════════════════════════════════════════════
           II. ANIMATED STATS COUNTER
           ══════════════════════════════════════════════════ */}
+      {sv.career_stats !== false && (
       <div ref={statsRef} className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 mb-24 relative z-10">
         {stats.map((stat, idx) => (
           <div key={stat.label} className="text-center p-6 rounded-2xl bg-[#050508]/40 border border-white/5 backdrop-blur-md">
@@ -518,10 +522,12 @@ export default function Career() {
           </div>
         ))}
       </div>
+      )}
 
       {/* ══════════════════════════════════════════════════
           III. WHY JOIN US
           ══════════════════════════════════════════════════ */}
+      {sv.career_perks !== false && (
       <section className="max-w-7xl mx-auto px-4 mb-28 relative z-10">
         <div className="text-center mb-14">
           <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-500 block mb-3">
@@ -568,10 +574,13 @@ export default function Career() {
           })}
         </div>
       </section>
+      )}
 
       {/* ══════════════════════════════════════════════════
           IV. OPEN ROLES + APPLICATION FORM
           ══════════════════════════════════════════════════ */}
+      {sv.career_jobs !== false && (
+      <>
       <section className="max-w-7xl mx-auto px-4 mb-28 relative z-10">
         <div className="text-center mb-14">
           <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-500 block mb-3">// Open Positions</span>
@@ -1081,10 +1090,13 @@ export default function Career() {
           </div>
         </div>
       </section>
+      </>
+      )}
 
       {/* ══════════════════════════════════════════════════
           VI. CAREER GROWTH LADDER
           ══════════════════════════════════════════════════ */}
+      {sv.career_ladder !== false && (
       <section className="max-w-7xl mx-auto px-4 mb-28 relative z-10 w-full">
         <div className="text-center mb-14">
           <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-500 block mb-3">// Your Journey</span>
@@ -1113,10 +1125,12 @@ export default function Career() {
           ))}
         </div>
       </section>
+      )}
 
       {/* ══════════════════════════════════════════════════
           VII. PERKS & BENEFITS
           ══════════════════════════════════════════════════ */}
+      {sv.career_perks !== false && (
       <section className="max-w-7xl mx-auto px-4 mb-28 relative z-10 w-full">
         <div className="text-center mb-14">
           <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-500 block mb-3">// Studio Culture</span>
@@ -1134,10 +1148,12 @@ export default function Career() {
           ))}
         </div>
       </section>
+      )}
 
       {/* ══════════════════════════════════════════════════
           VIII. EMPLOYEE TESTIMONIALS — 3D Carousel (Home Page Style)
           ══════════════════════════════════════════════════ */}
+      {sv.career_testimonials !== false && (
       <section className="py-28 px-4 sm:px-8 border-t border-b border-white/5 bg-black/30 relative overflow-hidden">
         {/* Dynamic ambient glow */}
         <div 
@@ -1261,10 +1277,12 @@ export default function Career() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ══════════════════════════════════════════════════
           IX. FAQ SECTION
           ══════════════════════════════════════════════════ */}
+      {sv.career_faq !== false && (
       <section className="max-w-6xl mx-auto px-4 mb-28 relative z-10">
         <div className="text-center mb-14">
           <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-500 block mb-3">// Common Questions</span>
@@ -1307,8 +1325,7 @@ export default function Career() {
           ))}
         </div>
       </section>
-
-
+      )}
 
     </div>
   );

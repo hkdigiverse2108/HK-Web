@@ -21,6 +21,9 @@ const resolveImageUrl = (imgSrc) => {
 
 export default function Gallery() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
+  if (sv.gallery_grid === false) return null;
+
   const items = content?.gallery || [];
   const [selectedIdx, setSelectedIdx] = useState(null);
 

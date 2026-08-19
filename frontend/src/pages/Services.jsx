@@ -239,6 +239,9 @@ const DEFAULT_SERVICES = [
 
 export default function Services() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
+  if (sv.services_list === false) return null;
+
   const [hoveredColor, setHoveredColor] = React.useState(null);
 
   const rawServices = content?.services || DEFAULT_SERVICES;

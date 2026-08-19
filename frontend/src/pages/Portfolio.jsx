@@ -196,6 +196,9 @@ const categories = [
 
 export default function Portfolio() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
+  if (sv.portfolio_grid === false) return null;
+
   const [filter, setFilter] = useState('all');
   const [hoveredId, setHoveredId] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);

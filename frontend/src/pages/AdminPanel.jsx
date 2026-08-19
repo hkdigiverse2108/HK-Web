@@ -2372,7 +2372,8 @@ export default function AdminPanel() {
       title: "1. Global Layout Elements",
       items: [
         { label: "Navigation Bar", tab: "navbar", route: "#preview/navbar", icon: "💎", badge: "GLOBAL", badgeStyle: "bg-blue-500/10 text-blue-400 border border-blue-500/20" },
-        { label: "Footer Details", tab: "footer", route: "#preview/footer", icon: "👣", badge: "GLOBAL", badgeStyle: "bg-blue-500/10 text-blue-400 border border-blue-500/20" }
+        { label: "Footer Details", tab: "footer", route: "#preview/footer", icon: "👣", badge: "GLOBAL", badgeStyle: "bg-blue-500/10 text-blue-400 border border-blue-500/20" },
+        { label: "Section Visibility", tab: "section_visibility", route: "#preview/home", icon: "👁️", badge: "GLOBAL", badgeStyle: "bg-blue-500/10 text-blue-400 border border-blue-500/20" }
       ]
     },
     {
@@ -8965,6 +8966,197 @@ export default function AdminPanel() {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* SECTION VISIBILITY CMS PANEL */}
+          {activeTab === 'section_visibility' && (
+            <div className="space-y-6">
+              <h3 className="font-mono text-[10px] uppercase tracking-wider text-white">// Section Visibility Controls</h3>
+              <p className="text-[10px] text-neutral-500 font-light">Toggle sections ON/OFF across all pages. When OFF, the section will be completely hidden from the live site.</p>
+              
+              {(() => {
+                const sv = currentContent.site_settings?.section_visibility || {};
+                const toggleSection = (key) => {
+                  const nextContent = JSON.parse(JSON.stringify(currentContent));
+                  if (!nextContent.site_settings) nextContent.site_settings = {};
+                  if (!nextContent.site_settings.section_visibility) nextContent.site_settings.section_visibility = {};
+                  nextContent.site_settings.section_visibility[key] = sv[key] === false ? true : false;
+                  pushState(nextContent);
+                };
+                
+                const Toggle = ({ sectionKey, label }) => (
+                  <div className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-white/[0.02] transition-colors group">
+                    <span className="text-[11px] text-neutral-300 font-light group-hover:text-white transition-colors">{label}</span>
+                    <button
+                      onClick={() => toggleSection(sectionKey)}
+                      className={`relative w-10 h-5 rounded-full transition-all duration-300 cursor-pointer ${sv[sectionKey] !== false ? 'bg-emerald-500/80' : 'bg-neutral-700'}`}
+                    >
+                      <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-md transition-all duration-300 ${sv[sectionKey] !== false ? 'left-[22px]' : 'left-0.5'}`} />
+                    </button>
+                  </div>
+                );
+                
+                const SectionGroup = ({ title, icon, children }) => (
+                  <div className="p-4 bg-white/[0.02] border border-white/5 rounded-xl space-y-1">
+                    <h4 className="font-mono text-[9px] uppercase tracking-wider text-neutral-400 mb-3 flex items-center gap-2">
+                      <span>{icon}</span> {title}
+                    </h4>
+                    <div className="divide-y divide-white/5">
+                      {children}
+                    </div>
+                  </div>
+                );
+                
+                return (
+                  <div className="space-y-4">
+                    <SectionGroup title="Home Page" icon="🏠">
+                      <Toggle sectionKey="home_hero" label="Hero Canvas" />
+                      <Toggle sectionKey="home_stats" label="Statistics & Metrics" />
+                      <Toggle sectionKey="home_brands" label="Partner Brand Ticker" />
+                      <Toggle sectionKey="home_services" label="Services Preview" />
+                      <Toggle sectionKey="home_casestudy" label="Featured Case Study" />
+                      <Toggle sectionKey="home_testimonials" label="Client Testimonials" />
+                      <Toggle sectionKey="home_cta" label="Bottom CTA" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="About Us" icon="🏢">
+                      <Toggle sectionKey="aboutus_philosophy" label="Company Philosophy" />
+                      <Toggle sectionKey="aboutus_visionmission" label="Vision & Mission" />
+                      <Toggle sectionKey="aboutus_founder" label="Founder's Message" />
+                      <Toggle sectionKey="aboutus_dna" label="HK DNA Orbits" />
+                      <Toggle sectionKey="aboutus_workspace" label="Our Workspace Gallery" />
+                      <Toggle sectionKey="aboutus_standards" label="Development Standards" />
+                      <Toggle sectionKey="aboutus_locations" label="Office Locations" />
+                      <Toggle sectionKey="aboutus_manifesto" label="Company Manifesto" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Our Story" icon="📖">
+                      <Toggle sectionKey="ourstory_timeline" label="Timeline" />
+                      <Toggle sectionKey="ourstory_directives" label="Strategic Directives" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Our People" icon="👥">
+                      <Toggle sectionKey="ourpeople_team" label="Team Grid / Organigram" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Our Culture" icon="🌟">
+                      <Toggle sectionKey="ourculture_philosophy" label="Philosophy Section" />
+                      <Toggle sectionKey="ourculture_grid" label="Culture Grid" />
+                      <Toggle sectionKey="ourculture_manifesto" label="Manifesto Code Block" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Career" icon="🤝">
+                      <Toggle sectionKey="career_hero" label="Career Hero Banner" />
+                      <Toggle sectionKey="career_jobs" label="Job Openings" />
+                      <Toggle sectionKey="career_perks" label="Perks & Benefits" />
+                      <Toggle sectionKey="career_ladder" label="Career Ladder" />
+                      <Toggle sectionKey="career_stats" label="Company Stats" />
+                      <Toggle sectionKey="career_testimonials" label="Employee Testimonials" />
+                      <Toggle sectionKey="career_faq" label="FAQ Section" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Awards & Achievements" icon="🏆">
+                      <Toggle sectionKey="awards_list" label="Awards List" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Blogs / Insights" icon="📝">
+                      <Toggle sectionKey="blogs_list" label="Blog Articles" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Gallery" icon="🖼️">
+                      <Toggle sectionKey="gallery_grid" label="Gallery Grid" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Services" icon="💼">
+                      <Toggle sectionKey="services_list" label="Services List" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Industry" icon="🌐">
+                      <Toggle sectionKey="industry_grid" label="Industries Grid" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Case Studies" icon="📄">
+                      <Toggle sectionKey="casestudy_list" label="Case Studies List" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Portfolio" icon="🎨">
+                      <Toggle sectionKey="portfolio_grid" label="Portfolio Grid" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Ventures" icon="💡">
+                      <Toggle sectionKey="ventures_list" label="Ventures List" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Contact" icon="✉️">
+                      <Toggle sectionKey="contact_form" label="Contact Form & Details" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Service: Web Development" icon="💻">
+                      <Toggle sectionKey="service_web_hero" label="Hero Section" />
+                      <Toggle sectionKey="service_web_overview" label="Speed Simulator" />
+                      <Toggle sectionKey="service_web_features" label="Feature Selector" />
+                      <Toggle sectionKey="service_web_process" label="Laptop Mockup" />
+                      <Toggle sectionKey="service_web_tech" label="Tech Stack" />
+                      <Toggle sectionKey="service_web_cta" label="Start Project CTA" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Service: App Development" icon="📱">
+                      <Toggle sectionKey="service_app_hero" label="Hero Section" />
+                      <Toggle sectionKey="service_app_overview" label="Overview" />
+                      <Toggle sectionKey="service_app_features" label="Features" />
+                      <Toggle sectionKey="service_app_process" label="Process" />
+                      <Toggle sectionKey="service_app_tech" label="Tech Stack" />
+                      <Toggle sectionKey="service_app_cta" label="CTA" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Service: Custom Software" icon="🛠️">
+                      <Toggle sectionKey="service_software_hero" label="Hero Section" />
+                      <Toggle sectionKey="service_software_overview" label="Overview" />
+                      <Toggle sectionKey="service_software_features" label="Features" />
+                      <Toggle sectionKey="service_software_process" label="Process" />
+                      <Toggle sectionKey="service_software_tech" label="Tech Stack" />
+                      <Toggle sectionKey="service_software_cta" label="CTA" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Service: Digital Marketing" icon="📈">
+                      <Toggle sectionKey="service_marketing_hero" label="Hero Section" />
+                      <Toggle sectionKey="service_marketing_overview" label="Overview" />
+                      <Toggle sectionKey="service_marketing_features" label="Features" />
+                      <Toggle sectionKey="service_marketing_process" label="Process" />
+                      <Toggle sectionKey="service_marketing_tech" label="Tech Stack" />
+                      <Toggle sectionKey="service_marketing_cta" label="CTA" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Service: Social Media" icon="📣">
+                      <Toggle sectionKey="service_social_hero" label="Hero Section" />
+                      <Toggle sectionKey="service_social_overview" label="Overview" />
+                      <Toggle sectionKey="service_social_features" label="Features" />
+                      <Toggle sectionKey="service_social_process" label="Process" />
+                      <Toggle sectionKey="service_social_tech" label="Tech Stack" />
+                      <Toggle sectionKey="service_social_cta" label="CTA" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Service: AI Consulting" icon="🧠">
+                      <Toggle sectionKey="service_ai_hero" label="Hero Section" />
+                      <Toggle sectionKey="service_ai_overview" label="Overview" />
+                      <Toggle sectionKey="service_ai_features" label="Features" />
+                      <Toggle sectionKey="service_ai_process" label="Process" />
+                      <Toggle sectionKey="service_ai_tech" label="Tech Stack" />
+                      <Toggle sectionKey="service_ai_cta" label="CTA" />
+                    </SectionGroup>
+                    
+                    <SectionGroup title="Service: IT Consulting" icon="🛡️">
+                      <Toggle sectionKey="service_it_hero" label="Hero Section" />
+                      <Toggle sectionKey="service_it_overview" label="Overview" />
+                      <Toggle sectionKey="service_it_features" label="Features" />
+                      <Toggle sectionKey="service_it_process" label="Process" />
+                      <Toggle sectionKey="service_it_tech" label="Tech Stack" />
+                      <Toggle sectionKey="service_it_cta" label="CTA" />
+                    </SectionGroup>
+                  </div>
+                );
+              })()}
             </div>
           )}
 

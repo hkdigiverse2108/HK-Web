@@ -264,6 +264,8 @@ const projects = [
 
 export default function Industry() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
+  if (sv.industry_grid === false) return null;
 
   const industries = (content?.industries || DEFAULT_INDUSTRIES).map(ind => {
     const styleFallback = DEFAULT_INDUSTRIES.find(x => x.id === ind.slug || x.id === ind.id) || DEFAULT_INDUSTRIES[0];

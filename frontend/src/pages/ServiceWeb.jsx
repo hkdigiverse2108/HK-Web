@@ -5,6 +5,7 @@ import { useContent } from '../context/ContentContext';
 export default function ServiceWeb({ overrideContent }) {
   const { content: liveContent } = useContent();
   const content = overrideContent || liveContent;
+  const sv = content?.site_settings?.section_visibility || {};
 
   // Find current Web service details from database with flexible matching
   const serviceData = content?.services?.find(s => 
@@ -98,6 +99,7 @@ export default function ServiceWeb({ overrideContent }) {
       {/* ──────────────────────────────────────────────────
           I. CINEMATIC HERO SECTION WITH FLOATING PARTICLES
           ────────────────────────────────────────────────── */}
+      {sv.service_web_hero !== false && (
       <section 
         ref={heroRef}
         onMouseMove={handleMouseMove}
@@ -157,10 +159,12 @@ export default function ServiceWeb({ overrideContent }) {
           </motion.p>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           II. SPEED VS BLOAT SIMULATOR WIDGET
           ────────────────────────────────────────────────── */}
+      {sv.service_web_overview !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Performance Benchmark</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Speed vs Bloat Simulator</h2>
@@ -305,10 +309,12 @@ export default function ServiceWeb({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           III. FEATURE SELECTOR & SVG WIREFRAME GRAPH
           ────────────────────────────────────────────────── */}
+      {sv.service_web_features !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Architecture Logic</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Custom Feature Blueprint</h2>
@@ -421,10 +427,12 @@ export default function ServiceWeb({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           IV. LAPTOP MOCKUP FRAME (TEMPLATE PREVIEW)
           ────────────────────────────────────────────────── */}
+      {sv.service_web_process !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Design Deliverables</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Visual Mockup Layouts</h2>
@@ -529,10 +537,12 @@ export default function ServiceWeb({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           IV.5 INTERACTIVE TECH STACK SELECTOR
           ────────────────────────────────────────────────── */}
+      {sv.service_web_tech !== false && (
       <section className="max-w-6xl mx-auto px-4 mb-24 relative z-10 text-center pt-16">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Architecture Suite</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Our Tech Stack</h2>
@@ -582,10 +592,12 @@ export default function ServiceWeb({ overrideContent }) {
           </AnimatePresence>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           V. START PROJECT CTA
           ────────────────────────────────────────────────── */}
+      {sv.service_web_cta !== false && (
       <section className="max-w-6xl mx-auto px-4 relative z-10 text-center py-20">
         <a 
           href="#contact" 
@@ -594,6 +606,7 @@ export default function ServiceWeb({ overrideContent }) {
           Start Your Web Project
         </a>
       </section>
+      )}
 
     </div>
   );

@@ -5,6 +5,7 @@ import { useContent } from '../context/ContentContext';
 export default function ServiceItConsulting({ overrideContent }) {
   const { content: liveContent } = useContent();
   const content = overrideContent || liveContent;
+  const sv = content?.site_settings?.section_visibility || {};
   const serviceData = content?.services?.find(s => 
     s.href === '#service-it-consulting' || 
     s.href === 'service-it-consulting' || 
@@ -89,6 +90,7 @@ export default function ServiceItConsulting({ overrideContent }) {
       {/* ──────────────────────────────────────────────────
           I. CINEMATIC HERO SECTION WITH FLOATING PARTICLES
           ────────────────────────────────────────────────── */}
+      {sv.service_it_hero !== false && (
       <section 
         ref={heroRef}
         onMouseMove={handleMouseMove}
@@ -148,10 +150,12 @@ export default function ServiceItConsulting({ overrideContent }) {
           </motion.p>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           II. SPEED VS BLOAT SIMULATOR WIDGET
           ────────────────────────────────────────────────── */}
+      {sv.service_it_overview !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Performance Benchmark</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Traffic Load Simulator</h2>
@@ -289,10 +293,12 @@ export default function ServiceItConsulting({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           III. FEATURE SELECTOR & SVG WIREFRAME GRAPH
           ────────────────────────────────────────────────── */}
+      {sv.service_it_features !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Architecture Logic</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Infrastructure Logic Blueprint</h2>
@@ -388,10 +394,12 @@ export default function ServiceItConsulting({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
-          IV. CLOUD MOCKUP FRAME (PREVIEW)
+          IV. INFRASTRUCTURE MOCKUP FRAME (PREVIEW)
           ────────────────────────────────────────────────── */}
+      {sv.service_it_process !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Cloud Deliverables</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Infrastructure Monitor Layouts</h2>
@@ -492,10 +500,12 @@ export default function ServiceItConsulting({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           IV.5 INTERACTIVE TECH STACK SELECTOR
           ────────────────────────────────────────────────── */}
+      {sv.service_it_tech !== false && (
       <section className="max-w-6xl mx-auto px-4 mb-24 relative z-10 text-center pt-16">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Architecture Suite</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Our Tech Stack</h2>
@@ -545,10 +555,12 @@ export default function ServiceItConsulting({ overrideContent }) {
           </AnimatePresence>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           V. START PROJECT CTA
           ────────────────────────────────────────────────── */}
+      {sv.service_it_cta !== false && (
       <section className="max-w-6xl mx-auto px-4 relative z-10 text-center py-20">
         <a 
           href="#contact" 
@@ -557,6 +569,7 @@ export default function ServiceItConsulting({ overrideContent }) {
           Book an IT Consultation
         </a>
       </section>
+      )}
 
     </div>
   );

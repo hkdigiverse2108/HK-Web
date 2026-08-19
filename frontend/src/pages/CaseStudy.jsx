@@ -128,6 +128,8 @@ const DEFAULT_CASES = [
 
 export default function CaseStudy() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
+  if (sv.casestudy_list === false) return null;
 
   const cases = (content?.case_studies || DEFAULT_CASES).map(c => {
     const styleFallback = DEFAULT_CASES.find(x => x.id === c.slug || x.id === c.id) || DEFAULT_CASES[0];

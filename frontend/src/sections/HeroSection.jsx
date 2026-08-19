@@ -228,6 +228,9 @@ export default function HeroSection({ isLoaded, overrideContent }) {
     opacity: hero.overlayOpacity !== undefined ? parseFloat(hero.overlayOpacity) : 0.5,
   };
 
+  const sv = activeContent?.site_settings?.section_visibility || {};
+  if (sv.home_hero === false) return null;
+
   return (
     <div
       ref={containerRef}

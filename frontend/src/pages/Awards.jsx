@@ -259,6 +259,9 @@ const DEFAULT_AWARDS = [
 
 export default function Awards() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
+  if (sv.awards_list === false) return null;
+
   const [activeTab, setActiveTab] = useState('all');
   const [selectedAward, setSelectedAward] = useState(null);
 

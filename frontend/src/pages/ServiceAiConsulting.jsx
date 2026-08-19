@@ -5,6 +5,7 @@ import { useContent } from '../context/ContentContext';
 export default function ServiceAiConsulting({ overrideContent }) {
   const { content: liveContent } = useContent();
   const content = overrideContent || liveContent;
+  const sv = content?.site_settings?.section_visibility || {};
   const serviceData = content?.services?.find(s => 
     s.href === '#service-ai-consulting' || 
     s.href === 'service-ai-consulting' || 
@@ -89,6 +90,7 @@ export default function ServiceAiConsulting({ overrideContent }) {
       {/* ──────────────────────────────────────────────────
           I. CINEMATIC HERO SECTION WITH FLOATING PARTICLES
           ────────────────────────────────────────────────── */}
+      {sv.service_ai_hero !== false && (
       <section 
         ref={heroRef}
         onMouseMove={handleMouseMove}
@@ -148,10 +150,12 @@ export default function ServiceAiConsulting({ overrideContent }) {
           </motion.p>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           II. SPEED VS BLOAT SIMULATOR WIDGET
           ────────────────────────────────────────────────── */}
+      {sv.service_ai_overview !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Performance Benchmark</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Semantic Search Simulator</h2>
@@ -290,10 +294,12 @@ export default function ServiceAiConsulting({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           III. FEATURE SELECTOR & SVG WIREFRAME GRAPH
           ────────────────────────────────────────────────── */}
+      {sv.service_ai_features !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Architecture Logic</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">AI Agent Logic Blueprint</h2>
@@ -389,10 +395,12 @@ export default function ServiceAiConsulting({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
-          IV. AGENT WORKSPACE MOCKUP FRAME (PREVIEW)
+          IV. VECTOR LOGIC MOCKUP FRAME (PREVIEW)
           ────────────────────────────────────────────────── */}
+      {sv.service_ai_process !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// AI Deliverables</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Agentic Workspace Layouts</h2>
@@ -493,10 +501,12 @@ export default function ServiceAiConsulting({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           IV.5 INTERACTIVE TECH STACK SELECTOR
           ────────────────────────────────────────────────── */}
+      {sv.service_ai_tech !== false && (
       <section className="max-w-6xl mx-auto px-4 mb-24 relative z-10 text-center pt-16">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Architecture Suite</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Our Tech Stack</h2>
@@ -546,10 +556,12 @@ export default function ServiceAiConsulting({ overrideContent }) {
           </AnimatePresence>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           V. START PROJECT CTA
           ────────────────────────────────────────────────── */}
+      {sv.service_ai_cta !== false && (
       <section className="max-w-6xl mx-auto px-4 relative z-10 text-center py-20">
         <a 
           href="#contact" 
@@ -558,7 +570,7 @@ export default function ServiceAiConsulting({ overrideContent }) {
           Book an AI Consultation
         </a>
       </section>
-
+      )}
     </div>
   );
 }

@@ -93,6 +93,7 @@ export default function AboutUs() {
   const yPrince = useTransform(founderScroll, [0, 1], [25, -25]);
 
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
   const aboutUs = content?.about_us || {};
   const philosophy = aboutUs.philosophy || {
     title: "Why We Exist",
@@ -207,6 +208,7 @@ export default function AboutUs() {
       {/* ──────────────────────────────────────────────────
           1. COMPANY PHILOSOPHY (WIPE ANIMATION)
           ────────────────────────────────────────────────── */}
+      {sv.aboutus_philosophy !== false && (
       <section className="py-24 border-b border-white/5 relative z-10 group overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-amber-500/0 via-amber-500/0 md:via-amber-500/[0.02] to-amber-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 blur-2xl pointer-events-none" />
         <div className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
@@ -250,10 +252,12 @@ export default function AboutUs() {
           </motion.p>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           1.5 VISION & MISSION
           ────────────────────────────────────────────────── */}
+      {sv.aboutus_visionmission !== false && (
       <section className="py-24 border-b border-white/5 relative z-10 bg-black/10">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
           
@@ -324,10 +328,12 @@ export default function AboutUs() {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           2. FOUNDER'S MESSAGE (PARALLAX + DYNAMIC SIGNATURE)
           ────────────────────────────────────────────────── */}
+      {sv.aboutus_founder !== false && (
       <section ref={founderSectionRef} className="py-28 border-b border-white/5 relative z-10">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           
@@ -377,10 +383,12 @@ export default function AboutUs() {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           3. HK DNA (ROTATING ORBITS + ENERGY PARTICLES + CENTRAL LOGO)
           ────────────────────────────────────────────────── */}
+      {sv.aboutus_dna !== false && (
       <section className="py-28 border-b border-white/5 relative z-10">
         <div className="max-w-7xl mx-auto text-center">
           <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-neutral-400 block mb-3">// Core Identity</span>
@@ -515,10 +523,12 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           4. OUR WORKSPACE (MASONRY GALLERY WITH 3D PERSPECTIVE TILT)
           ────────────────────────────────────────────────── */}
+      {sv.aboutus_workspace !== false && (
       <section className="py-28 border-b border-white/5 relative z-10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 text-left">
@@ -550,10 +560,12 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           5. DEVELOPMENT STANDARDS
           ────────────────────────────────────────────────── */}
+      {sv.aboutus_standards !== false && (
       <section ref={timelineRef} className="py-28 border-b border-white/5 relative z-10">
         <div className="max-w-7xl mx-auto px-4 text-left">
           <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-neutral-400 block mb-3">{timelineOperational.eyebrow}</span>
@@ -602,10 +614,12 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           6. OFFICE LOCATIONS
           ────────────────────────────────────────────────── */}
+      {sv.aboutus_locations !== false && (
       <section className="py-28 border-b border-white/5 relative z-10">
         <div className="max-w-7xl mx-auto px-4 text-left">
           <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-neutral-400 block mb-3">{officeLocations.eyebrow}</span>
@@ -637,10 +651,12 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           7. COMPANY MANIFESTO
           ────────────────────────────────────────────────── */}
+      {sv.aboutus_manifesto !== false && (
       <section className="py-40 bg-black relative z-10 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(139,92,246,0.1),transparent_70%)] pointer-events-none" />
 
@@ -698,6 +714,7 @@ export default function AboutUs() {
           </div>
         </div>
       </section>
+      )}
 
     </div>
   );

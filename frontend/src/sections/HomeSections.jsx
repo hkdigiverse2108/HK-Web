@@ -302,10 +302,12 @@ export default function HomeSections({ overrideContent }) {
     ? 'grid-cols-1 md:grid-cols-3' 
     : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4';
 
+  const sv = activeContent?.site_settings?.section_visibility || {};
+
   return (
     <div className="bg-[#0c0c0c] text-[#e5e2e1] font-sans relative z-10 border-t border-white/5">
       {/* Stats Row */}
-      {visibleStats.length > 0 && (
+      {sv.home_stats !== false && visibleStats.length > 0 && (
         <section id="stats-section" className={`border-b border-white/5 grid ${gridColsClass} max-w-[1600px] w-full mx-auto`}>
           {visibleStats.map((stat, i) => (
             <div 
@@ -326,7 +328,7 @@ export default function HomeSections({ overrideContent }) {
       )}
 
       {/* Brand Ticker */}
-      {activeBrands.show !== false && brandList.length > 0 && (
+      {sv.home_brands !== false && activeBrands.show !== false && brandList.length > 0 && (
         <div id="brands-section" className="py-12 border-b border-white/5 overflow-hidden bg-black/40">
           <div className="flex whitespace-nowrap animate-scroll">
             <div className="flex gap-24 items-center px-12">
@@ -358,7 +360,7 @@ export default function HomeSections({ overrideContent }) {
       )}
 
       {/* Service Index */}
-      <section 
+      {sv.home_services !== false && <section 
         id="services-section"
         className="py-32 px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1600px] w-full mx-auto relative"
         onMouseMove={handleMouseMove}
@@ -443,7 +445,7 @@ export default function HomeSections({ overrideContent }) {
             </div>
           </div>
         )}
-      </section>
+      </section>}
 
       {/* Featured Case Study */}
       {(() => {
@@ -463,7 +465,7 @@ export default function HomeSections({ overrideContent }) {
           ]
         };
         
-        if (activeCaseStudy.show === false) return null;
+        if (activeCaseStudy.show === false || sv.home_casestudy === false) return null;
 
         return (
           <section id="case-study-section" className="py-32 bg-black/60 border-t border-b border-white/5">
@@ -555,6 +557,7 @@ export default function HomeSections({ overrideContent }) {
       })()}
 
       {/* Premium 3D Stack Testimonials Section */}
+      {sv.home_testimonials !== false && <>
       {(() => {
         const activeTestimonialsObj = activeContent?.testimonials || { show: true, title: "Trusted by pioneers.", description: "..." };
         if (activeTestimonialsObj.show === false || !activeTestimonialsData.length) return null;
@@ -730,9 +733,10 @@ export default function HomeSections({ overrideContent }) {
           </section>
         );
       })()}
+      </>}
 
       {/* Bottom CTA */}
-      {(() => {
+      {sv.home_cta !== false && (() => {
         const activeBottomCta = activeContent?.bottomCta || {
           show: true,
           titleNormal: "Let's build the",
@@ -741,7 +745,7 @@ export default function HomeSections({ overrideContent }) {
           btnLink: "#contact"
         };
         
-        if (activeBottomCta.show === false) return null;
+        if (activeBottomCta.show === false || sv.home_cta === false) return null;
 
         return (
           <section id="bottom-cta-section" className="py-40 px-4 sm:px-6 md:px-8 lg:px-12 text-center max-w-[1600px] w-full mx-auto">

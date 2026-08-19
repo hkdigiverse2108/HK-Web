@@ -5,6 +5,7 @@ import { useContent } from '../context/ContentContext';
 export default function ServiceCustomSoftware({ overrideContent }) {
   const { content: liveContent } = useContent();
   const content = overrideContent || liveContent;
+  const sv = content?.site_settings?.section_visibility || {};
   const serviceData = content?.services?.find(s => 
     s.href === '#service-custom-software' || 
     s.href === 'service-custom-software' || 
@@ -88,6 +89,7 @@ export default function ServiceCustomSoftware({ overrideContent }) {
       {/* ──────────────────────────────────────────────────
           I. CINEMATIC HERO SECTION WITH FLOATING PARTICLES
           ────────────────────────────────────────────────── */}
+      {sv.service_software_hero !== false && (
       <section 
         ref={heroRef}
         onMouseMove={handleMouseMove}
@@ -147,10 +149,12 @@ export default function ServiceCustomSoftware({ overrideContent }) {
           </motion.p>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
-          II. SYSTEM BEHAVIOR SIMULATOR
+          II. SPEED VS BLOAT SIMULATOR WIDGET
           ────────────────────────────────────────────────── */}
+      {sv.service_software_overview !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Performance Benchmark</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Database Engine Simulator</h2>
@@ -288,10 +292,12 @@ export default function ServiceCustomSoftware({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           III. FEATURE SELECTOR & SVG WIREFRAME GRAPH
           ────────────────────────────────────────────────── */}
+      {sv.service_software_features !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Architecture Logic</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Software Architecture Blueprint</h2>
@@ -387,10 +393,12 @@ export default function ServiceCustomSoftware({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
-          IV. PORTAL MOCKUP FRAME (PREVIEW)
+          IV. DASHBOARD SCREEN MOCKUP FRAME (PREVIEW)
           ────────────────────────────────────────────────── */}
+      {sv.service_software_process !== false && (
       <section className="max-w-7xl mx-auto px-4 py-28 border-b border-white/5 relative z-10 text-center">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Portal Deliverables</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Enterprise Dashboard Layouts</h2>
@@ -491,10 +499,12 @@ export default function ServiceCustomSoftware({ overrideContent }) {
 
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           IV.5 INTERACTIVE TECH STACK SELECTOR
           ────────────────────────────────────────────────── */}
+      {sv.service_software_tech !== false && (
       <section className="max-w-6xl mx-auto px-4 mb-24 relative z-10 text-center pt-16">
         <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">// Architecture Suite</span>
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight mb-4">Our Tech Stack</h2>
@@ -544,10 +554,12 @@ export default function ServiceCustomSoftware({ overrideContent }) {
           </AnimatePresence>
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           V. START PROJECT CTA
           ────────────────────────────────────────────────── */}
+      {sv.service_software_cta !== false && (
       <section className="max-w-6xl mx-auto px-4 relative z-10 text-center py-20">
         <a 
           href="#contact" 
@@ -556,6 +568,7 @@ export default function ServiceCustomSoftware({ overrideContent }) {
           Start Your Enterprise Project
         </a>
       </section>
+      )}
 
     </div>
   );

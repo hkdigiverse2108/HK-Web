@@ -53,6 +53,9 @@ const budgetRanges = [
 
 export default function Contact() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
+  if (sv.contact_form === false) return null;
+
   const activeOffices = content?.contact_offices || offices;
   const activeFaqs = content?.contact_faqs || faqs;
 

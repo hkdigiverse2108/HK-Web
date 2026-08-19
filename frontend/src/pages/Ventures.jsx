@@ -98,6 +98,9 @@ const DEFAULT_VENTURES = [
 
 export default function Ventures() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
+  if (sv.ventures_list === false) return null;
+
   const [selectedVenture, setSelectedVenture] = useState(null);
 
   const ventures = (content?.ventures || DEFAULT_VENTURES).map(v => ({

@@ -37,6 +37,7 @@ const iconMap = {
 
 export default function OurCulture() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
   // State for Art & Logic Interactive Balance
   const [balanceVal, setBalanceVal] = useState(50);
 
@@ -67,6 +68,7 @@ export default function OurCulture() {
       <div className="absolute top-[10%] left-1/4 w-[35vw] h-[35vw] rounded-full bg-rose-500/5 blur-[120px] pointer-events-none z-0" />
       <div className="absolute top-[50%] right-1/4 w-[30vw] h-[30vw] rounded-full bg-red-600/5 blur-[110px] pointer-events-none z-0" />
 
+      {sv.ourculture_philosophy !== false && (
       <div className="text-center mb-24 relative z-10 pt-8 space-y-4">
         <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-neutral-500 font-light block mb-3">
           {settings.subtitle}
@@ -78,10 +80,12 @@ export default function OurCulture() {
           {settings.description}
         </p>
       </div>
+      )}
 
       {/* ──────────────────────────────────────────────────
           II. LIFE AT HK ACTIVITY GRID (IMAGE + BRIEF DETAILS)
           ────────────────────────────────────────────────── */}
+      {sv.ourculture_grid !== false && (
       <section className="max-w-[1600px] w-full mx-auto px-4 mb-32 relative z-10 text-center">
         <div className="mb-16 space-y-4">
           <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-red-500 font-semibold block">
@@ -128,6 +132,7 @@ export default function OurCulture() {
           ))}
         </div>
       </section>
+      )}
 
       {/* ──────────────────────────────────────────────────
           III. INTERACTIVE ART & LOGIC BALANCE COMPASS
@@ -213,6 +218,7 @@ export default function OurCulture() {
       {/* ──────────────────────────────────────────────────
           IV. CULTURE PROTOCOL MANIFESTO (CODE BLOCK)
           ────────────────────────────────────────────────── */}
+      {sv.ourculture_manifesto !== false && (
       <section className="max-w-6xl mx-auto px-4 relative z-10 text-left">
         <div className="text-center mb-16">
           <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-3">{settings.manifestoSubtitle || "// Manifesto Protocol"}</span>
@@ -258,7 +264,7 @@ export default function OurCulture() {
           </pre>
         </motion.div>
       </section>
-
+      )}
     </div>
   );
 }

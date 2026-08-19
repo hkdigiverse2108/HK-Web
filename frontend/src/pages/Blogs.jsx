@@ -70,6 +70,9 @@ const DEFAULT_POSTS = [
 
 export default function Blogs() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
+  if (sv.blogs_list === false) return null;
+
   const [selectedPost, setSelectedPost] = useState(null);
 
   const posts = (content?.blogs || DEFAULT_POSTS).map(p => ({

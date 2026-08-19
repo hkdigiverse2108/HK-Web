@@ -37,6 +37,7 @@ DEFAULT_SITE_SETTINGS = {
         { "label": "Ventures", "href": "#ventures", "show": True },
         { "label": "Contact", "href": "#contact", "show": True }
     ],
+    "section_visibility": {},
     "footer": {
         "address": "Silver Trade Center, 501 & 502, near Pragati IT Park, Mota Varachha, Surat, Gujarat 394101",
         "email": "contact@hkdigiverse.com",

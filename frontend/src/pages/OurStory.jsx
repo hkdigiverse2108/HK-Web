@@ -215,6 +215,7 @@ function ParticleCanvas() {
 /* ───────────────────── MAIN COMPONENT ───────────────────── */
 export default function OurStory() {
   const { content } = useContent();
+  const sv = content?.site_settings?.section_visibility || {};
   const milestones = content?.milestones || [];
 
   const finalMilestones = [...milestones];
@@ -427,6 +428,8 @@ export default function OurStory() {
         </div>
       )}
 
+      {sv.ourstory_timeline !== false && (
+      <>
       <div className="text-center mb-28 space-y-4 z-10 relative pt-8">
         <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-neutral-500 font-light block mb-3">// COMPANY MATRIX</span>
         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">Our Story</h1>
@@ -531,8 +534,11 @@ export default function OurStory() {
           })}
         </div>
       </div>
+      </>
+      )}
 
       {/* Yearly Strategic Directives (Vision & Mission) */}
+      {sv.ourstory_directives !== false && (
       <section id="directives" className="mt-20 max-w-6xl mx-auto border-t border-white/5 pt-28 pb-12 z-10 relative">
         <div className="text-center mb-16 space-y-4">
           <div className="flex items-center justify-center gap-4">
@@ -651,6 +657,7 @@ export default function OurStory() {
           </AnimatePresence>
         </div>
       </section>
+      )}
     </div>
   );
 }
