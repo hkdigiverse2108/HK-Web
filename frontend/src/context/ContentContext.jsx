@@ -213,7 +213,7 @@ export const DEFAULT_CONTENT = {
     { title: "Launch Celebration", category: "Team", size: "col-span-2 row-span-1", image: "/media/images/gallery/launch_celebration.png" }
   ],
   site_settings: {
-    logo_text: "HK DIGIVERSE",
+    logo_text: "HariKrushn DigiVerse LLP",
     navbar_styles: {
       fontSize: "12px",
       color: "#a3a3a3",

@@ -165,9 +165,22 @@ export default function Navbar() {
               alt="HK Logo" 
               className="w-9 h-9 object-contain transition-transform duration-500 group-hover:scale-110"
             />
-            <span className="font-display tracking-[0.15em] text-sm font-semibold text-white" style={{ fontSize: styles.logoSize || '14px', color: styles.logoColor || '#ffffff' }}>
-              {logoTextFirst} <span className="font-light opacity-80 text-xs hidden md:inline" style={{ fontSize: `calc(${styles.logoSize || '14px'} - 2px)`, color: styles.logoColor || '#ffffff' }}>{logoTextRest}</span>
-            </span>
+            <div className="flex flex-col md:flex-row md:items-baseline md:gap-1.5 leading-none">
+              <span 
+                className="font-display tracking-[0.15em] text-xs sm:text-sm font-semibold text-white" 
+                style={{ fontSize: styles.logoSize || '14px', color: styles.logoColor || '#ffffff' }}
+              >
+                {logoTextFirst}
+              </span>
+              {logoTextRest && (
+                <span 
+                  className="font-display font-light opacity-80 tracking-[0.15em] text-[8px] sm:text-[9px] md:text-xs text-white uppercase md:normal-case mt-0.5 md:mt-0" 
+                  style={{ fontSize: `calc(${styles.logoSize || '14px'} - 2px)`, color: styles.logoColor || '#ffffff' }}
+                >
+                  {logoTextRest}
+                </span>
+              )}
+            </div>
           </a>
 
           {/* Desktop Navigation */}

@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 DEFAULT_SITE_SETTINGS = {
     "identifier": "global_settings",
-    "logo_text": "HK DIGIVERSE",
+    "logo_text": "HariKrushn DigiVerse LLP",
     "navbar_styles": {
         "fontSize": "12px",
         "color": "#a3a3a3",
