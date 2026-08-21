@@ -5908,8 +5908,8 @@ export default function AdminPanel() {
                         </label>
                       </div>
                       {item.img && (
-                        <div className="mt-2 w-full h-32 bg-black/50 rounded-lg border border-white/5 overflow-hidden">
-                          <img src={item.img} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
+                        <div className="mt-2 w-full h-36 bg-black/80 rounded-lg border border-white/10 overflow-hidden flex items-center justify-center p-2">
+                          <img src={item.img} alt="Preview" className="max-h-full max-w-full object-contain rounded" onError={(e) => { e.target.style.display = 'none'; }} />
                         </div>
                       )}
                     </div>

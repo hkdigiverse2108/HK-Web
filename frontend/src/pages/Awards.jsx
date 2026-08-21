@@ -76,27 +76,33 @@ function AwardCard({ award, idx, onClick }) {
         transformStyle: "preserve-3d",
         perspective: 1000
       }}
-      className="bg-[#09090d]/80 border border-white/5 rounded-3xl overflow-hidden group hover:border-amber-500/20 transition-colors shadow-2xl flex flex-col h-[420px] text-left relative cursor-pointer"
+      className="bg-[#09090d]/80 border border-white/5 rounded-3xl overflow-hidden group hover:border-amber-500/20 transition-colors shadow-2xl flex flex-col min-h-[460px] h-full text-left relative cursor-pointer"
     >
       {/* Visual top border glow */}
       <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-amber-500/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-      {/* Card Image Cover */}
-      <div className="w-full h-48 overflow-hidden relative border-b border-white/5">
+      {/* Card Image Showcase - Fully visible without cropping */}
+      <div className="w-full h-56 relative bg-black/70 border-b border-white/5 flex items-center justify-center p-3 overflow-hidden">
+        {/* Ambient background glow from image */}
+        <img 
+          src={award.img} 
+          alt="" 
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover filter blur-xl opacity-25 scale-125 pointer-events-none"
+        />
         <img 
           src={award.img} 
           alt={award.title} 
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+          className="relative z-10 max-h-full max-w-full w-auto h-auto object-contain rounded-lg transition-transform duration-500 group-hover:scale-105 drop-shadow-md"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#09090d] to-transparent opacity-60" />
         
         {/* Category Label */}
-        <span className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest px-3 py-1 rounded-full">
+        <span className="absolute top-3 left-3 z-20 bg-black/80 backdrop-blur-md border border-white/15 text-[9px] font-mono font-bold text-amber-400 uppercase tracking-widest px-2.5 py-1 rounded-full shadow-lg">
           {award.category === 'company' ? 'Company Award' : 'Founder Award'}
         </span>
 
         {/* Year Label */}
-        <span className="absolute top-4 right-4 bg-amber-500/10 border border-amber-500/20 text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest px-3 py-1 rounded-full">
+        <span className="absolute top-3 right-3 z-20 bg-amber-500/20 backdrop-blur-md border border-amber-500/30 text-[9px] font-mono font-bold text-amber-400 uppercase tracking-widest px-2.5 py-1 rounded-full shadow-lg">
           {award.year}
         </span>
       </div>
@@ -119,7 +125,7 @@ function AwardCard({ award, idx, onClick }) {
         </div>
 
         {/* Footer info showing who received it */}
-        <div className="border-t border-white/5 pt-4 flex items-center justify-between font-mono text-[10px] text-neutral-500">
+        <div className="border-t border-white/5 pt-4 mt-4 flex items-center justify-between font-mono text-[10px] text-neutral-500">
           <span>RECIPIENT:</span>
           <span className="text-white font-bold">{award.recipient}</span>
         </div>
@@ -333,7 +339,7 @@ export default function Awards() {
             <div className="relative z-10 max-w-[1600px] w-full mx-auto px-4 mb-20">
               <motion.div 
                 layout 
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch"
               >
                 <AnimatePresence mode="popLayout">
                   {filteredAwards.map((award, index) => (
@@ -371,20 +377,39 @@ export default function Awards() {
 
             {activeAward && (
               <div className="max-w-[1600px] w-full mx-auto px-4">
-                {/* Hero Image */}
-                <div 
-                  className="relative h-72 sm:h-96 rounded-3xl overflow-hidden mb-12 border border-white/10 shadow-2xl" 
-                  style={{ boxShadow: `0 30px 80px -20px rgba(251, 191, 36, 0.25)` }}
-                >
-                  <img src={activeAward.img} alt={activeAward.title} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-[#050508]/40 to-transparent" />
-                  <div className="absolute bottom-8 left-8 right-8 text-left">
-                    <span className="font-mono text-xs uppercase tracking-widest px-3 py-1.5 rounded-lg border bg-amber-500/10 text-amber-400 border-amber-500/20 inline-block mb-3">
+                {/* Header Info */}
+                <div className="mb-8 text-left">
+                  <div className="flex flex-wrap items-center gap-3 mb-4">
+                    <span className="font-mono text-xs uppercase tracking-widest px-3.5 py-1.5 rounded-full border bg-amber-500/10 text-amber-400 border-amber-500/20 font-semibold inline-block">
                       {activeAward.year} // {activeAward.category === 'company' ? 'Company Award' : 'Founder Award'}
                     </span>
-                    <h1 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight">{activeAward.title}</h1>
-                    <p className="font-mono text-sm text-neutral-400 mt-2">Awarded by {activeAward.by}</p>
+                    <span className="font-mono text-xs text-neutral-400">
+                      Awarded by <strong className="text-white font-medium">{activeAward.by}</strong>
+                    </span>
                   </div>
+                  <h1 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                    {activeAward.title}
+                  </h1>
+                </div>
+
+                {/* Hero Image Showcase - 100% visible, zero cropping */}
+                <div 
+                  className="relative rounded-3xl overflow-hidden mb-12 border border-white/10 shadow-2xl bg-black/80 flex items-center justify-center p-4 sm:p-8 min-h-[300px] max-h-[580px]" 
+                  style={{ boxShadow: `0 30px 80px -20px rgba(251, 191, 36, 0.15)` }}
+                >
+                  {/* Subtle ambient blurred background from the award image */}
+                  <img 
+                    src={activeAward.img} 
+                    alt="" 
+                    aria-hidden="true" 
+                    className="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-20 scale-125 pointer-events-none"
+                  />
+                  {/* Clean fully contained award image */}
+                  <img 
+                    src={activeAward.img} 
+                    alt={activeAward.title} 
+                    className="relative z-10 max-h-[500px] max-w-full w-auto h-auto object-contain rounded-2xl drop-shadow-[0_15px_35px_rgba(0,0,0,0.8)]" 
+                  />
                 </div>
 
                 {/* Impact Stats */}
@@ -402,12 +427,8 @@ export default function Awards() {
                 {/* Detailed Content */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-left">
                   <div className="md:col-span-2 space-y-6">
-                    <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">Honorable Citation</h2>
-                    <p className="font-light text-neutral-300 text-sm sm:text-base leading-relaxed">
-                      {activeAward.longDescription}
-                    </p>
-                    <p className="font-light text-neutral-400 text-sm sm:text-base leading-relaxed">
-                      At HariKrushn DigiVerse LLP, we thrive under the pressure of creating world-class digital applications. Receiving this honor from {activeAward.by} highlights our team's dedication to building high-fidelity products that set new standards in user experience, speed, and design precision.
+                    <p className="font-light text-neutral-300 text-sm sm:text-base leading-relaxed whitespace-pre-line">
+                      {activeAward.longDescription || activeAward.description}
                     </p>
                   </div>
 
