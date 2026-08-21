@@ -355,99 +355,111 @@ export default function Awards() {
             </div>
           </motion.div>
         ) : (
-          /* DETAIL VIEW — Single Award Page */
+          /* DETAIL VIEW — Single Award Page (Editorial 2-Column Split Layout) */
           <motion.div
             key="detail"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
             className="relative z-10"
           >
-            {/* Back Button */}
-            <div className="mb-10 px-4">
-              <button
-                onClick={() => setSelectedAward(null)}
-                className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-neutral-400 hover:text-white transition-colors cursor-pointer group"
-              >
-                <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span>
-                <span>Back to Awards</span>
-              </button>
-            </div>
-
             {activeAward && (
-              <div className="max-w-[1600px] w-full mx-auto px-4">
-                {/* Header Info */}
-                <div className="mb-8 text-left">
-                  <div className="flex flex-wrap items-center gap-3 mb-4">
-                    <span className="font-mono text-xs uppercase tracking-widest px-3.5 py-1.5 rounded-full border bg-amber-500/10 text-amber-400 border-amber-500/20 font-semibold inline-block">
-                      {activeAward.year} // {activeAward.category === 'company' ? 'Company Award' : 'Founder Award'}
-                    </span>
-                    <span className="font-mono text-xs text-neutral-400">
-                      Awarded by <strong className="text-white font-medium">{activeAward.by}</strong>
-                    </span>
-                  </div>
-                  <h1 className="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                    {activeAward.title}
-                  </h1>
+              <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Top Navigation Bar */}
+                <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pt-2 border-b border-white/5 pb-4">
+                  <button
+                    onClick={() => setSelectedAward(null)}
+                    className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-neutral-400 hover:text-white transition-colors cursor-pointer group"
+                  >
+                    <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span>
+                    <span>Back to Awards</span>
+                  </button>
+                  <span className="font-mono text-xs uppercase tracking-widest px-3.5 py-1.5 rounded-full border bg-amber-500/10 text-amber-400 border-amber-500/20 font-semibold inline-block">
+                    {activeAward.year} // {activeAward.category === 'company' ? 'Company Award' : 'Founder Award'}
+                  </span>
                 </div>
 
-                {/* Hero Image Showcase - 100% visible, zero cropping */}
-                <div 
-                  className="relative rounded-3xl overflow-hidden mb-12 border border-white/10 shadow-2xl bg-black/80 flex items-center justify-center p-4 sm:p-8 min-h-[300px] max-h-[580px]" 
-                  style={{ boxShadow: `0 30px 80px -20px rgba(251, 191, 36, 0.15)` }}
-                >
-                  {/* Subtle ambient blurred background from the award image */}
-                  <img 
-                    src={activeAward.img} 
-                    alt="" 
-                    aria-hidden="true" 
-                    className="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-20 scale-125 pointer-events-none"
-                  />
-                  {/* Clean fully contained award image */}
-                  <img 
-                    src={activeAward.img} 
-                    alt={activeAward.title} 
-                    className="relative z-10 max-h-[500px] max-w-full w-auto h-auto object-contain rounded-2xl drop-shadow-[0_15px_35px_rgba(0,0,0,0.8)]" 
-                  />
-                </div>
+                {/* Main 2-Column Split Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-20">
+                  {/* Left Column: Award Image Showcase */}
+                  <div className="lg:col-span-5 lg:sticky lg:top-24 space-y-4">
+                    <div 
+                      className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black/60 flex items-center justify-center p-3 sm:p-4 backdrop-blur-xl group"
+                      style={{ boxShadow: `0 20px 60px -15px rgba(251, 191, 36, 0.12)` }}
+                    >
+                      {/* Atmospheric ambient glow */}
+                      <img 
+                        src={activeAward.img} 
+                        alt="" 
+                        aria-hidden="true" 
+                        className="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-25 scale-125 pointer-events-none"
+                      />
+                      {/* Clean fully-visible award photo without cropping */}
+                      <img 
+                        src={activeAward.img} 
+                        alt={activeAward.title} 
+                        className="relative z-10 w-auto h-auto max-h-[620px] max-w-full object-contain rounded-2xl drop-shadow-[0_12px_32px_rgba(0,0,0,0.8)] transition-transform duration-500 group-hover:scale-[1.01]" 
+                      />
+                    </div>
 
-                {/* Impact Stats */}
-                {activeAward.impactStats && (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-16">
-                    {activeAward.impactStats.map(stat => (
-                      <div key={stat.label} className="text-center p-6 rounded-2xl bg-[#050508]/40 border border-white/5 backdrop-blur-md">
-                        <span className="font-display text-2xl sm:text-3xl font-extrabold text-amber-400 block">{stat.value}</span>
-                        <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-neutral-500 mt-2 block">{stat.label}</span>
+                    {/* Metadata Card */}
+                    <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-between font-mono text-xs">
+                      <div>
+                        <span className="text-neutral-500 block text-[9px] uppercase tracking-widest">Awarded By</span>
+                        <span className="text-neutral-300 font-medium">{activeAward.by}</span>
                       </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Detailed Content */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 text-left">
-                  <div className="md:col-span-2 space-y-6">
-                    <p className="font-light text-neutral-300 text-sm sm:text-base leading-relaxed whitespace-pre-line">
-                      {activeAward.longDescription || activeAward.description}
-                    </p>
-                  </div>
-
-                  <div className="space-y-6">
-                    <div className="p-8 rounded-3xl bg-[#09090d]/60 border border-white/5 space-y-6">
-                      <h3 className="font-display text-lg font-bold text-white tracking-tight">// Award Key Highlights</h3>
-                      <ul className="space-y-4">
-                        {activeAward.highlights && activeAward.highlights.map((highlight, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-neutral-300 font-light">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-2 flex-shrink-0" />
-                            <span>{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="border-t border-white/5 pt-4 flex items-center justify-between font-mono text-xs text-neutral-500">
-                        <span>RECIPIENT:</span>
+                      <div className="text-right">
+                        <span className="text-neutral-500 block text-[9px] uppercase tracking-widest">Recipient</span>
                         <span className="text-white font-bold">{activeAward.recipient}</span>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Right Column: Title, Story, Stats & Highlights */}
+                  <div className="lg:col-span-7 space-y-8 text-left">
+                    <div>
+                      <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.3em] text-neutral-500 font-light block mb-2">
+                        // Recognition & Achievement
+                      </span>
+                      <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                        {activeAward.title}
+                      </h1>
+                    </div>
+
+                    {/* Narrative Description */}
+                    <div className="text-neutral-300 font-light text-sm sm:text-base leading-relaxed bg-white/[0.015] border border-white/5 p-6 sm:p-8 rounded-3xl">
+                      <p className="whitespace-pre-line leading-relaxed">
+                        {activeAward.longDescription || activeAward.description}
+                      </p>
+                    </div>
+
+                    {/* Impact Stats (if available) */}
+                    {activeAward.impactStats && activeAward.impactStats.length > 0 && (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {activeAward.impactStats.map(stat => (
+                          <div key={stat.label} className="p-5 rounded-2xl bg-[#09090d]/60 border border-white/5 text-center">
+                            <span className="font-display text-2xl font-extrabold text-amber-400 block">{stat.value}</span>
+                            <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-500 mt-1 block">{stat.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Highlights (if available) */}
+                    {activeAward.highlights && activeAward.highlights.length > 0 && (
+                      <div className="p-6 sm:p-8 rounded-3xl bg-[#09090d]/60 border border-white/5 space-y-4">
+                        <h3 className="font-display text-sm font-bold text-white tracking-tight uppercase">// Key Highlights</h3>
+                        <ul className="space-y-3">
+                          {activeAward.highlights.map((highlight, idx) => (
+                            <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-neutral-300 font-light">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-2 flex-shrink-0" />
+                              <span>{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
