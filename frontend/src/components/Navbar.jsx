@@ -113,6 +113,23 @@ export default function Navbar() {
   };
 
   const [mobileDropdowns, setMobileDropdowns] = useState({});
+  const [openDesktopDropdown, setOpenDesktopDropdown] = useState(null);
+  const desktopNavRef = React.useRef(null);
+
+  // Close desktop/tablet dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (desktopNavRef.current && !desktopNavRef.current.contains(event.target)) {
+        setOpenDesktopDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, []);
 
   const toggleMobileDropdown = (name) => {
     setMobileDropdowns(prev => ({
@@ -124,6 +141,7 @@ export default function Navbar() {
   const handleLinkClick = (href) => {
     setIsMobileMenuOpen(false);
     setMobileDropdowns({});
+    setOpenDesktopDropdown(null);
     if (window.location.hash === href) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
@@ -183,30 +201,56 @@ export default function Navbar() {
             </div>
           </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center md:gap-4 lg:gap-6 xl:gap-8">
+          {/* Desktop & Tablet Navigation */}
+          <div ref={desktopNavRef} className="hidden md:flex items-center md:gap-3 lg:gap-6 xl:gap-8">
             {activeNavigationItems.map((item, index) => {
+              const itemKey = item.label || item.name;
+              const isDropdownOpen = openDesktopDropdown === itemKey;
+
               if (item.dropdown && item.dropdown.length > 0) {
                 return (
-                  <div key={item.label || item.name} className="relative group py-1">
+                  <div 
+                    key={itemKey} 
+                    className="relative group py-1"
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
                     <button 
+                      type="button"
                       aria-haspopup="true" 
-                      aria-expanded="false" 
-                      className="flex items-center gap-1.5 uppercase tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer"
+                      aria-expanded={isDropdownOpen} 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenDesktopDropdown(prev => prev === itemKey ? null : itemKey);
+                      }}
+                      className="flex items-center gap-1.5 uppercase tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer select-none"
                       style={{
                         fontSize: styles.fontSize || '12px',
-                        color: hoveredIndex === index ? (styles.hoverColor || '#ffffff') : (styles.color || '#a3a3a3')
+                        color: (hoveredIndex === index || isDropdownOpen) ? (styles.hoverColor || '#ffffff') : (styles.color || '#a3a3a3')
                       }}
-                      onMouseEnter={() => setHoveredIndex(index)}
-                      onMouseLeave={() => setHoveredIndex(null)}
                     >
-                      <span>{item.label || item.name}</span>
-                      <svg className="w-2.5 h-2.5 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <span>{itemKey}</span>
+                      <svg 
+                        className={cn(
+                          "w-2.5 h-2.5 transition-transform duration-300", 
+                          isDropdownOpen ? "rotate-180 text-white" : "group-hover:rotate-180"
+                        )} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    {/* Glassmorphic Dropdown Wrapper (Bridges hover gap) */}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-64 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 ease-out z-50">
+                    {/* Glassmorphic Dropdown Wrapper (Supports Touch/Click on Tablet & Hover on Desktop) */}
+                    <div 
+                      className={cn(
+                        "absolute top-full left-1/2 -translate-x-1/2 pt-2 w-64 transition-all duration-300 ease-out z-50",
+                        isDropdownOpen 
+                          ? "opacity-100 translate-y-0 pointer-events-auto" 
+                          : "opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto"
+                      )}
+                    >
                       {/* Actual Styled Dropdown Box */}
                       <div className="bg-[#050505]/95 backdrop-blur-md border border-white/10 p-3 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col gap-1">
                         {item.dropdown.map((subItem) => (
@@ -233,7 +277,7 @@ export default function Navbar() {
 
               return (
                 <a
-                  key={item.label || item.name}
+                  key={itemKey}
                   href={item.href}
                   onClick={() => handleLinkClick(item.href)}
                   className="relative uppercase tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer group"
@@ -244,7 +288,7 @@ export default function Navbar() {
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
-                  {item.label || item.name}
+                  {itemKey}
                   <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" style={{ backgroundColor: styles.hoverColor }} />
                 </a>
               );
