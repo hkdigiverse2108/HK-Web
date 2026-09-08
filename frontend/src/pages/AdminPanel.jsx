@@ -1346,6 +1346,8 @@ export default function AdminPanel() {
     const nextContent = JSON.parse(JSON.stringify(currentContent));
     if (field === 'level') {
       nextContent.people[index][field] = parseInt(value) || 1;
+    } else if (field === 'sort_order') {
+      nextContent.people[index][field] = (value === '' || value === null) ? null : parseInt(value);
     } else {
       nextContent.people[index][field] = value;
     }
@@ -5553,7 +5555,7 @@ export default function AdminPanel() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       <div>
                         <label className="font-mono text-[8px] text-neutral-500 block mb-0.5">Level (1-5)</label>
                         <input
@@ -5580,6 +5582,16 @@ export default function AdminPanel() {
                           type="text"
                           value={selectedItem.dept || ''}
                           onChange={(e) => updatePeopleItem(selectedIndex, 'dept', e.target.value)}
+                          className="w-full px-3 py-1.5 bg-black border border-white/10 rounded text-white text-xs focus:outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="font-mono text-[8px] text-neutral-500 block mb-0.5">Sort / Column Order</label>
+                        <input
+                          type="number"
+                          placeholder="e.g. 1, 2, 3..."
+                          value={selectedItem.sort_order !== undefined && selectedItem.sort_order !== null ? selectedItem.sort_order : ''}
+                          onChange={(e) => updatePeopleItem(selectedIndex, 'sort_order', e.target.value)}
                           className="w-full px-3 py-1.5 bg-black border border-white/10 rounded text-white text-xs focus:outline-none"
                         />
                       </div>
@@ -7068,7 +7080,7 @@ export default function AdminPanel() {
                         <label className="font-mono text-[8px] text-neutral-500 block mb-0.5">Tech Stack (comma separated)</label>
                         <input
                           type="text"
-                          value={item.techStack ? item.techStack.join(', ') : ''}
+                          value={Array.isArray(item.techStack) ? item.techStack.join(', ') : (item.techStack || '')}
                           onChange={(e) => {
                             const nextContent = JSON.parse(JSON.stringify(currentContent));
                             nextContent.ventures[index].techStack = e.target.value.split(',').map(s => s.trim());
@@ -7081,9 +7093,10 @@ export default function AdminPanel() {
                         <label className="font-mono text-[8px] text-neutral-500 block mb-0.5">Partners (comma separated)</label>
                         <input
                           type="text"
-                          value={item.partners ? item.partners.join(', ') : ''}
+                          value={Array.isArray(item.partners) ? item.partners.join(', ') : (item.partners || '')}
                           onChange={(e) => {
-                          nextContent.ventures[index].partners = e.target.value.split(',').map(s => s.trim());
+                            const nextContent = JSON.parse(JSON.stringify(currentContent));
+                            nextContent.ventures[index].partners = e.target.value.split(',').map(s => s.trim());
                             pushState(nextContent);
                           }}
                           className="w-full px-3 py-1.5 bg-black border border-white/10 rounded text-white text-xs focus:outline-none"
