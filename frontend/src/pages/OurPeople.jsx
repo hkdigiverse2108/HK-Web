@@ -765,15 +765,6 @@ function DesktopTree({
       }
     });
 
-    // Sort children by sort_order dynamically so user can order columns anytime from Admin Panel
-    Object.keys(childrenMap).forEach(pId => {
-      childrenMap[pId].sort((a, b) => {
-        const orderA = a.sort_order !== undefined && a.sort_order !== null ? Number(a.sort_order) : 9999;
-        const orderB = b.sort_order !== undefined && b.sort_order !== null ? Number(b.sort_order) : 9999;
-        return orderA - orderB;
-      });
-    });
-
     const positions = {};
     const nextXAtLevel = {};
 
@@ -1315,16 +1306,6 @@ export default function OurPeople({ overrideContent }) {
         nodeMap[parentId].children.push(nodeMap[p.name]);
       } else if (p.level === 1 || parentIds.includes(rootNode.name)) {
         nodeMap[rootNode.name].children.push(nodeMap[p.name]);
-      }
-    });
-
-    Object.keys(nodeMap).forEach(key => {
-      if (nodeMap[key].children && nodeMap[key].children.length > 1) {
-        nodeMap[key].children.sort((a, b) => {
-          const orderA = a.sort_order !== undefined && a.sort_order !== null ? Number(a.sort_order) : 9999;
-          const orderB = b.sort_order !== undefined && b.sort_order !== null ? Number(b.sort_order) : 9999;
-          return orderA - orderB;
-        });
       }
     });
 
