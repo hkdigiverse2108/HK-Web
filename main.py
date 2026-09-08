@@ -275,11 +275,18 @@ DEFAULT_CASE_STUDIES = [
 ]
 
 DEFAULT_CAREER_LADDER = [
-  { "level": "Intern", "duration": "3-6 months", "desc": "Learn fundamentals, shadow senior team members, and contribute to live projects." },
-  { "level": "Junior", "duration": "Year 1", "desc": "Own small features independently, participate in code reviews, and build domain expertise." },
-  { "level": "Mid-Level", "duration": "Year 2-3", "desc": "Lead feature development, mentor juniors, and make architectural decisions." },
-  { "level": "Senior", "duration": "Year 3-5", "desc": "Drive technical strategy, lead client engagements, and define engineering standards." },
-  { "level": "Lead / Manager", "duration": "Year 5+", "desc": "Shape company direction, manage teams, and drive innovation across verticals." }
+  { "level": "Intern", "duration": "3-6 months", "desc": "Learn fundamentals, shadow senior team members, and contribute to live projects.", "sort_order": 1 },
+  { "level": "Junior", "duration": "Year 1", "desc": "Own small features independently, participate in code reviews, and build domain expertise.", "sort_order": 2 },
+  { "level": "Mid-Level", "duration": "Year 2-3", "desc": "Lead feature development, mentor juniors, and make architectural decisions.", "sort_order": 3 },
+  { "level": "Senior", "duration": "Year 3-5", "desc": "Drive technical strategy, lead client engagements, and define engineering standards.", "sort_order": 4 },
+  { "level": "Lead / Manager", "duration": "Year 5+", "desc": "Shape company direction, manage teams, and drive innovation across verticals.", "sort_order": 5 }
+]
+
+DEFAULT_CAREER_STATS = [
+  { "value": "50+", "label": "Projects Delivered", "sort_order": 1 },
+  { "value": "8+", "label": "Industries Served", "sort_order": 2 },
+  { "value": "3+", "label": "Years of Excellence", "sort_order": 3 },
+  { "value": "30+", "label": "Team Members", "sort_order": 4 }
 ]
 
 DEFAULT_JOB_FORM_FIELDS = [
@@ -1848,6 +1855,9 @@ DEFAULT_CONTENT = {
     "career_job_form_fields": DEFAULT_JOB_FORM_FIELDS,
     "career_intern_form_fields": DEFAULT_INTERN_FORM_FIELDS,
     "career_philosophy_cards": DEFAULT_PHILOSOPHY_CARDS,
+    "career_ladder": DEFAULT_CAREER_LADDER,
+    "career_stats": DEFAULT_CAREER_STATS,
+    "case_studies": DEFAULT_CASE_STUDIES,
     "industries": DEFAULT_INDUSTRIES,
     "industry_projects": DEFAULT_INDUSTRY_PROJECTS,
     "strategic_directives": DEFAULT_STRATEGIC_DIRECTIVES,
