@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '../utils/cn';
 import { useContent } from '../context/ContentContext';
+import { navigateTo } from '../utils/navigation';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -63,7 +64,7 @@ export default function Navbar() {
   // Click handler to trigger admin panel after 7 clicks
   const handleLogoClick = (e) => {
     e.preventDefault();
-    window.location.hash = '#';
+    navigateTo('/');
     const newClicks = logoClicks + 1;
     setLogoClicks(newClicks);
     if (newClicks >= 7) {
@@ -99,7 +100,7 @@ export default function Navbar() {
         setShowAuthModal(false);
         setPasswordInput('');
         setTimeout(() => {
-          window.location.hash = '#admin';
+          navigateTo('/admin');
         }, 50);
       } else {
         const errData = await res.json();
@@ -138,16 +139,13 @@ export default function Navbar() {
     }));
   };
 
-  const handleLinkClick = (href) => {
+  const handleLinkClick = (href, e) => {
+    if (e && e.preventDefault) e.preventDefault();
     setIsMobileMenuOpen(false);
     setMobileDropdowns({});
     setOpenDesktopDropdown(null);
-    if (window.location.hash === href) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 50);
+    if (href) {
+      navigateTo(href);
     }
   };
 
@@ -257,7 +255,7 @@ export default function Navbar() {
                           <a
                             key={subItem.label || subItem.name}
                             href={subItem.href}
-                            onClick={() => handleLinkClick(subItem.href)}
+                            onClick={(e) => handleLinkClick(subItem.href, e)}
                             className="uppercase tracking-[0.15em] font-light transition-all duration-200 py-2 px-3 rounded-lg hover:bg-white/5 cursor-pointer block text-left"
                             style={{
                               fontSize: `calc(${styles.fontSize || '12px'} - 1px)`,
@@ -279,7 +277,7 @@ export default function Navbar() {
                 <a
                   key={itemKey}
                   href={item.href}
-                  onClick={() => handleLinkClick(item.href)}
+                  onClick={(e) => handleLinkClick(item.href, e)}
                   className="relative uppercase tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer group"
                   style={{
                     fontSize: styles.fontSize || '12px',
@@ -376,7 +374,7 @@ export default function Navbar() {
                       <a
                         key={subItem.label || subItem.name}
                         href={subItem.href}
-                        onClick={() => handleLinkClick(subItem.href)}
+                        onClick={(e) => handleLinkClick(subItem.href, e)}
                         className="text-xs uppercase tracking-[0.2em] font-light text-neutral-500 hover:text-white transition-colors duration-300 py-2 cursor-pointer block"
                       >
                         {subItem.label || subItem.name}
@@ -391,7 +389,7 @@ export default function Navbar() {
               <a
                 key={item.label || item.name}
                 href={item.href}
-                onClick={() => handleLinkClick(item.href)}
+                onClick={(e) => handleLinkClick(item.href, e)}
                 style={{ 
                   transitionDelay: isMobileMenuOpen ? `${index * 50}ms` : '0ms',
                   transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(30px)',

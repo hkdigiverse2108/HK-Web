@@ -245,91 +245,172 @@ function PreviewContainer({ currentHash }) {
   );
 }
 
+const PAGE_TITLES = {
+  '/': 'HariKrushn DigiVerse LLP | Architectural Digital Craftsmanship & AI Systems',
+  '/our-story': 'Our Story | HariKrushn DigiVerse LLP',
+  '/our-people': 'Our People | HariKrushn DigiVerse LLP',
+  '/our-culture': 'Our Culture | HariKrushn DigiVerse LLP',
+  '/about-us': 'About Us | HariKrushn DigiVerse LLP',
+  '/awards-achievements': 'Awards & Achievements | HariKrushn DigiVerse LLP',
+  '/blogs': 'Blogs & Insights | HariKrushn DigiVerse LLP',
+  '/our-gallery': 'Our Gallery | HariKrushn DigiVerse LLP',
+  '/services': 'Services | HariKrushn DigiVerse LLP',
+  '/industry': 'Industries We Serve | HariKrushn DigiVerse LLP',
+  '/career': 'Careers | HariKrushn DigiVerse LLP',
+  '/case-study': 'Case Studies | HariKrushn DigiVerse LLP',
+  '/portfolio': 'Portfolio & Featured Projects | HariKrushn DigiVerse LLP',
+  '/ventures': 'Ventures | HariKrushn DigiVerse LLP',
+  '/contact': 'Contact Us | HariKrushn DigiVerse LLP',
+  '/service-web': 'Web Development Services | HariKrushn DigiVerse LLP',
+  '/service-app': 'Mobile App Development | HariKrushn DigiVerse LLP',
+  '/service-custom-software': 'Custom Software & SaaS Development | HariKrushn DigiVerse LLP',
+  '/service-digital-marketing': 'Digital Marketing & SEO Services | HariKrushn DigiVerse LLP',
+  '/service-social-media-management': 'Social Media & Brand Management | HariKrushn DigiVerse LLP',
+  '/service-ai-consulting': 'AI Consulting & Integration | HariKrushn DigiVerse LLP',
+  '/service-it-consulting': 'IT & Cloud Consulting | HariKrushn DigiVerse LLP',
+  '/admin': 'Admin Panel | HariKrushn DigiVerse LLP'
+};
+
+function getNormalizedLocation() {
+  const hash = window.location.hash || '';
+  const pathname = window.location.pathname || '/';
+
+  // If preview mode, return preview hash
+  if (hash.startsWith('#preview')) {
+    return hash;
+  }
+
+  // Auto-redirect legacy hash URLs (e.g. /#our-people -> /our-people)
+  if (hash && hash !== '#' && hash !== '#home' && !hash.startsWith('#preview')) {
+    const rawPath = hash.replace('#', '').split('?')[0];
+    const searchParams = hash.includes('?') ? '?' + hash.split('?')[1] : window.location.search;
+    const cleanPath = (rawPath.startsWith('/') ? rawPath : '/' + rawPath) + searchParams;
+    
+    // Smoothly replace legacy hash in browser URL bar
+    window.history.replaceState(null, '', cleanPath);
+    return cleanPath.split('?')[0];
+  }
+
+  const base = pathname.split('?')[0];
+  if (base === '' || base === '/home') {
+    return '/';
+  }
+  return base;
+}
+
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [currentHash, setCurrentHash] = useState(window.location.hash || '#');
+  const [currentRoute, setCurrentRoute] = useState(getNormalizedLocation());
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const newHash = window.location.hash || '#';
-      setCurrentHash((prevHash) => {
-        const prevBase = prevHash.split('?')[0];
-        const newBase = newHash.split('?')[0];
-        if (prevBase !== newBase) {
+    const handleLocationChange = () => {
+      const newRoute = getNormalizedLocation();
+      setCurrentRoute((prevRoute) => {
+        if (prevRoute !== newRoute) {
           window.scrollTo({ top: 0, behavior: 'instant' });
         }
-        return newHash;
+        return newRoute;
       });
+
+      if (!newRoute.startsWith('#preview')) {
+        document.title = PAGE_TITLES[newRoute] || 'HariKrushn DigiVerse LLP';
+      }
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    const initRoute = getNormalizedLocation();
+    if (!initRoute.startsWith('#preview')) {
+      document.title = PAGE_TITLES[initRoute] || 'HariKrushn DigiVerse LLP';
+    }
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
   }, []);
 
   const handlePreloadComplete = useCallback(() => {
     setIsLoaded(true);
   }, []);
 
-  // Extract base hash without query params
-  const baseHash = currentHash.split('?')[0];
-
-  // Check if current hash is for preview mode
-  const isPreviewMode = baseHash.startsWith('#preview');
-
-  // Check if current hash is for a subpage
-  const isSubpage = baseHash !== '#' && baseHash !== '#home' && baseHash !== '#admin' && !isPreviewMode;
+  const baseRoute = currentRoute.split('?')[0];
+  const isPreviewMode = baseRoute.startsWith('#preview');
+  const isSubpage = baseRoute !== '/' && baseRoute !== '/home' && baseRoute !== '/admin' && baseRoute !== '#' && baseRoute !== '#home' && !isPreviewMode;
 
   const renderPageContent = () => {
-    if (baseHash.startsWith('#preview')) {
-      return <PreviewContainer currentHash={baseHash} />;
+    if (baseRoute.startsWith('#preview')) {
+      return <PreviewContainer currentHash={baseRoute} />;
     }
-    switch (baseHash) {
+    switch (baseRoute) {
+      case '/admin':
       case '#admin':
         return (
           <ErrorBoundary>
             <AdminPanel />
           </ErrorBoundary>
         );
+      case '/our-story':
       case '#our-story':
         return <OurStory />;
+      case '/our-people':
       case '#our-people':
         return <OurPeople />;
+      case '/our-culture':
       case '#our-culture':
         return <OurCulture />;
+      case '/about-us':
       case '#about-us':
         return <AboutUs />;
+      case '/awards-achievements':
       case '#awards-achievements':
         return <Awards />;
+      case '/blogs':
       case '#blogs':
         return <Blogs />;
+      case '/our-gallery':
       case '#our-gallery':
         return <Gallery />;
+      case '/services':
       case '#services':
         return <Services />;
+      case '/industry':
       case '#industry':
         return <Industry />;
+      case '/career':
       case '#career':
         return <Career />;
+      case '/case-study':
       case '#case-study':
         return <CaseStudy />;
+      case '/portfolio':
       case '#portfolio':
         return <Portfolio />;
+      case '/ventures':
       case '#ventures':
         return <Ventures />;
+      case '/contact':
       case '#contact':
         return <Contact />;
+      case '/service-web':
       case '#service-web':
         return <ServiceWeb />;
+      case '/service-app':
       case '#service-app':
         return <ServiceApp />;
+      case '/service-custom-software':
       case '#service-custom-software':
         return <ServiceCustomSoftware />;
+      case '/service-digital-marketing':
       case '#service-digital-marketing':
         return <ServiceDigitalMarketing />;
+      case '/service-social-media-management':
       case '#service-social-media-management':
         return <ServiceSocialMedia />;
+      case '/service-ai-consulting':
       case '#service-ai-consulting':
         return <ServiceAiConsulting />;
+      case '/service-it-consulting':
       case '#service-it-consulting':
         return <ServiceItConsulting />;
       default:
@@ -337,7 +418,7 @@ function App() {
     }
   };
 
-  const isAdminOrPreview = baseHash === '#admin' || isPreviewMode;
+  const isAdminOrPreview = baseRoute === '/admin' || baseRoute === '#admin' || isPreviewMode;
 
   return (
     <ContentProvider>
@@ -345,10 +426,10 @@ function App() {
       {!isAdminOrPreview && <CustomCursor />}
 
       {/* Cinematic preloader screen - bypassed in preview mode */}
-      {!isLoaded && currentHash !== '#preview' && <Preloader onComplete={handlePreloadComplete} />}
+      {!isLoaded && !isPreviewMode && <Preloader onComplete={handlePreloadComplete} />}
 
       {/* Main website layout */}
-      <div className={`transition-opacity duration-1000 ${(isLoaded || currentHash === '#preview') ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`transition-opacity duration-1000 ${(isLoaded || isPreviewMode) ? 'opacity-100' : 'opacity-0'}`}>
         {!isAdminOrPreview && <Navbar />}
 
         {isSubpage ? (
@@ -356,7 +437,7 @@ function App() {
           <main className="pt-36 sm:pt-40 lg:pt-44 xl:pt-48 pb-24 w-full mx-auto min-h-screen relative z-10">
             <AnimatePresence mode="wait">
               <motion.div
-                key={baseHash}
+                key={baseRoute}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -15 }}
@@ -368,7 +449,7 @@ function App() {
           </main>
         ) : isAdminOrPreview ? (
           /* Fullscreen Admin Panel or Preview container */
-          <div key={`admin-preview-wrapper-${baseHash}`} translate="no" className="notranslate w-full min-h-screen">
+          <div key={`admin-preview-wrapper-${baseRoute}`} translate="no" className="notranslate w-full min-h-screen">
             {renderPageContent()}
           </div>
         ) : (

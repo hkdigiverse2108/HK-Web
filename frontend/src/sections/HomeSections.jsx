@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useContent } from '../context/ContentContext';
 import Magnetic from '../components/Magnetic';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { navigateTo } from '../utils/navigation';
 
 const resolveImgUrl = (url) => {
   if (!url) return '';
@@ -477,8 +478,8 @@ export default function HomeSections({ overrideContent }) {
                   onClick={() => {
                     const href = activeCaseStudy.linkHref && activeCaseStudy.linkHref !== '#case-study' 
                       ? activeCaseStudy.linkHref 
-                      : '#case-study?case=aerocrm';
-                    window.location.hash = href;
+                      : '/case-study?case=aerocrm';
+                    navigateTo(href);
                   }}
                   className="order-2 lg:order-1 relative group cursor-pointer"
                 >
@@ -538,7 +539,12 @@ export default function HomeSections({ overrideContent }) {
 
                   <div className="pt-4">
                     <a 
-                      href={activeCaseStudy.linkHref && activeCaseStudy.linkHref !== '#case-study' ? activeCaseStudy.linkHref : '#case-study?case=aerocrm'} 
+                      href={activeCaseStudy.linkHref && activeCaseStudy.linkHref !== '#case-study' ? activeCaseStudy.linkHref : '/case-study?case=aerocrm'} 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const href = activeCaseStudy.linkHref && activeCaseStudy.linkHref !== '#case-study' ? activeCaseStudy.linkHref : '/case-study?case=aerocrm';
+                        navigateTo(href);
+                      }}
                       className="inline-flex items-center gap-3 group cursor-pointer"
                     >
                       <span className="font-mono text-[10px] uppercase tracking-widest text-white border-b border-white pb-1">

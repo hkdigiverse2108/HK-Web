@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContent } from '../context/ContentContext';
+import { navigateTo } from '../utils/navigation';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -578,32 +579,41 @@ export default function Industry() {
   const [searchQuery, setSearchQuery] = useState('');
   const detailsRef = useRef(null);
 
-  // Synchronize hash params
+  // Synchronize URL params
   useEffect(() => {
-    const parseHashParam = () => {
+    const parseUrlParam = () => {
+      const search = window.location.search;
       const hash = window.location.hash;
-      if (hash.includes('?')) {
+      let type = null;
+      if (search.includes('type=')) {
+        type = new URLSearchParams(search).get('type');
+      } else if (hash.includes('?')) {
         const queryString = hash.split('?')[1];
-        const params = new URLSearchParams(queryString);
-        const type = params.get('type');
-        if (type && industries.some(i => i.id === type)) {
-          setSelectedIndustry(type);
-          return;
-        }
+        type = new URLSearchParams(queryString).get('type');
       }
+
+      if (type && industries.some(i => i.id === type)) {
+        setSelectedIndustry(type);
+        return;
+      }
+
       if (industries.length > 0) {
         setSelectedIndustry(prev => (industries.some(i => i.id === prev) ? prev : industries[0].id));
       }
     };
 
-    parseHashParam();
-    window.addEventListener('hashchange', parseHashParam);
-    return () => window.removeEventListener('hashchange', parseHashParam);
+    parseUrlParam();
+    window.addEventListener('popstate', parseUrlParam);
+    window.addEventListener('hashchange', parseUrlParam);
+    return () => {
+      window.removeEventListener('popstate', parseUrlParam);
+      window.removeEventListener('hashchange', parseUrlParam);
+    };
   }, [content?.industries]);
 
   const handleSelectIndustry = (id) => {
     setSelectedIndustry(id);
-    window.location.hash = `#industry?type=${id}`;
+    navigateTo(`/industry?type=${id}`);
     
     // Smooth scroll to details on mobile screens
     if (window.innerWidth < 1024) {

@@ -41,7 +41,7 @@ export const DEFAULT_CONTENT = {
       desc: "Creating high-fidelity, cinematic, and fast-loading web applications that captivate and convert.",
       description: "Creating high-fidelity, cinematic, and fast-loading web applications that captivate and convert.",
       tags: ["FRONTEND", "DESIGN"],
-      href: "#service-web",
+      href: "/service-web",
       img: "/media/images/gallery/design_sprint.png",
       gradient: "from-blue-500 via-indigo-500 to-cyan-500"
     },
@@ -51,7 +51,7 @@ export const DEFAULT_CONTENT = {
       desc: "Building bespoke native-feeling iOS and Android solutions with fluid gestures and offline sync.",
       description: "Building bespoke native-feeling iOS and Android solutions with fluid gestures and offline sync.",
       tags: ["IOS", "ANDROID"],
-      href: "#service-app",
+      href: "/service-app",
       img: "/media/images/gallery/digiverse_workspace.png",
       gradient: "from-emerald-500 via-teal-500 to-cyan-500"
     },
@@ -61,7 +61,7 @@ export const DEFAULT_CONTENT = {
       desc: "Constructing robust backend panels, CRM matrices, SaaS dashboards, and multi-tenant systems.",
       description: "Constructing robust backend panels, CRM matrices, SaaS dashboards, and multi-tenant systems.",
       tags: ["CRM", "ERP"],
-      href: "#service-custom-software",
+      href: "/service-custom-software",
       img: "/media/images/quantum_banking.png",
       gradient: "from-amber-500 via-orange-500 to-yellow-500"
     },
@@ -71,7 +71,7 @@ export const DEFAULT_CONTENT = {
       desc: "Driving traffic and client acquisitions using data-backed strategies, SEO, and paid ads.",
       description: "Driving traffic and client acquisitions using data-backed strategies, SEO, and paid ads.",
       tags: ["SEO", "GROWTH"],
-      href: "#service-digital-marketing",
+      href: "/service-digital-marketing",
       img: "/media/images/gallery/launch_celebration.png",
       gradient: "from-rose-500 via-pink-500 to-purple-500"
     },
@@ -81,7 +81,7 @@ export const DEFAULT_CONTENT = {
       desc: "Crafting brand presence, graphic design guides, and content calendars to elevate recognition.",
       description: "Crafting brand presence, graphic design guides, and content calendars to elevate recognition.",
       tags: ["BRANDING", "CONTENT"],
-      href: "#service-social-media-management",
+      href: "/service-social-media-management",
       img: "/media/images/gallery/cinematic_review.png",
       gradient: "from-pink-500 via-fuchsia-500 to-violet-500"
     },
@@ -91,7 +91,7 @@ export const DEFAULT_CONTENT = {
       desc: "Developing automated AI agents, vector database search pipelines, and custom LLM integrations.",
       description: "Developing automated AI agents, vector database search pipelines, and custom LLM integrations.",
       tags: ["LLM", "AGENTS"],
-      href: "#service-ai-consulting",
+      href: "/service-ai-consulting",
       img: "/media/images/gallery/ai_orchestrator.png",
       gradient: "from-purple-500 via-violet-500 to-indigo-500"
     },
@@ -101,7 +101,7 @@ export const DEFAULT_CONTENT = {
       desc: "Designing Cloud migrations, Docker orchestration files, hardened security, and CI/CD pipelines.",
       description: "Designing Cloud migrations, Docker orchestration files, hardened security, and CI/CD pipelines.",
       tags: ["CLOUD", "DEVOPS"],
-      href: "#service-it-consulting",
+      href: "/service-it-consulting",
       img: "/media/images/gallery/hardware_calibration.png",
       gradient: "from-sky-500 via-blue-500 to-indigo-500"
     }
@@ -227,22 +227,22 @@ export const DEFAULT_CONTENT = {
         href: "#",
         show: true,
         dropdown: [
-          { label: "Our Story", href: "#our-story", show: true },
-          { label: "Our People", href: "#our-people", show: true },
-          { label: "Our Culture", href: "#our-culture", show: true },
-          { label: "About Us", href: "#about-us", show: true },
-          { label: "Awards and Achievements", href: "#awards-achievements", show: true },
-          { label: "Blogs", href: "#blogs", show: true },
-          { label: "Our Gallery", href: "#our-gallery", show: true }
+          { label: "Our Story", href: "/our-story", show: true },
+          { label: "Our People", href: "/our-people", show: true },
+          { label: "Our Culture", href: "/our-culture", show: true },
+          { label: "About Us", href: "/about-us", show: true },
+          { label: "Awards and Achievements", href: "/awards-achievements", show: true },
+          { label: "Blogs", href: "/blogs", show: true },
+          { label: "Our Gallery", href: "/our-gallery", show: true }
         ]
       },
-      { label: "Services", href: "#services", show: true },
-      { label: "Industry", href: "#industry", show: true },
-      { label: "Career", href: "#career", show: true },
-      { label: "Case Study", href: "#case-study", show: true },
-      { label: "Portfolio", href: "#portfolio", show: true },
-      { label: "Ventures", href: "#ventures", show: true },
-      { label: "Contact", href: "#contact", show: true }
+      { label: "Services", href: "/services", show: true },
+      { label: "Industry", href: "/industry", show: true },
+      { label: "Career", href: "/career", show: true },
+      { label: "Case Study", href: "/case-study", show: true },
+      { label: "Portfolio", href: "/portfolio", show: true },
+      { label: "Ventures", href: "/ventures", show: true },
+      { label: "Contact", href: "/contact", show: true }
     ],
     section_visibility: {},
     footer: {
@@ -254,16 +254,16 @@ export const DEFAULT_CONTENT = {
       phone: "+91 98765 43210",
       copyright: "© 2026 HariKrushn DigiVerse LLP. All rights reserved.",
       capabilities: [
-        { label: "Engineering", href: "#service-web", show: true },
-        { label: "AI & ML", href: "#service-ai-consulting", show: true },
-        { label: "Branding", href: "#service-social-media-management", show: true },
-        { label: "Product Strategy", href: "#service-custom-software", show: true }
+        { label: "Engineering", href: "/service-web", show: true },
+        { label: "AI & ML", href: "/service-ai-consulting", show: true },
+        { label: "Branding", href: "/service-social-media-management", show: true },
+        { label: "Product Strategy", href: "/service-custom-software", show: true }
       ],
       ecosystem: [
-        { label: "Portfolio", href: "#portfolio", show: true },
-        { label: "Ventures", href: "#ventures", show: true },
-        { label: "Careers", href: "#career", show: true },
-        { label: "Contact", href: "#contact", show: true }
+        { label: "Portfolio", href: "/portfolio", show: true },
+        { label: "Ventures", href: "/ventures", show: true },
+        { label: "Careers", href: "/career", show: true },
+        { label: "Contact", href: "/contact", show: true }
       ],
       social_links: [
         {platform: "LinkedIn", url: "https://linkedin.com", show: true},

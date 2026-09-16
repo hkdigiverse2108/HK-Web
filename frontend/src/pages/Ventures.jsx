@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContent } from '../context/ContentContext';
+import { navigateTo } from '../utils/navigation';
 
 /* ────────────────────────── VENTURES DATA ────────────────────────── */
 const DEFAULT_VENTURES = [
@@ -319,7 +320,7 @@ export default function Ventures() {
                   <h3 className="font-display text-2xl font-bold text-white mb-4">Interested in {activeVenture.name}?</h3>
                   <p className="font-light text-neutral-400 text-sm mb-8 max-w-lg mx-auto">Whether you want to collaborate, invest, volunteer, or simply learn more — we'd love to hear from you.</p>
                   <button 
-                    onClick={() => { window.location.hash = '#contact'; }}
+                    onClick={() => navigateTo('/contact')}
                     className={`bg-${activeVenture.color}-500 text-black px-8 py-4 rounded-xl text-[10px] font-mono font-bold uppercase tracking-widest hover:opacity-90 transition-all shadow-lg`}
                   >
                     Get in Touch

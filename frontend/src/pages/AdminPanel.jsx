@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useContent, DEFAULT_CONTENT } from '../context/ContentContext';
+import { useContent } from '../context/ContentContext';
+import { navigateTo } from '../utils/navigation';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -2283,7 +2284,7 @@ export default function AdminPanel() {
   const handleLogout = () => {
     sessionStorage.removeItem('adminPassword');
     setAuthorized(false);
-    window.location.hash = '#home';
+    navigateTo('/');
   };
 
   // Form view before authorization
@@ -2350,7 +2351,7 @@ export default function AdminPanel() {
 
           <div className="text-center mt-6">
             <button 
-              onClick={() => { window.location.hash = '#home'; }}
+              onClick={() => navigateTo('/')}
               className="font-mono text-[10px] text-neutral-500 hover:text-white uppercase tracking-widest transition-colors cursor-pointer"
             >
               Cancel & Return Home
@@ -10689,7 +10690,7 @@ export default function AdminPanel() {
                 </div>
                 
                 <button 
-                  onClick={() => { window.location.hash = '#home'; }}
+                  onClick={() => navigateTo('/')}
                   className="px-4 py-2 border border-white/10 hover:border-white/20 hover:bg-white/5 rounded-lg font-mono text-[9px] uppercase tracking-widest text-neutral-400 hover:text-white transition-colors cursor-pointer"
                 >
                   Exit Editor

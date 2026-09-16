@@ -752,7 +752,7 @@ function DesktopTree({
 
   // 3. Dynamic Auto-Layout Engine Calculations
   const Y_SPACING = 200;
-  const X_SPACING = 210;
+  const X_SPACING = 250;
 
   const runAutoLayout = (nodes, rootId = 'HariKrushn DigiVerse LLP') => {
     const childrenMap = {};

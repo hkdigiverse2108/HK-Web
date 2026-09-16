@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useContent } from '../context/ContentContext';
+import { navigateTo } from '../utils/navigation';
 
 /* ────────────────────────── CONSULTANCY CASE STUDIES ────────────────────────── */
 const DEFAULT_CASES = [
@@ -143,21 +144,30 @@ export default function CaseStudy() {
   const [selectedCase, setSelectedCase] = useState(null);
 
   useEffect(() => {
-    const handleHash = () => {
+    const handleUrlState = () => {
+      const search = window.location.search;
       const hash = window.location.hash;
-      if (hash.includes('?case=')) {
-        const caseId = hash.split('?case=')[1];
-        if (caseId) {
-          setSelectedCase(caseId);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+      let caseId = null;
+      if (search.includes('case=')) {
+        caseId = new URLSearchParams(search).get('case');
+      } else if (hash.includes('?case=')) {
+        caseId = hash.split('?case=')[1];
+      }
+
+      if (caseId) {
+        setSelectedCase(caseId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setSelectedCase(null);
       }
     };
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    handleUrlState();
+    window.addEventListener('popstate', handleUrlState);
+    window.addEventListener('hashchange', handleUrlState);
+    return () => {
+      window.removeEventListener('popstate', handleUrlState);
+      window.removeEventListener('hashchange', handleUrlState);
+    };
   }, []);
 
   if (selectedCase) {
@@ -178,9 +188,7 @@ export default function CaseStudy() {
 
           {/* Back button */}
           <button
-            onClick={() => {
-              window.location.hash = '#case-study';
-            }}
+            onClick={() => navigateTo('/case-study')}
             className="group flex items-center gap-2 mb-10 text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white cursor-pointer transition-colors"
           >
             <span>← Back to Case Studies</span>
@@ -280,9 +288,7 @@ export default function CaseStudy() {
             className="group"
           >
             <div 
-              onClick={() => {
-                window.location.hash = '#case-study?case=' + item.id;
-              }}
+              onClick={() => navigateTo('/case-study?case=' + item.id)}
               className="bg-[#050508]/60 backdrop-blur-md border border-white/5 rounded-3xl overflow-hidden hover:border-white/15 transition-all duration-500 shadow-2xl relative cursor-pointer text-left"
               style={{ boxShadow: `0 20px 60px -20px ${item.glowColor}` }}
             >

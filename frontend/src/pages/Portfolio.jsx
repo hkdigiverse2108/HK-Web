@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContent } from '../context/ContentContext';
+import { navigateTo } from '../utils/navigation';
 
 /* ────────────────────────── PORTFOLIO PROJECTS ────────────────────────── */
 const DEFAULT_PROJECTS = [
@@ -214,23 +215,32 @@ export default function Portfolio() {
 
   const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
 
-  // Hash-based detail routing
+  // URL & Search parameter based detail routing
   useEffect(() => {
-    const handleHash = () => {
+    const handleUrlState = () => {
+      const search = window.location.search;
       const hash = window.location.hash;
-      if (hash.includes('?project=')) {
-        const projectId = hash.split('?project=')[1];
-        if (projectId) {
-          setSelectedProject(projectId);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+      let projectId = null;
+      if (search.includes('project=')) {
+        projectId = new URLSearchParams(search).get('project');
+      } else if (hash.includes('?project=')) {
+        projectId = hash.split('?project=')[1];
+      }
+
+      if (projectId) {
+        setSelectedProject(projectId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setSelectedProject(null);
       }
     };
-    handleHash();
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    handleUrlState();
+    window.addEventListener('popstate', handleUrlState);
+    window.addEventListener('hashchange', handleUrlState);
+    return () => {
+      window.removeEventListener('popstate', handleUrlState);
+      window.removeEventListener('hashchange', handleUrlState);
+    };
   }, []);
 
   /* ────────── DETAIL PAGE VIEW ────────── */
@@ -252,7 +262,7 @@ export default function Portfolio() {
 
           {/* Back button */}
           <button
-            onClick={() => { window.location.hash = '#portfolio'; }}
+            onClick={() => navigateTo('/portfolio')}
             className="group flex items-center gap-2 mb-10 text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white cursor-pointer transition-colors"
           >
             <span>← Back to Portfolio</span>
@@ -440,7 +450,7 @@ export default function Portfolio() {
               className="group relative"
             >
               <div 
-                onClick={() => { window.location.hash = '#portfolio?project=' + item.id; }}
+                onClick={() => navigateTo('/portfolio?project=' + item.id)}
                 className="bg-[#050508]/60 border border-white/5 rounded-2xl overflow-hidden hover:border-white/15 transition-all duration-500 h-full flex flex-col cursor-pointer"
                 style={{ boxShadow: hoveredId === item.id ? `0 20px 50px -15px ${item.accentColor}33` : 'none' }}
               >
