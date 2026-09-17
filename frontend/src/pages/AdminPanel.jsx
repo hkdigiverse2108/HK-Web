@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useContent } from '../context/ContentContext';
+import { useContent, DEFAULT_CONTENT } from '../context/ContentContext';
 import { navigateTo } from '../utils/navigation';
 
 const API_URL = import.meta.env.VITE_API_URL || '';

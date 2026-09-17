@@ -269,7 +269,8 @@ export const DEFAULT_CONTENT = {
         {platform: "LinkedIn", url: "https://linkedin.com", show: true},
         {platform: "Twitter", url: "https://twitter.com", show: true},
         {platform: "GitHub", url: "https://github.com", show: true},
-        {platform: "Instagram", url: "https://instagram.com", show: true}
+        {platform: "Instagram", url: "https://instagram.com", show: true},
+        {platform: "YouTube", url: "https://youtube.com", show: true}
       ]
     }
   },
