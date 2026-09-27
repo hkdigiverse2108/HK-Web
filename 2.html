@@ -60,7 +60,7 @@ button{cursor:pointer}
 /* PAGE */
 main{padding:135px 0 80px}
 .page-head{text-align:center;max-width:800px;margin:0 auto 42px}
-.page-head h1{font-size:clamp(45px,6vw,72px);line-height:.97;letter-spacing:-.06em;margin:15px 0 20px}
+.page-head h1{font-size:clamp(32px,7vw,72px);line-height:.97;letter-spacing:-.06em;margin:15px 0 20px}
 .page-head p{color:#858f95;line-height:1.75;font-size:14px;margin:0 auto;max-width:650px}
 .stepper{
   max-width:900px;margin:32px auto 0;display:flex;align-items:center;justify-content:center;
@@ -203,7 +203,14 @@ footer{border-top:1px solid var(--line);padding:32px 0 50px}
   .snapshot{grid-template-columns:1fr}
   .submit-row{display:flex;flex-direction:column;align-items:stretch}
   .submit{width:100%}
-  .footer-row{display:block}.footer-links{margin-top:14px;flex-wrap:wrap}
+  .footer-row{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+  .footer-links{margin-top:0;flex-wrap:wrap;gap:12px}
+}
+@media(max-width:480px){
+  .form-card{padding:16px}
+  .side-card{padding:16px}
+  main{padding-top:100px}
+  .step-line{width:15px}
 }
 </style>
 </head>

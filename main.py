@@ -11,7 +11,7 @@ try:
 except ImportError:
     cv2 = None
 
-from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Header
+from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Header, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -2598,7 +2598,7 @@ async def clear_all_submissions(req: ClearSubmissionsRequest):
 
 # ----------------- Franchise Enquiries Endpoints -----------------
 @app.post("/api/franchise/enquiry")
-async def submit_franchise_enquiry(req: dict):
+async def submit_franchise_enquiry(req: dict, background_tasks: BackgroundTasks):
     doc = {**req}
     doc["created_at"] = doc.get("created_at") or datetime.datetime.now().isoformat()
     doc["status"] = doc.get("status", "New")
@@ -2636,24 +2636,15 @@ async def submit_franchise_enquiry(req: dict):
         # Dispatch emails asynchronously to applicant and admin
         try:
             from app.core.email import handle_franchise_submission_emails
-            email_thread = threading.Thread(
-                target=handle_franchise_submission_emails,
-                args=(dict(doc),),
-                daemon=True
-            )
-            email_thread.start()
+            background_tasks.add_task(handle_franchise_submission_emails, dict(doc))
         except Exception as email_err:
-            print(f"[Franchise Email Error] Could not start email thread: {email_err}")
+            print(f"[Franchise Email Error] Could not add email task: {email_err}")
 
         return {"status": "success", "message": "Franchise enquiry submitted successfully", "id": doc["_id"]}
     except Exception as e:
         try:
             from app.core.email import handle_franchise_submission_emails
-            threading.Thread(
-                target=handle_franchise_submission_emails,
-                args=(dict(doc),),
-                daemon=True
-            ).start()
+            background_tasks.add_task(handle_franchise_submission_emails, dict(doc))
         except Exception:
             pass
 
