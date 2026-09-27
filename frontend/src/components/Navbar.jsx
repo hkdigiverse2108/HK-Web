@@ -139,11 +139,19 @@ export default function Navbar() {
     }));
   };
 
-  const handleLinkClick = (href, e) => {
-    if (e && e.preventDefault) e.preventDefault();
+  const handleLinkClick = (href, e, isExternal = false) => {
     setIsMobileMenuOpen(false);
     setMobileDropdowns({});
     setOpenDesktopDropdown(null);
+
+    const isFranchise = href?.toLowerCase().includes('franchise');
+    if (isFranchise || isExternal) {
+      if (e && e.preventDefault) e.preventDefault();
+      window.open('/franchise', '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    if (e && e.preventDefault) e.preventDefault();
     if (href) {
       navigateTo(href);
     }
@@ -251,33 +259,41 @@ export default function Navbar() {
                     >
                       {/* Actual Styled Dropdown Box */}
                       <div className="bg-[#050505]/95 backdrop-blur-md border border-white/10 p-3 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col gap-1">
-                        {item.dropdown.map((subItem) => (
-                          <a
-                            key={subItem.label || subItem.name}
-                            href={subItem.href}
-                            onClick={(e) => handleLinkClick(subItem.href, e)}
-                            className="uppercase tracking-[0.15em] font-light transition-all duration-200 py-2 px-3 rounded-lg hover:bg-white/5 cursor-pointer block text-left"
-                            style={{
-                              fontSize: `calc(${styles.fontSize || '12px'} - 1px)`,
-                              color: styles.color || '#a3a3a3'
-                            }}
-                            onMouseEnter={(e) => e.target.style.color = styles.hoverColor || '#ffffff'}
-                            onMouseLeave={(e) => e.target.style.color = styles.color || '#a3a3a3'}
-                          >
-                            {subItem.label || subItem.name}
-                          </a>
-                        ))}
+                        {item.dropdown.map((subItem) => {
+                          const isSubFranchise = (subItem.label || subItem.name)?.toLowerCase().includes('franchise') || subItem.href?.toLowerCase().includes('franchise');
+                          return (
+                            <a
+                              key={subItem.label || subItem.name}
+                              href={isSubFranchise ? "/franchise" : subItem.href}
+                              target={isSubFranchise ? "_blank" : undefined}
+                              rel={isSubFranchise ? "noopener noreferrer" : undefined}
+                              onClick={(e) => handleLinkClick(isSubFranchise ? '/franchise' : subItem.href, e, isSubFranchise)}
+                              className="uppercase tracking-[0.15em] font-light transition-all duration-200 py-2 px-3 rounded-lg hover:bg-white/5 cursor-pointer block text-left"
+                              style={{
+                                fontSize: `calc(${styles.fontSize || '12px'} - 1px)`,
+                                color: styles.color || '#a3a3a3'
+                              }}
+                              onMouseEnter={(e) => e.target.style.color = styles.hoverColor || '#ffffff'}
+                              onMouseLeave={(e) => e.target.style.color = styles.color || '#a3a3a3'}
+                            >
+                              {subItem.label || subItem.name}
+                            </a>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
                 );
               }
 
+              const isFranchise = itemKey?.toLowerCase().includes('franchise') || item.href?.toLowerCase().includes('franchise');
               return (
                 <a
                   key={itemKey}
-                  href={item.href}
-                  onClick={(e) => handleLinkClick(item.href, e)}
+                  href={isFranchise ? "/franchise" : item.href}
+                  target={isFranchise ? "_blank" : undefined}
+                  rel={isFranchise ? "noopener noreferrer" : undefined}
+                  onClick={(e) => handleLinkClick(isFranchise ? '/franchise' : item.href, e, isFranchise)}
                   className="relative uppercase tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer group"
                   style={{
                     fontSize: styles.fontSize || '12px',
@@ -370,26 +386,34 @@ export default function Navbar() {
                       isDropdownOpen ? "max-h-[350px] py-4 opacity-100" : "max-h-0 py-0 opacity-0 border-none"
                     )}
                   >
-                    {item.dropdown.map((subItem) => (
-                      <a
-                        key={subItem.label || subItem.name}
-                        href={subItem.href}
-                        onClick={(e) => handleLinkClick(subItem.href, e)}
-                        className="text-xs uppercase tracking-[0.2em] font-light text-neutral-500 hover:text-white transition-colors duration-300 py-2 cursor-pointer block"
-                      >
-                        {subItem.label || subItem.name}
-                      </a>
-                    ))}
+                    {item.dropdown.map((subItem) => {
+                      const isSubFranchise = (subItem.label || subItem.name)?.toLowerCase().includes('franchise') || subItem.href?.toLowerCase().includes('franchise');
+                      return (
+                        <a
+                          key={subItem.label || subItem.name}
+                          href={isSubFranchise ? "/franchise" : subItem.href}
+                          target={isSubFranchise ? "_blank" : undefined}
+                          rel={isSubFranchise ? "noopener noreferrer" : undefined}
+                          onClick={(e) => handleLinkClick(isSubFranchise ? '/franchise' : subItem.href, e, isSubFranchise)}
+                          className="text-xs uppercase tracking-[0.2em] font-light text-neutral-500 hover:text-white transition-colors duration-300 py-2 cursor-pointer block"
+                        >
+                          {subItem.label || subItem.name}
+                        </a>
+                      );
+                    })}
                   </div>
                 </div>
               );
             }
 
+            const isFranchise = (item.label || item.name)?.toLowerCase().includes('franchise') || item.href?.toLowerCase().includes('franchise');
             return (
               <a
                 key={item.label || item.name}
-                href={item.href}
-                onClick={(e) => handleLinkClick(item.href, e)}
+                href={isFranchise ? "/franchise" : item.href}
+                target={isFranchise ? "_blank" : undefined}
+                rel={isFranchise ? "noopener noreferrer" : undefined}
+                onClick={(e) => handleLinkClick(isFranchise ? '/franchise' : item.href, e, isFranchise)}
                 style={{ 
                   transitionDelay: isMobileMenuOpen ? `${index * 50}ms` : '0ms',
                   transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(30px)',

@@ -17,11 +17,11 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/media': {
-          target: `http://localhost:${backendPort}`,
+          target: `http://127.0.0.1:${backendPort}`,
           changeOrigin: true,
         },
         '/api': {
-          target: `http://localhost:${backendPort}`,
+          target: `http://127.0.0.1:${backendPort}`,
           changeOrigin: true,
         }
       }

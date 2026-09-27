@@ -242,7 +242,8 @@ export const DEFAULT_CONTENT = {
       { label: "Case Study", href: "/case-study", show: true },
       { label: "Portfolio", href: "/portfolio", show: true },
       { label: "Ventures", href: "/ventures", show: true },
-      { label: "Contact", href: "/contact", show: true }
+      { label: "Contact", href: "/contact", show: true },
+      { label: "Franchise", href: "/franchise", show: true }
     ],
     section_visibility: {},
     footer: {

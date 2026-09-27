@@ -2519,29 +2519,49 @@ async def get_applications(req: VerifyRequest):
 class DeleteSubmissionRequest(BaseModel):
     password: str
     id: str
-    type: str # 'inquiry' or 'application'
+    type: str # 'inquiry' or 'application' or 'franchise'
 
 @app.post("/api/admin/submissions/delete")
 async def delete_submission(req: DeleteSubmissionRequest):
     if not verify_admin_password(req.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    collection_name = "inquiries" if req.type == "inquiry" else "career_applications"
+    if req.type == "franchise":
+        collection_name = "franchise_enquiries"
+        backup_file = os.path.join(os.path.dirname(__file__), "media", "franchise_enquiries.json")
+        if os.path.exists(backup_file):
+            try:
+                with open(backup_file, "r", encoding="utf-8") as f:
+                    enquiries = json.load(f)
+                enquiries = [item for item in enquiries if str(item.get("_id")) != str(req.id)]
+                with open(backup_file, "w", encoding="utf-8") as f:
+                    json.dump(enquiries, f, indent=2, ensure_ascii=False)
+            except Exception:
+                pass
+    elif req.type == "inquiry":
+        collection_name = "inquiries"
+    else:
+        collection_name = "career_applications"
+
     coll = get_collection(collection_name)
     if coll is not None:
         try:
             from bson import ObjectId
-            result = coll.delete_one({"_id": ObjectId(req.id)})
+            try:
+                result = coll.delete_one({"_id": ObjectId(req.id)})
+            except Exception:
+                result = coll.delete_one({"_id": req.id})
             if result.deleted_count > 0:
                 return {"status": "success", "message": "Submission deleted successfully"}
-            raise HTTPException(status_code=404, detail="Submission not found")
         except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
-    raise HTTPException(status_code=500, detail="Database not available")
+            pass
+    if req.type == "franchise":
+        return {"status": "success", "message": "Deleted successfully"}
+    raise HTTPException(status_code=404, detail="Submission not found")
 
 class ClearSubmissionsRequest(BaseModel):
     password: str
-    type: str # 'inquiry' or 'application' or 'all'
+    type: str # 'inquiry' or 'application' or 'franchise' or 'all'
 
 @app.post("/api/admin/submissions/clear-all")
 async def clear_all_submissions(req: ClearSubmissionsRequest):
@@ -2560,9 +2580,149 @@ async def clear_all_submissions(req: ClearSubmissionsRequest):
             if coll_app is not None:
                 res = coll_app.delete_many({})
                 deleted_count += res.deleted_count
+        if req.type in ["franchise", "all"]:
+            coll_fran = get_collection("franchise_enquiries")
+            if coll_fran is not None:
+                res = coll_fran.delete_many({})
+                deleted_count += res.deleted_count
+            backup_file = os.path.join(os.path.dirname(__file__), "media", "franchise_enquiries.json")
+            if os.path.exists(backup_file):
+                try:
+                    with open(backup_file, "w", encoding="utf-8") as f:
+                        json.dump([], f)
+                except Exception:
+                    pass
         return {"status": "success", "message": f"Successfully deleted {deleted_count} submissions"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# ----------------- Franchise Enquiries Endpoints -----------------
+@app.post("/api/franchise/enquiry")
+async def submit_franchise_enquiry(req: dict):
+    doc = {**req}
+    doc["created_at"] = doc.get("created_at") or datetime.datetime.now().isoformat()
+    doc["status"] = doc.get("status", "New")
+    
+    # Try MongoDB first
+    coll = get_collection("franchise_enquiries")
+    if coll is not None:
+        try:
+            res = coll.insert_one(doc)
+            doc["_id"] = str(res.inserted_id)
+        except Exception as e:
+            print(f"[Franchise] Mongo insert error: {e}")
+            
+    # Always keep local JSON backup for 100% reliability
+    try:
+        media_dir = os.path.join(os.path.dirname(__file__), "media")
+        os.makedirs(media_dir, exist_ok=True)
+        backup_file = os.path.join(media_dir, "franchise_enquiries.json")
+        enquiries = []
+        if os.path.exists(backup_file):
+            try:
+                with open(backup_file, "r", encoding="utf-8") as f:
+                    enquiries = json.load(f)
+            except Exception:
+                enquiries = []
+        if "_id" not in doc or not doc["_id"]:
+            doc["_id"] = str(int(time.time() * 1000))
+        else:
+            doc["_id"] = str(doc["_id"])
+            
+        enquiries.insert(0, doc)
+        with open(backup_file, "w", encoding="utf-8") as f:
+            json.dump(enquiries, f, indent=2, ensure_ascii=False)
+            
+        # Dispatch emails asynchronously to applicant and admin
+        try:
+            from app.core.email import handle_franchise_submission_emails
+            email_thread = threading.Thread(
+                target=handle_franchise_submission_emails,
+                args=(dict(doc),),
+                daemon=True
+            )
+            email_thread.start()
+        except Exception as email_err:
+            print(f"[Franchise Email Error] Could not start email thread: {email_err}")
+
+        return {"status": "success", "message": "Franchise enquiry submitted successfully", "id": doc["_id"]}
+    except Exception as e:
+        try:
+            from app.core.email import handle_franchise_submission_emails
+            threading.Thread(
+                target=handle_franchise_submission_emails,
+                args=(dict(doc),),
+                daemon=True
+            ).start()
+        except Exception:
+            pass
+
+        if "_id" in doc:
+            return {"status": "success", "message": "Franchise enquiry submitted successfully", "id": str(doc["_id"])}
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/admin/franchise-enquiries")
+async def get_franchise_enquiries(req: VerifyRequest):
+    if not verify_admin_password(req.password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+        
+    results = []
+    coll = get_collection("franchise_enquiries")
+    if coll is not None:
+        try:
+            cursor = coll.find({}).sort("created_at", -1)
+            for doc in cursor:
+                doc["_id"] = str(doc["_id"])
+                results.append(doc)
+            if results:
+                return results
+        except Exception as e:
+            print(f"[Franchise] Mongo fetch error: {e}")
+            
+    backup_file = os.path.join(os.path.dirname(__file__), "media", "franchise_enquiries.json")
+    if os.path.exists(backup_file):
+        try:
+            with open(backup_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return results
+
+class UpdateFranchiseStatusReq(BaseModel):
+    password: str
+    id: str
+    status: str
+
+@app.post("/api/admin/franchise-enquiries/status")
+async def update_franchise_enquiry_status(req: UpdateFranchiseStatusReq):
+    if not verify_admin_password(req.password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+        
+    coll = get_collection("franchise_enquiries")
+    if coll is not None:
+        try:
+            from bson import ObjectId
+            try:
+                coll.update_one({"_id": ObjectId(req.id)}, {"$set": {"status": req.status}})
+            except Exception:
+                coll.update_one({"_id": req.id}, {"$set": {"status": req.status}})
+        except Exception:
+            pass
+                
+    backup_file = os.path.join(os.path.dirname(__file__), "media", "franchise_enquiries.json")
+    if os.path.exists(backup_file):
+        try:
+            with open(backup_file, "r", encoding="utf-8") as f:
+                enquiries = json.load(f)
+            for item in enquiries:
+                if str(item.get("_id")) == str(req.id):
+                    item["status"] = req.status
+            with open(backup_file, "w", encoding="utf-8") as f:
+                json.dump(enquiries, f, indent=2, ensure_ascii=False)
+        except Exception:
+            pass
+            
+    return {"status": "success", "message": "Status updated successfully"}
 
 from app.core.security import verify_password, create_session_token, verify_session_token
 
@@ -3163,6 +3323,7 @@ if __name__ == "__main__":
 
         frontend_proc = None
         if frontend_cmd:
+            time.sleep(1.5)
             print("[System] Starting Frontend (Vite)...")
             frontend_proc = run_service(frontend_cmd, os.path.join(os.path.dirname(__file__), "frontend"), "[Frontend]")
 

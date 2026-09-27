@@ -63,7 +63,8 @@ export default function AdminPanel() {
     "Home Page Sections": true,
     "Company Inner Pages": true,
     "Capabilities Pages (Static)": false,
-    "Ecosystem Admin Logs": true
+    "Ecosystem Admin Logs": true,
+    "11. Franchise Management": true
   });
 
   // Status and Modals
@@ -920,10 +921,125 @@ export default function AdminPanel() {
   const [applications, setApplications] = useState([]);
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
 
+  // Franchise Enquiries Log states
+  const [franchiseEnquiries, setFranchiseEnquiries] = useState([]);
+  const [loadingFranchiseEnquiries, setLoadingFranchiseEnquiries] = useState(false);
+  const [franchiseSearch, setFranchiseSearch] = useState('');
+  const [franchiseStatusFilter, setFranchiseStatusFilter] = useState('all');
+  const [selectedFranchiseItem, setSelectedFranchiseItem] = useState(null);
+
+  const loadFranchiseEnquiries = async () => {
+    setLoadingFranchiseEnquiries(true);
+    try {
+      const res = await fetch(API_URL + '/api/admin/franchise-enquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFranchiseEnquiries(Array.isArray(data) ? data : []);
+      }
+    } catch (e) {
+      console.error("Failed to load franchise enquiries:", e);
+    } finally {
+      setLoadingFranchiseEnquiries(false);
+    }
+  };
+
+  const handleUpdateFranchiseStatus = async (id, status) => {
+    try {
+      const res = await fetch(API_URL + '/api/admin/franchise-enquiries/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, id, status })
+      });
+      if (res.ok) {
+        setSaveStatus({ type: 'success', message: `Status updated to ${status}!` });
+        setFranchiseEnquiries(prev => prev.map(item => item._id === id ? { ...item, status } : item));
+        if (selectedFranchiseItem && selectedFranchiseItem._id === id) {
+          setSelectedFranchiseItem(prev => ({ ...prev, status }));
+        }
+        setTimeout(() => setSaveStatus({ type: '', message: '' }), 3000);
+      }
+    } catch (e) {
+      console.error("Failed to update franchise status:", e);
+    }
+  };
+
+  // Helper to normalize and sanitize cell values for 100% clean Excel display
+  const formatCSVCell = (val) => {
+    if (val === null || val === undefined) return '""';
+    let s = String(val);
+    // Fix any previous mojibake (garbled UTF-8 bytes)
+    s = s.replace(/â‚¹/g, '₹')
+         .replace(/â€“/g, ' - ')
+         .replace(/â€”/g, ' - ')
+         .replace(/â€™/g, "'")
+         .replace(/â€œ/g, '"')
+         .replace(/â€/g, '"');
+    // Normalize unicode dashes (en-dash, em-dash, figure-dash) to standard clean hyphen
+    s = s.replace(/[\u2010\u2011\u2012\u2013\u2014\u2015]/g, ' - ');
+    // Clean up multiple spaces
+    s = s.replace(/\s+/g, ' ').trim();
+    // Escape double quotes for CSV
+    return `"${s.replace(/"/g, '""')}"`;
+  };
+
+  const downloadFranchiseCSV = () => {
+    if (!franchiseEnquiries || franchiseEnquiries.length === 0) {
+      alert("No franchise enquiries available to export.");
+      return;
+    }
+    const headers = [
+      "ID", "Date", "Full Name", "Designation", "Company", "Phone", "Email",
+      "City", "State", "Address", "Market Type", "Office Setup", "Experience",
+      "Team Size", "Key Strengths", "Investment Budget", "Launch Timeline",
+      "Background", "Goals & Vision", "Source", "Status"
+    ];
+
+    const rows = franchiseEnquiries.map(item => [
+      formatCSVCell(item._id || ''),
+      formatCSVCell(item.created_at ? new Date(item.created_at).toLocaleString() : ''),
+      formatCSVCell(item.fullName || item.name || ''),
+      formatCSVCell(item.designation || ''),
+      formatCSVCell(item.company || ''),
+      formatCSVCell(item.phone || ''),
+      formatCSVCell(item.email || ''),
+      formatCSVCell(item.city || ''),
+      formatCSVCell(item.state || ''),
+      formatCSVCell(item.address || ''),
+      formatCSVCell(item.marketType || ''),
+      formatCSVCell(item.office || ''),
+      formatCSVCell(item.experience || ''),
+      formatCSVCell(item.team || ''),
+      formatCSVCell(Array.isArray(item.strengths) ? item.strengths.join('; ') : (item.strengths || '')),
+      formatCSVCell(item.investment || ''),
+      formatCSVCell(item.timeline || ''),
+      formatCSVCell(item.background || ''),
+      formatCSVCell(item.goals || ''),
+      formatCSVCell(item.source || ''),
+      formatCSVCell(item.status || 'New')
+    ]);
+
+    const csvContent = headers.map(h => `"${h}"`).join(',') + '\n' + rows.map(r => r.join(',')).join('\n');
+    
+    // Add UTF-8 BOM (\uFEFF) so Excel on Windows automatically detects UTF-8 encoding
+    const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `franchise_enquiries_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   // Helper to convert JSON to CSV and download
   const downloadCSV = (type) => {
     let dataToExport = [];
-    let filename = 'submissions_export.csv';
+    let filename = `${type}_submissions_${new Date().toISOString().split('T')[0]}.csv`;
 
     if (type === 'inquiry' || type === 'all') {
       inquiries.forEach(inq => {
@@ -935,7 +1051,7 @@ export default function AdminPanel() {
           Phone: inq.phone || '',
           Role_or_Track: '',
           College: '',
-          Message: (inq.message || inq.project_details || '').replace(/"/g, '""')
+          Message: inq.message || inq.project_details || ''
         });
       });
     }
@@ -950,7 +1066,7 @@ export default function AdminPanel() {
           Phone: app.phone || '',
           Role_or_Track: app.role || app.track || '',
           College: app.college || '',
-          Message: (app.message || '').replace(/"/g, '""')
+          Message: app.message || ''
         });
       });
     }
@@ -960,21 +1076,22 @@ export default function AdminPanel() {
       return;
     }
 
-    // Generate CSV string
-    const headers = Object.keys(dataToExport[0]).join(',');
+    const headers = Object.keys(dataToExport[0]).map(h => `"${h}"`).join(',');
     const rows = dataToExport.map(row => 
-      Object.values(row).map(val => `"${val}"`).join(',')
+      Object.values(row).map(val => formatCSVCell(val)).join(',')
     );
-    const csvContent = "data:text/csv;charset=utf-8," + [headers, ...rows].join("\n");
+    const csvContent = [headers, ...rows].join("\n");
     
-    // Trigger download
-    const encodedUri = encodeURI(csvContent);
+    // Add UTF-8 BOM so Excel opens with proper characters
+    const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `${type}_submissions_${new Date().toISOString().split('T')[0]}.csv`);
+    link.href = url;
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Helper to generate a clean print/PDF view
@@ -1100,6 +1217,9 @@ export default function AdminPanel() {
   useEffect(() => {
     if (activeTab === 'submissions' && authorized) {
       loadSubmissions();
+    }
+    if ((activeTab === 'franchise_enquiries' || activeTab === 'submissions') && authorized) {
+      loadFranchiseEnquiries();
     }
   }, [activeTab, authorized]);
 
@@ -2467,6 +2587,14 @@ export default function AdminPanel() {
       items: [
         { label: "Contact Us Details", tab: "contact", route: "#preview/contact", icon: "✉️", badge: "PAGE", badgeStyle: "bg-white/5 text-neutral-400 border border-white/10" },
         { label: "Form Submissions Hub", tab: "submissions", route: "#preview/home", icon: "📨", badge: "DATABASE", badgeStyle: "bg-rose-500/10 text-rose-400 border border-rose-500/20" }
+      ]
+    },
+    {
+      title: "11. Franchise Management",
+      items: [
+        { label: "Franchise Enquiries Hub", tab: "franchise_enquiries", route: "#preview/franchise", icon: "🏢", badge: "ENQUIRIES", badgeStyle: "bg-lime-500/10 text-lime-400 border border-lime-500/20" },
+        { label: "Live Franchise Form", tab: "franchise_form_live", route: "#preview/franchise-enquiry", icon: "📝", badge: "LIVE FORM", badgeStyle: "bg-blue-500/10 text-blue-400 border border-blue-500/20" },
+        { label: "Franchise Landing Page", tab: "franchise_page", route: "#preview/franchise", icon: "🌐", badge: "LIVE PAGE", badgeStyle: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" }
       ]
     }
   ];
@@ -10276,6 +10404,86 @@ export default function AdminPanel() {
             </div>
           )}
 
+          {/* 14. FRANCHISE ENQUIRIES VIEW */}
+          {activeTab === 'franchise_enquiries' && (
+            <div className="p-5 bg-white/[0.02] border border-white/5 rounded-xl space-y-4 text-left">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-lime-400">// Franchise Applications Hub</span>
+              <p className="text-xs text-neutral-400 font-light leading-relaxed">
+                Centralized dashboard managing all prospective partner and franchise applications for HK DigiVerse.
+              </p>
+              <div className="pt-2 space-y-2">
+                <div className="flex items-center justify-between text-[11px] text-neutral-300 font-mono py-1 border-b border-white/5">
+                  <span>Total Applications:</span>
+                  <span className="font-bold text-lime-400">{franchiseEnquiries.length}</span>
+                </div>
+                <div className="flex items-center justify-between text-[11px] text-neutral-300 font-mono py-1 border-b border-white/5">
+                  <span>New Submissions:</span>
+                  <span className="font-bold text-amber-400">{franchiseEnquiries.filter(x => !x.status || x.status === 'New').length}</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 pt-2">
+                <button
+                  onClick={() => {
+                    setActiveTab('franchise_form_live');
+                    setIframeHash('#preview/franchise-enquiry');
+                  }}
+                  className="py-2.5 px-2 border border-blue-500/20 hover:bg-blue-500/10 rounded-xl font-mono text-[9px] uppercase tracking-wider text-blue-400 transition-colors font-medium text-center cursor-pointer"
+                >
+                  📝 Live Form
+                </button>
+                <button
+                  onClick={loadFranchiseEnquiries}
+                  className="py-2.5 px-2 border border-white/10 hover:bg-white/5 rounded-xl font-mono text-[9px] uppercase tracking-wider text-neutral-300 transition-colors font-medium text-center cursor-pointer"
+                >
+                  🔄 Refresh
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* 15. LIVE FRANCHISE FORM VIEW */}
+          {activeTab === 'franchise_form_live' && (
+            <div className="p-5 bg-white/[0.02] border border-white/5 rounded-xl space-y-4 text-left">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-blue-400">// Live Franchise Form Canvas</span>
+              <p className="text-xs text-neutral-400 font-light leading-relaxed">
+                Live interactive franchise enquiry form. You can test form submissions directly here or fill in test data. Any submitted application will immediately appear in the Franchise Applications Hub.
+              </p>
+              <div className="grid grid-cols-2 gap-2 pt-2">
+                <button
+                  onClick={() => {
+                    setActiveTab('franchise_enquiries');
+                    setIframeHash('#preview/franchise');
+                  }}
+                  className="py-2.5 px-2 border border-lime-500/20 hover:bg-lime-500/10 rounded-xl font-mono text-[9px] uppercase tracking-wider text-lime-400 transition-colors font-medium text-center cursor-pointer"
+                >
+                  🏢 Applications ({franchiseEnquiries.length})
+                </button>
+                <button
+                  onClick={() => window.open('/franchise-enquiry', '_blank')}
+                  className="py-2.5 px-2 border border-white/10 hover:bg-white/5 rounded-xl font-mono text-[9px] uppercase tracking-wider text-neutral-300 transition-colors font-medium text-center cursor-pointer"
+                >
+                  ↗ New Tab
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* 16. FRANCHISE LANDING PAGE VIEW */}
+          {activeTab === 'franchise_page' && (
+            <div className="p-5 bg-white/[0.02] border border-white/5 rounded-xl space-y-4 text-left">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-emerald-400">// Franchise Landing Page</span>
+              <p className="text-xs text-neutral-400 font-light leading-relaxed">
+                Full standalone franchise showcase website for prospective investors and partners.
+              </p>
+              <button
+                onClick={() => window.open('/franchise', '_blank')}
+                className="w-full py-2.5 border border-emerald-500/20 hover:bg-emerald-500/10 rounded-xl font-mono text-[9px] uppercase tracking-widest text-emerald-400 transition-colors font-medium text-center cursor-pointer"
+              >
+                ↗ Open Live In New Tab
+              </button>
+            </div>
+          )}
+
             </section>
           </>
         )}
@@ -10636,6 +10844,474 @@ export default function AdminPanel() {
               )}
 
             </div>
+          </div>
+        ) : activeTab === 'franchise_enquiries' ? (
+          /* ==========================================
+             PREMIUM FRANCHISE APPLICATIONS HUB & CRM
+             ========================================== */
+          <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#070707]">
+            {/* Top Hub Bar */}
+            <div className="h-20 px-8 border-b border-white/5 bg-[#0a0a0a]/60 backdrop-blur-md flex items-center justify-between select-none shrink-0 gap-4">
+              <div className="flex flex-col text-left shrink-0">
+                <span className="font-mono text-[9px] uppercase tracking-widest text-lime-400 font-bold flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse"></span>
+                  // FRANCHISE NETWORK CRM
+                </span>
+                <h2 className="text-sm font-bold text-white uppercase tracking-wider mt-0.5">Franchise Applications & Partners</h2>
+              </div>
+
+              {/* Dynamic Status Tabs */}
+              <div className="flex items-center gap-1.5 sm:gap-2 bg-white/[0.02] border border-white/5 p-1 rounded-xl shrink-0 overflow-x-auto">
+                {[
+                  { id: 'all', label: 'All', count: franchiseEnquiries.length },
+                  { id: 'New', label: 'New', count: franchiseEnquiries.filter(x => !x.status || x.status === 'New').length },
+                  { id: 'In Review', label: 'In Review', count: franchiseEnquiries.filter(x => x.status === 'In Review').length },
+                  { id: 'Contacted', label: 'Contacted', count: franchiseEnquiries.filter(x => x.status === 'Contacted').length },
+                  { id: 'On Hold', label: 'On Hold', count: franchiseEnquiries.filter(x => x.status === 'On Hold').length },
+                  { id: 'Approved', label: 'Approved', count: franchiseEnquiries.filter(x => x.status === 'Approved').length },
+                  { id: 'Rejected', label: 'Rejected', count: franchiseEnquiries.filter(x => x.status === 'Rejected').length }
+                ].map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setFranchiseStatusFilter(tab.id)}
+                    className={`px-3 py-1.5 rounded-lg font-mono text-[9px] uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap ${
+                      franchiseStatusFilter === tab.id
+                        ? 'bg-lime-500 text-black font-bold shadow-[0_0_15px_rgba(132,204,22,0.4)]'
+                        : 'text-neutral-400 hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    {tab.label} ({tab.count})
+                  </button>
+                ))}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2.5 shrink-0">
+                <button
+                  onClick={downloadFranchiseCSV}
+                  className="px-3.5 py-2 border border-white/10 hover:border-emerald-500/30 hover:bg-emerald-500/5 rounded-xl font-mono text-[9px] uppercase tracking-widest text-emerald-400 transition-all font-medium cursor-pointer flex items-center gap-1.5"
+                  title="Export all franchise enquiries to CSV / Excel"
+                >
+                  <span>🟢</span>
+                  <span>Export Excel</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('franchise_form_live');
+                    setIframeHash('#preview/franchise-enquiry');
+                  }}
+                  className="px-3.5 py-2 border border-blue-500/20 hover:bg-blue-500/10 rounded-xl font-mono text-[9px] uppercase tracking-widest text-blue-400 transition-all font-medium cursor-pointer flex items-center gap-1.5"
+                  title="Open live franchise enquiry form"
+                >
+                  <span>📝</span>
+                  <span>Test Form</span>
+                </button>
+                <button
+                  onClick={() => handleClearAllSubmissions('franchise')}
+                  className="px-3.5 py-2 border border-red-500/10 hover:border-red-500/30 hover:bg-red-500/5 rounded-xl font-mono text-[9px] uppercase tracking-widest text-red-500 transition-all font-medium cursor-pointer"
+                  title="Clear all franchise submissions"
+                >
+                  🗑️ Clear
+                </button>
+              </div>
+
+              {/* Live search input */}
+              <div className="w-56 relative shrink-0">
+                <input
+                  type="text"
+                  placeholder="SEARCH APPLICANT / CITY..."
+                  value={franchiseSearch}
+                  onChange={(e) => setFranchiseSearch(e.target.value)}
+                  className="w-full pl-8 pr-4 py-2 bg-black/60 border border-white/10 rounded-xl text-white font-mono text-[10px] uppercase tracking-widest focus:outline-none focus:border-lime-500/50 transition-all placeholder:text-neutral-600"
+                />
+                <span className="absolute left-3 top-2.5 text-[10px] opacity-35">🔍</span>
+                {franchiseSearch && (
+                  <button 
+                    onClick={() => setFranchiseSearch('')}
+                    className="absolute right-3 top-2.5 text-[9px] text-neutral-400 hover:text-white font-mono cursor-pointer"
+                  >
+                    CLEAR
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Franchise Applications Grid Area */}
+            <div className="flex-1 p-8 overflow-y-auto bg-[radial-gradient(#171b12_1px,transparent_1px)] [background-size:24px_24px]">
+              {loadingFranchiseEnquiries ? (
+                <div className="h-full flex items-center justify-center flex-col gap-3">
+                  <div className="w-8 h-8 border-2 border-lime-500/10 border-t-lime-500 rounded-full animate-spin" />
+                  <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-500">// RETRIEVING LIVE FRANCHISE APPLICATIONS...</span>
+                </div>
+              ) : (
+                (() => {
+                  const filtered = franchiseEnquiries.filter(item => {
+                    if (franchiseStatusFilter !== 'all') {
+                      const itemStatus = item.status || 'New';
+                      if (itemStatus !== franchiseStatusFilter) return false;
+                    }
+                    if (franchiseSearch) {
+                      const q = franchiseSearch.toLowerCase().trim();
+                      const name = (item.fullName || item.name || '').toLowerCase();
+                      const email = (item.email || '').toLowerCase();
+                      const phone = (item.phone || '').toLowerCase();
+                      const city = (item.city || '').toLowerCase();
+                      const state = (item.state || '').toLowerCase();
+                      const investment = (item.investment || '').toLowerCase();
+                      const strengths = Array.isArray(item.strengths) ? item.strengths.join(' ').toLowerCase() : (item.strengths || '').toLowerCase();
+                      return name.includes(q) || email.includes(q) || phone.includes(q) || city.includes(q) || state.includes(q) || investment.includes(q) || strengths.includes(q);
+                    }
+                    return true;
+                  });
+
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="h-80 border border-white/5 bg-black/40 rounded-2xl flex flex-col items-center justify-center gap-3 font-mono text-[10px] text-neutral-400 uppercase tracking-widest">
+                        <span className="text-2xl">🏢</span>
+                        <span>No franchise applications match your filter.</span>
+                        <div className="flex items-center gap-3 mt-2">
+                          <button
+                            onClick={() => {
+                              setFranchiseStatusFilter('all');
+                              setFranchiseSearch('');
+                            }}
+                            className="px-4 py-2 border border-white/10 rounded-xl hover:bg-white/5 text-white cursor-pointer"
+                          >
+                            Reset Filter
+                          </button>
+                          <button
+                            onClick={() => {
+                              setActiveTab('franchise_form_live');
+                              setIframeHash('#preview/franchise-enquiry');
+                            }}
+                            className="px-4 py-2 bg-lime-500 text-black font-bold rounded-xl hover:bg-lime-400 cursor-pointer"
+                          >
+                            Fill Test Application ↗
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 text-left">
+                      {filtered.map((item, idx) => {
+                        const dateStr = item.created_at ? new Date(item.created_at).toLocaleString() : 'Recent';
+                        const name = item.fullName || item.name || 'Anonymous Applicant';
+                        const currentStatus = item.status || 'New';
+
+                        return (
+                          <div
+                            key={item._id || idx}
+                            className="p-6 bg-[#0a0a0c] border border-white/5 rounded-2xl space-y-4 hover:border-lime-500/30 transition-all duration-300 relative group shadow-lg"
+                          >
+                            {/* Card Top: Name, Date, Status */}
+                            <div className="flex justify-between items-start pb-3 border-b border-white/5">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-lime-500/10 border border-lime-500/20 text-lime-400 flex items-center justify-center font-bold text-sm">
+                                  {name.slice(0, 2).toUpperCase()}
+                                </div>
+                                <div className="flex flex-col">
+                                  <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
+                                    {name}
+                                  </h3>
+                                  <span className="font-mono text-[8px] text-neutral-500 uppercase tracking-widest mt-0.5">
+                                    Submitted {dateStr}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-2">
+                                {/* Status Selector */}
+                                <select
+                                  value={currentStatus}
+                                  onChange={(e) => handleUpdateFranchiseStatus(item._id, e.target.value)}
+                                  className={`px-2.5 py-1 rounded-lg text-[9px] font-mono font-bold tracking-widest uppercase cursor-pointer border focus:outline-none transition-all ${
+                                    currentStatus === 'Approved'
+                                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                                      : currentStatus === 'Contacted'
+                                      ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
+                                      : currentStatus === 'In Review'
+                                      ? 'bg-purple-500/10 text-purple-400 border-purple-500/30'
+                                      : currentStatus === 'On Hold'
+                                      ? 'bg-orange-500/10 text-orange-400 border-orange-500/30'
+                                      : currentStatus === 'Rejected'
+                                      ? 'bg-red-500/10 text-red-400 border-red-500/30'
+                                      : 'bg-amber-500/10 text-amber-400 border-amber-500/30 animate-pulse'
+                                  }`}
+                                >
+                                  <option value="New" className="bg-[#111] text-amber-400">● New</option>
+                                  <option value="In Review" className="bg-[#111] text-purple-400">● In Review</option>
+                                  <option value="Contacted" className="bg-[#111] text-blue-400">● Contacted</option>
+                                  <option value="On Hold" className="bg-[#111] text-orange-400">● On Hold</option>
+                                  <option value="Approved" className="bg-[#111] text-emerald-400">● Approved</option>
+                                  <option value="Rejected" className="bg-[#111] text-red-400">● Rejected</option>
+                                </select>
+
+                                {/* Delete button */}
+                                <button
+                                  onClick={() => handleDeleteSubmission(item._id, 'franchise')}
+                                  className="w-7 h-7 rounded-lg border border-red-500/10 hover:border-red-500/40 text-neutral-600 hover:text-red-400 flex items-center justify-center text-xs transition-colors cursor-pointer"
+                                  title="Delete enquiry"
+                                >
+                                  ✕
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Contact & Location Strip */}
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs bg-white/[0.01] p-3 rounded-xl border border-white/5 font-mono">
+                              <div className="flex flex-col">
+                                <span className="text-[7px] text-neutral-500 uppercase tracking-widest">Phone / Mobile</span>
+                                <a href={`tel:${item.phone}`} className="text-lime-400 hover:underline font-bold mt-0.5 truncate">
+                                  📞 {item.phone || 'N/A'}
+                                </a>
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-[7px] text-neutral-500 uppercase tracking-widest">Email Address</span>
+                                <a href={`mailto:${item.email}`} className="text-neutral-300 hover:underline mt-0.5 truncate" title={item.email}>
+                                  ✉️ {item.email || 'N/A'}
+                                </a>
+                              </div>
+                              <div className="flex flex-col col-span-2 sm:col-span-1">
+                                <span className="text-[7px] text-neutral-500 uppercase tracking-widest">City & State</span>
+                                <span className="text-white mt-0.5 font-sans font-medium truncate">
+                                  📍 {item.city || 'City N/A'}, {item.state || 'State N/A'}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Investment & Market Type badges */}
+                            <div className="flex flex-wrap gap-2 text-[9px] font-mono">
+                              {item.marketType && (
+                                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-neutral-300">
+                                  🏛️ {item.marketType}
+                                </span>
+                              )}
+                              {item.investment && (
+                                <span className="px-2.5 py-1 rounded-md bg-lime-500/10 border border-lime-500/20 text-lime-400 font-semibold">
+                                  💰 Budget: {item.investment}
+                                </span>
+                              )}
+                              {item.timeline && (
+                                <span className="px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400">
+                                  ⏱️ Launch: {item.timeline}
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Key Strengths Chips */}
+                            {Array.isArray(item.strengths) && item.strengths.length > 0 && (
+                              <div className="space-y-1">
+                                <span className="text-[7px] font-mono uppercase text-neutral-500 tracking-widest block">Key Partner Strengths</span>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {item.strengths.map((str, sIdx) => (
+                                    <span key={sIdx} className="px-2 py-0.5 bg-neutral-900 border border-white/10 rounded text-[8px] font-mono text-neutral-300">
+                                      ✓ {str}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Background / Vision snippet */}
+                            {(item.experience || item.goals) && (
+                              <div className="space-y-1 bg-black/40 p-3 rounded-xl border border-white/5 text-xs text-neutral-300 font-light">
+                                {item.experience && (
+                                  <p className="line-clamp-2">
+                                    <strong className="text-neutral-400 font-mono text-[8px] uppercase tracking-wider block">Background:</strong>
+                                    {item.experience}
+                                  </p>
+                                )}
+                                {item.goals && (
+                                  <p className="line-clamp-2 mt-1.5 pt-1.5 border-t border-white/5">
+                                    <strong className="text-neutral-400 font-mono text-[8px] uppercase tracking-wider block">Goals:</strong>
+                                    {item.goals}
+                                  </p>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Card Footer Actions */}
+                            <div className="pt-2 flex items-center justify-between border-t border-white/5">
+                              <button
+                                onClick={() => setSelectedFranchiseItem(item)}
+                                className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-lime-500/40 rounded-xl font-mono text-[9px] uppercase tracking-widest text-white transition-all cursor-pointer flex items-center gap-1.5"
+                              >
+                                <span>👁️ View Full Dossier</span>
+                              </button>
+                              <div className="flex items-center gap-2">
+                                <a
+                                  href={`tel:${item.phone}`}
+                                  className="px-3 py-1.5 bg-lime-500/10 hover:bg-lime-500/20 border border-lime-500/30 text-lime-400 rounded-lg font-mono text-[8px] uppercase tracking-wider transition-colors"
+                                >
+                                  Call
+                                </a>
+                                <a
+                                  href={`mailto:${item.email}`}
+                                  className="px-3 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded-lg font-mono text-[8px] uppercase tracking-wider transition-colors"
+                                >
+                                  Email
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })()
+              )}
+            </div>
+
+            {/* FRANCHISE DOSSIER MODAL */}
+            {selectedFranchiseItem && (
+              <div className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+                <div className="w-full max-w-2xl bg-[#0a0a0c] border border-white/10 rounded-2xl p-6 space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto text-left">
+                  {/* Modal Header */}
+                  <div className="flex justify-between items-start pb-4 border-b border-white/10">
+                    <div>
+                      <span className="font-mono text-[9px] uppercase tracking-widest text-lime-400 font-bold">// FRANCHISE APPLICATION DOSSIER</span>
+                      <h2 className="text-xl font-bold text-white mt-1">{selectedFranchiseItem.fullName || selectedFranchiseItem.name}</h2>
+                      <span className="font-mono text-[9px] text-neutral-500 uppercase tracking-wider">
+                        Submitted: {selectedFranchiseItem.created_at ? new Date(selectedFranchiseItem.created_at).toLocaleString() : 'N/A'}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setSelectedFranchiseItem(null)}
+                      className="w-8 h-8 rounded-full border border-white/10 hover:border-white text-neutral-400 hover:text-white flex items-center justify-center cursor-pointer transition-colors"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  {/* Status & Actions */}
+                  <div className="flex items-center justify-between p-3 bg-white/[0.02] border border-white/5 rounded-xl font-mono text-xs">
+                    <span className="text-neutral-400">Current Status:</span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {['New', 'In Review', 'Contacted', 'On Hold', 'Approved', 'Rejected'].map(st => (
+                        <button
+                          key={st}
+                          onClick={() => handleUpdateFranchiseStatus(selectedFranchiseItem._id, st)}
+                          className={`px-2.5 py-1 rounded text-[8px] uppercase tracking-widest transition-all cursor-pointer ${
+                            (selectedFranchiseItem.status || 'New') === st
+                              ? 'bg-lime-500 text-black font-bold'
+                              : 'bg-white/5 text-neutral-400 hover:text-white border border-white/5'
+                          }`}
+                        >
+                          {st}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Grid of Applicant Details */}
+                  <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+                    <div className="p-3 bg-black/40 border border-white/5 rounded-xl">
+                      <span className="text-[7px] text-neutral-500 uppercase tracking-widest block">Phone Number</span>
+                      <a href={`tel:${selectedFranchiseItem.phone}`} className="text-lime-400 hover:underline font-bold text-sm mt-1 block">
+                        📞 {selectedFranchiseItem.phone || 'N/A'}
+                      </a>
+                    </div>
+                    <div className="p-3 bg-black/40 border border-white/5 rounded-xl">
+                      <span className="text-[7px] text-neutral-500 uppercase tracking-widest block">Email Address</span>
+                      <a href={`mailto:${selectedFranchiseItem.email}`} className="text-blue-400 hover:underline font-bold text-sm mt-1 block truncate">
+                        ✉️ {selectedFranchiseItem.email || 'N/A'}
+                      </a>
+                    </div>
+                    <div className="p-3 bg-black/40 border border-white/5 rounded-xl">
+                      <span className="text-[7px] text-neutral-500 uppercase tracking-widest block">City & State</span>
+                      <span className="text-white font-bold text-sm mt-1 block">
+                        📍 {selectedFranchiseItem.city || 'N/A'}, {selectedFranchiseItem.state || 'N/A'}
+                      </span>
+                    </div>
+                    <div className="p-3 bg-black/40 border border-white/5 rounded-xl">
+                      <span className="text-[7px] text-neutral-500 uppercase tracking-widest block">Market Profile</span>
+                      <span className="text-white font-bold text-sm mt-1 block">
+                        🏛️ {selectedFranchiseItem.marketType || 'General Market'}
+                      </span>
+                    </div>
+                    <div className="p-3 bg-black/40 border border-white/5 rounded-xl">
+                      <span className="text-[7px] text-neutral-500 uppercase tracking-widest block">Investment Readiness</span>
+                      <span className="text-lime-400 font-bold text-sm mt-1 block">
+                        💰 {selectedFranchiseItem.investment || 'Not Specified'}
+                      </span>
+                    </div>
+                    <div className="p-3 bg-black/40 border border-white/5 rounded-xl">
+                      <span className="text-[7px] text-neutral-500 uppercase tracking-widest block">Target Launch Timeline</span>
+                      <span className="text-blue-400 font-bold text-sm mt-1 block">
+                        ⏱️ {selectedFranchiseItem.timeline || 'Not Specified'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Full Address */}
+                  {selectedFranchiseItem.address && (
+                    <div className="p-3 bg-black/40 border border-white/5 rounded-xl text-xs">
+                      <span className="font-mono text-[7px] text-neutral-500 uppercase tracking-widest block">Registered Address</span>
+                      <p className="text-neutral-200 mt-1">{selectedFranchiseItem.address}</p>
+                    </div>
+                  )}
+
+                  {/* Strengths */}
+                  {Array.isArray(selectedFranchiseItem.strengths) && selectedFranchiseItem.strengths.length > 0 && (
+                    <div className="space-y-1.5">
+                      <span className="font-mono text-[7px] text-neutral-500 uppercase tracking-widest block">Selected Strengths & Capabilities</span>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedFranchiseItem.strengths.map((str, sIdx) => (
+                          <span key={sIdx} className="px-3 py-1 bg-lime-500/10 border border-lime-500/20 text-lime-400 font-mono text-[9px] rounded-lg">
+                            ✓ {str}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Business Experience */}
+                  <div className="space-y-1">
+                    <span className="font-mono text-[7px] text-neutral-500 uppercase tracking-widest block">Business Experience & Background</span>
+                    <p className="text-xs text-neutral-300 font-light leading-relaxed whitespace-pre-wrap bg-black/60 p-4 border border-white/5 rounded-xl">
+                      {selectedFranchiseItem.experience || 'No detailed background provided.'}
+                    </p>
+                  </div>
+
+                  {/* Growth Goals */}
+                  <div className="space-y-1">
+                    <span className="font-mono text-[7px] text-neutral-500 uppercase tracking-widest block">Franchise Growth Goals & Territory Vision</span>
+                    <p className="text-xs text-neutral-300 font-light leading-relaxed whitespace-pre-wrap bg-black/60 p-4 border border-white/5 rounded-xl">
+                      {selectedFranchiseItem.goals || 'No specific goals provided.'}
+                    </p>
+                  </div>
+
+                  {/* Modal Footer */}
+                  <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                    <button
+                      onClick={() => {
+                        handleDeleteSubmission(selectedFranchiseItem._id, 'franchise');
+                        setSelectedFranchiseItem(null);
+                      }}
+                      className="px-4 py-2 border border-red-500/20 text-red-400 hover:bg-red-500/10 rounded-xl font-mono text-[9px] uppercase tracking-wider transition-colors cursor-pointer"
+                    >
+                      🗑️ Delete Application
+                    </button>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={`tel:${selectedFranchiseItem.phone}`}
+                        className="px-4 py-2 bg-lime-500 hover:bg-lime-400 text-black font-bold rounded-xl font-mono text-[9px] uppercase tracking-wider transition-colors"
+                      >
+                        📞 Call Applicant
+                      </a>
+                      <button
+                        onClick={() => setSelectedFranchiseItem(null)}
+                        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl font-mono text-[9px] uppercase tracking-wider transition-colors cursor-pointer"
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           /* ==========================================

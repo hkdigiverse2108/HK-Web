@@ -19,4 +19,13 @@ class Settings:
         "http://127.0.0.1:3000",
     ]
 
+    # SMTP Email Settings
+    SMTP_HOST: str = os.getenv("SMTP_HOST", "smtp.gmail.com")
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USER: str = os.getenv("SMTP_USER", "hkdigiverse@gmail.com")
+    SMTP_PASS: str = os.getenv("SMTP_PASS", "")
+    FROM_EMAIL: str = os.getenv("FROM_EMAIL", os.getenv("SMTP_USER", "hkdigiverse@gmail.com"))
+    SMTP_FROM: str = os.getenv("SMTP_FROM", os.getenv("FROM_EMAIL", "hkdigiverse@gmail.com"))
+    ADMIN_NOTIFICATION_EMAIL: str = os.getenv("ADMIN_NOTIFICATION_EMAIL", "hrmangukiya3494@gmail.com")
+
 settings = Settings()

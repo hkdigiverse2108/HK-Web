@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#030405">
+<title>Franchise Enquiry Received — HK DigiVerse LLP</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --bg:#030405;
+  --panel:#080b0e;
+  --panel2:#0d1216;
+  --line:rgba(255,255,255,.09);
+  --text:#f5f7f8;
+  --muted:#858f95;
+  --green:#b9e34a;
+  --green2:#79bb49;
+  --blue:#2c91ff;
+  --cyan:#6bdcff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--text);
+  font-family:Manrope,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 70% 0%,rgba(38,137,255,.13),transparent 31%),
+    radial-gradient(circle at 10% 45%,rgba(185,227,74,.08),transparent 27%),
+    var(--bg);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:999;
+  opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+a{text-decoration:none;color:inherit}
+button{font:inherit}
+.container{width:min(1160px,calc(100% - 32px));margin:auto}
+.mono{font-family:"DM Mono",monospace}
+.eyebrow{
+  font:500 10px "DM Mono",monospace;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:#737e84;
+}
+.gradient{
+  background:linear-gradient(105deg,#fff 10%,#d9eda2 50%,#61aaff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* top bar */
+.topbar{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);
+  width:min(1250px,calc(100% - 28px));height:68px;
+  border:1px solid var(--line);border-radius:18px;
+  background:rgba(5,7,9,.72);backdrop-filter:blur(22px);
+  z-index:100;
+}
+.top-inner{height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{
+  width:35px;height:35px;border-radius:9px;
+  display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.1);
+  overflow:hidden;
+}
+.logo img{width:100%;height:100%;object-fit:contain}
+.brand-name{font-size:12px;font-weight:800;letter-spacing:.14em}
+.brand-sub{font-size:9px;color:#777f84;letter-spacing:.16em}
+.status{
+  display:flex;align-items:center;gap:9px;
+  font:500 9px "DM Mono";letter-spacing:.13em;text-transform:uppercase;color:#89939a
+}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 16px rgba(185,227,74,.7)}
+
+/* main */
+main{padding:145px 0 70px}
+.success-shell{max-width:940px;margin:auto;text-align:center}
+.success-icon{
+  width:88px;height:88px;margin:0 auto 28px;border-radius:50%;
+  display:grid;place-items:center;
+  border:1px solid rgba(185,227,74,.35);
+  background:radial-gradient(circle,rgba(185,227,74,.16),rgba(185,227,74,.025) 65%,transparent 70%);
+  box-shadow:0 0 80px rgba(185,227,74,.10);
+  animation:pop .7s cubic-bezier(.2,.8,.2,1);
+}
+.success-icon svg{width:37px;height:37px;stroke:#c9ee63;stroke-width:1.7;fill:none}
+@keyframes pop{0%{opacity:0;transform:scale(.55)}70%{transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+
+h1{
+  font-size:clamp(46px,7vw,82px);
+  line-height:.96;
+  letter-spacing:-.065em;
+  margin:0 auto 22px;
+  max-width:900px;
+}
+.lead{
+  color:#8d979d;
+  line-height:1.75;
+  max-width:650px;
+  margin:0 auto;
+  font-size:15px;
+}
+.confirm-pill{
+  margin:27px auto 0;
+  width:max-content;max-width:100%;
+  display:flex;align-items:center;gap:9px;
+  padding:10px 14px;border:1px solid rgba(255,255,255,.08);
+  border-radius:99px;background:rgba(255,255,255,.025);
+  color:#7e898f;font:500 10px "DM Mono";letter-spacing:.12em;
+}
+.confirm-pill b{color:#d5ec92;font-weight:500}
+
+/* reference card */
+.reference{
+  margin:46px auto 0;
+  display:grid;grid-template-columns:1fr auto;
+  text-align:left;align-items:center;
+  padding:25px 27px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:22px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  position:relative;overflow:hidden;
+}
+.reference:before{
+  content:"";position:absolute;width:300px;height:300px;right:-170px;top:-190px;
+  background:radial-gradient(circle,rgba(44,145,255,.2),transparent 68%);
+}
+.reference .label{font:500 9px "DM Mono";letter-spacing:.18em;text-transform:uppercase;color:#68737a}
+.ref-id{
+  font:500 24px "DM Mono";letter-spacing:.08em;margin-top:7px;
+}
+.copy{
+  position:relative;z-index:2;cursor:pointer;
+  padding:11px 14px;border-radius:11px;border:1px solid rgba(255,255,255,.09);
+  color:#a8d65a;background:rgba(185,227,74,.04);font-size:10px;
+}
+.copy:hover{background:rgba(185,227,74,.09)}
+
+/* next steps */
+.section{margin-top:70px;text-align:left}
+.section-title{display:flex;justify-content:space-between;align-items:end;gap:25px;margin-bottom:24px}
+.section-title h2{font-size:31px;letter-spacing:-.045em;margin:9px 0 0}
+.section-title p{color:#737e84;font-size:11px;max-width:340px;line-height:1.6;margin:0}
+
+.steps{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--line);border-radius:22px;overflow:hidden;
+}
+.step{
+  min-height:220px;padding:25px 22px;
+  background:rgba(255,255,255,.018);
+  border-right:1px solid var(--line);
+  position:relative;transition:.35s;
+}
+.step:last-child{border-right:0}
+.step:hover{background:rgba(255,255,255,.04);transform:translateY(-3px)}
+.step-number{
+  width:33px;height:33px;border-radius:10px;
+  border:1px solid rgba(185,227,74,.2);
+  display:grid;place-items:center;
+  color:#b8dc5a;font:500 10px "DM Mono";
+}
+.step h3{font-size:14px;margin:22px 0 9px}
+.step p{color:#747f85;font-size:11px;line-height:1.7;margin:0}
+.step .time{
+  position:absolute;bottom:20px;color:#59646a;
+  font:500 9px "DM Mono";letter-spacing:.08em;text-transform:uppercase;
+}
+
+/* application status */
+.status-card{
+  border:1px solid var(--line);border-radius:22px;padding:30px;
+  background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.012));
+}
+.progress-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.progress-head b{font-size:13px}.progress-head span{font:500 9px "DM Mono";color:#788289}
+.progress{
+  height:7px;background:#151a1d;border-radius:99px;overflow:hidden;
+}
+.progress-fill{
+  width:25%;height:100%;border-radius:99px;
+  background:linear-gradient(90deg,#78b74b,#c6e85a,#3195ff);
+  box-shadow:0 0 18px rgba(185,227,74,.18);
+  animation:progress 1.2s ease-out .5s both;
+}
+@keyframes progress{from{width:0}to{width:25%}}
+.status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
+.status-step{padding:14px;border:1px solid rgba(255,255,255,.06);border-radius:13px;color:#68737a}
+.status-step.active{border-color:rgba(185,227,74,.22);background:rgba(185,227,74,.035);color:#c9e88a}
+.status-step strong{display:block;font-size:11px;margin-bottom:5px}.status-step span{font:500 8px "DM Mono";text-transform:uppercase;letter-spacing:.1em}
+
+/* two cards */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.info-card{
+  padding:27px;border:1px solid var(--line);border-radius:22px;
+  background:rgba(255,255,255,.018);
+}
+.info-card h3{font-size:17px;margin:12px 0 10px}
+.info-card p{font-size:12px;color:#778187;line-height:1.7;margin:0}
+.check-list{display:grid;gap:12px;margin-top:21px}
+.check{display:flex;gap:11px;align-items:flex-start;font-size:11px;color:#818b91;line-height:1.55}
+.check i{
+  flex:0 0 18px;width:18px;height:18px;border-radius:6px;
+  border:1px solid rgba(185,227,74,.2);display:grid;place-items:center;
+  color:#bce45a;font-style:normal;font-size:10px;
+}
+
+/* contact */
+.contact-card{
+  margin-top:15px;padding:27px;border:1px solid rgba(44,145,255,.16);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(44,145,255,.13),transparent 38%),
+    #080b0e;
+}
+.contact-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:13px 16px;border-radius:12px;font-size:10px;font-weight:800;
+  letter-spacing:.09em;text-transform:uppercase;transition:.3s;
+}
+.btn.primary{background:linear-gradient(135deg,#c9ec5b,#7bbb4b);color:#071006}
+.btn.ghost{border:1px solid rgba(255,255,255,.1);color:#b4bdc1;background:rgba(255,255,255,.02)}
+.btn:hover{transform:translateY(-2px)}
+
+/* notice */
+.notice{
+  margin-top:55px;padding:18px 20px;border-left:2px solid rgba(185,227,74,.35);
+  background:rgba(255,255,255,.018);color:#657077;text-align:left;
+  font-size:10px;line-height:1.75;
+}
+.notice strong{color:#909b9f}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:35px 0 55px;margin-top:60px}
+.footer-row{display:flex;justify-content:space-between;gap:20px}
+.footer-brand{font:500 9px "DM Mono";letter-spacing:.14em;color:#606b71}
+.footer-links{display:flex;gap:18px;font-size:10px;color:#606b71}
+.footer-links a:hover{color:#fff}
+
+/* confetti */
+.confetti{position:fixed;top:-15px;width:5px;height:11px;z-index:150;pointer-events:none;opacity:.8;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(650deg);opacity:0}}
+
+/* responsive */
+@media(max-width:900px){
+  .steps{grid-template-columns:1fr 1fr}
+  .step:nth-child(2){border-right:0}
+  .step:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .status-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:650px){
+  .topbar{top:8px;width:calc(100% - 16px)}
+  .brand-sub,.status{display:none}
+  main{padding-top:120px}
+  h1{font-size:51px}
+  .reference{grid-template-columns:1fr;gap:18px}
+  .copy{width:max-content}
+  .section{margin-top:55px}
+  .section-title{display:block}
+  .section-title p{margin-top:12px}
+  .steps,.two-col{grid-template-columns:1fr}
+  .step{border-right:0!important;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:0}
+  .status-grid{grid-template-columns:1fr 1fr}
+  .status-card{padding:22px}
+  .footer-row{display:block}.footer-links{margin-top:16px;flex-wrap:wrap}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="top-inner">
+    <a class="brand" href="/franchise" onclick="if(window.top && window.top !== window){ try{ window.top.history.pushState(null,'','/franchise'); window.top.dispatchEvent(new Event('popstate')); return false; }catch(e){} }">
+      <div class="logo">
+        <div style="font-weight:800;color:#b9e34a;font-size:18px">HK</div>
+      </div>
+      <div>
+        <div class="brand-name">HARI KRUSHN</div>
+        <div class="brand-sub">DIGIVERSE LLP</div>
+      </div>
+    </a>
+    <div class="status"><span class="status-dot"></span> Franchise Enquiry Portal</div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <div class="success-shell">
+      <div class="success-icon">
+        <svg viewBox="0 0 40 40">
+          <path d="M10 21.2 17.2 28 30.5 12.5"/>
+        </svg>
+      </div>
+
+      <div class="eyebrow">// ENQUIRY SUCCESSFULLY RECEIVED</div>
+      <h1>Your <span class="gradient">HK DigiVerse</span> franchise journey has started.</h1>
+      <p class="lead">
+        Thank you for your interest in becoming an HK DigiVerse franchise partner.
+        Your enquiry has been received by our franchise team. The next step is a
+        structured discovery and qualification conversation.
+      </p>
+
+      <div class="confirm-pill">
+        <span class="status-dot"></span>
+        <span>Application status:</span>
+        <b>Received & Under Review</b>
+      </div>
+
+      <div class="reference">
+        <div>
+          <div class="label">Your enquiry reference</div>
+          <div class="ref-id" id="refId">HKF-2026-XXXXXX</div>
+        </div>
+        <button class="copy" id="copyBtn">COPY REFERENCE</button>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">// WHAT HAPPENS NEXT</div>
+          <h2>Four steps from enquiry to <span class="gradient">discovery.</span></h2>
+        </div>
+        <p>We keep the process clear so you know what happens after submitting your franchise enquiry.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">01</div>
+          <h3>Application Review</h3>
+          <p>Our team reviews the information submitted in your franchise enquiry and checks the basic fit for the franchise framework.</p>
+          <div class="time">NEXT • 1–2 BUSINESS DAYS</div>
+        </div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <h3>Discovery Call</h3>
+          <p>A franchise team member connects with you to understand your city, business background, goals and operating expectations.</p>
+          <div class="time">STEP • DISCOVERY</div>
+        </div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <h3>Commercial Discussion</h3>
+          <p>Review the franchise fee, setup investment, renewal structure, operating framework and responsibilities.</p>
+          <div class="time">STEP • COMMERCIAL</div>
+        </div>
+        <div class="step">
+          <div class="step-number">04</div>
+          <h3>Office & Training</h3>
+          <p>After applicable approvals and agreement formalities, move toward office setup, authorised-owner training and launch readiness.</p>
+          <div class="time">STEP • LAUNCH</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <div>
+          <div class="eyebrow">// APPLICATION TRACKER</div>
+          <h2>You're currently at <span class="gradient">Step 01.</span></h2>
+        </div>
+      </div>
+
+      <div class="status-card">
+        <div class="progress-head">
+          <b>Franchise Enquiry</b>
+          <span>25% COMPLETE</span>
+        </div>
+        <div class="progress"><div class="progress-fill"></div></div>
+
+        <div class="status-grid">
+          <div class="status-step active"><strong>Received</strong><span>Completed</span></div>
+          <div class="status-step"><strong>Discovery</strong><span>Upcoming</span></div>
+          <div class="status-step"><strong>Commercial</strong><span>Upcoming</span></div>
+          <div class="status-step"><strong>Launch</strong><span>Upcoming</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="two-col">
+        <div class="info-card">
+          <div class="eyebrow">// PREPARE FOR THE CALL</div>
+          <h3>Have these details ready</h3>
+          <p>A focused conversation helps us understand your market and operating plan faster.</p>
+          <div class="check-list">
+            <div class="check"><i>✓</i><span>Your preferred city / territory</span></div>
+            <div class="check"><i>✓</i><span>Your business or professional background</span></div>
+            <div class="check"><i>✓</i><span>Your expected investment capacity</span></div>
+            <div class="check"><i>✓</i><span>Preferred launch timeline</span></div>
+            <div class="check"><i>✓</i><span>Your target customer segment</span></div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="eyebrow">// FRANCHISE SNAPSHOT</div>
+          <h3>What you have enquired about</h3>
+          <p>HK DigiVerse LLP's 360° Tech & Digital Partner franchise model.</p>
+          <div class="check-list">
+            <div class="check"><i>₹</i><span><strong>₹8L</strong> Year 1 franchise fee</span></div>
+            <div class="check"><i>₹</i><span><strong>₹5L</strong> initial setup / asset investment</span></div>
+            <div class="check"><i>₹</i><span><strong>₹5L</strong> annual renewal after Year 1</span></div>
+            <div class="check"><i>22</i><span>Core technology & digital services</span></div>
+            <div class="check"><i>360</i><span>Tech, digital, branding, software & AI positioning</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="eyebrow">// NEED ASSISTANCE?</div>
+        <h3 style="font-size:21px;margin:12px 0 8px">Questions before your discovery call?</h3>
+        <p style="color:#778187;font-size:12px;line-height:1.7;margin:0;max-width:620px">
+          Reach the HK DigiVerse team directly for franchise-related questions.
+          Please keep your enquiry reference ready so our team can locate your application faster.
+        </p>
+        <div class="contact-actions">
+          <a class="btn primary" href="mailto:franchise@hkdigiverse.com?subject=Franchise%20Enquiry%20-%20HKF">Email Franchise Team ↗</a>
+          <a class="btn ghost" href="/franchise" onclick="if(window.top && window.top !== window){ try{ window.top.history.pushState(null,'','/franchise'); window.top.dispatchEvent(new Event('popstate')); return false; }catch(e){} }">Explore Franchise Model ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="notice">
+      <strong>Important:</strong>
+      Financial figures shown in the franchise presentation are expected/planning assumptions,
+      not guaranteed returns. Actual revenue, expenses and profit can vary based on location,
+      demand, sales performance, staffing, pricing, costs and other business factors.
+      Final franchise terms are governed by the executed agreement.
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-row">
+      <div class="footer-brand">© 2026 HARI KRUSHN DIGIVERSE LLP — HK DIGIVERSE</div>
+      <div class="footer-links">
+        <a href="/franchise">Franchise</a>
+        <a href="mailto:franchise@hkdigiverse.com">Contact</a>
+        <a href="#">Privacy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Generate a reference for demo / frontend use.
+   In production, replace this with the ID returned by your backend/database. */
+function createReference(){
+  const d=new Date();
+  const year=d.getFullYear();
+  const random=Math.floor(100000+Math.random()*900000);
+  return `HKF-${year}-${random}`;
+}
+const ref=document.getElementById("refId");
+const saved=localStorage.getItem("hk_franchise_reference");
+const reference=saved || createReference();
+localStorage.setItem("hk_franchise_reference",reference);
+ref.textContent=reference;
+
+try {
+  const enquiry = JSON.parse(sessionStorage.getItem("hkFranchiseEnquiry") || "{}");
+  if (enquiry && enquiry.fullName) {
+    const leadEl = document.querySelector(".lead");
+    if (leadEl) {
+      leadEl.innerHTML = `Thank you, <strong>${enquiry.fullName}</strong>, for your interest in becoming an HK DigiVerse franchise partner. Your enquiry for <strong>${enquiry.city ? enquiry.city + (enquiry.state ? ', ' + enquiry.state : '') : 'your territory'}</strong> has been received by our franchise team. The next step is a structured discovery and qualification conversation.`;
+    }
+  }
+} catch(e) {}
+
+document.getElementById("copyBtn").addEventListener("click",async()=>{
+  try{
+    await navigator.clipboard.writeText(reference);
+    const b=document.getElementById("copyBtn");
+    b.textContent="COPIED ✓";
+    setTimeout(()=>b.textContent="COPY REFERENCE",1600);
+  }catch(e){}
+});
+
+/* Premium success confetti — intentionally subtle */
+function confetti(){
+  const pieces=window.innerWidth<600?18:32;
+  for(let i=0;i<pieces;i++){
+    const el=document.createElement("span");
+    el.className="confetti";
+    el.style.left=Math.random()*100+"vw";
+    el.style.background=Math.random()>.5?"#b9e34a":"#3295ff";
+    el.style.animationDuration=(2.8+Math.random()*2.4)+"s";
+    el.style.animationDelay=Math.random()*1.2+"s";
+    el.style.transform=`translateY(-20px) rotate(${Math.random()*180}deg)`;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),6500);
+  }
+}
+setTimeout(confetti,450);
+
+/* Mouse glow */
+const glow=document.createElement("div");
+glow.style.cssText="position:fixed;left:50%;top:50%;width:300px;height:300px;border-radius:50%;pointer-events:none;z-index:-1;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(55,145,255,.055),transparent 68%);";
+document.body.appendChild(glow);
+window.addEventListener("pointermove",e=>{
+  glow.style.left=e.clientX+"px";
+  glow.style.top=e.clientY+"px";
+});
+</script>
+
+</body>
+</html>

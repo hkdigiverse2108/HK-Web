@@ -27,6 +27,9 @@ import CaseStudy from './pages/CaseStudy';
 import Portfolio from './pages/Portfolio';
 import Ventures from './pages/Ventures';
 import Contact from './pages/Contact';
+import Franchise from './pages/Franchise';
+import FranchiseEnquiry from './pages/FranchiseEnquiry';
+import FranchiseReceived from './pages/FranchiseReceived';
 import AdminPanel from './pages/AdminPanel';
 
 // Service Subpages
@@ -164,6 +167,16 @@ function PreviewContainer({ currentHash }) {
         return <Ventures />;
       case '/contact':
         return <Contact />;
+      case '/franchise':
+      case '/franchise.html':
+        return <Franchise />;
+      case '/franchise-enquiry':
+      case '/franchise-enquiry.html':
+        return <FranchiseEnquiry />;
+      case '/franchise-received':
+      case '/franchise-received.html':
+      case '/1.html':
+        return <FranchiseReceived />;
       case '/service-web':
         return <ServiceWeb overrideContent={previewContent} />;
       case '/service-app':
@@ -225,6 +238,15 @@ function PreviewContainer({ currentHash }) {
     );
   }
 
+  const isFranchisePreview = subpage === '/franchise' || subpage === '/franchise.html' || subpage === '/franchise-enquiry' || subpage === '/franchise-enquiry.html' || subpage === '/franchise-received' || subpage === '/franchise-received.html' || subpage === '/1.html';
+  if (isFranchisePreview) {
+    return (
+      <div className="w-full h-screen overflow-hidden">
+        {renderPreviewPage()}
+      </div>
+    );
+  }
+
   const isHomePreview = subpage === '' || subpage === '/' || subpage === '/home';
 
   return (
@@ -246,7 +268,7 @@ function PreviewContainer({ currentHash }) {
 }
 
 const PAGE_TITLES = {
-  '/': 'HariKrushn DigiVerse LLP | Architectural Digital Craftsmanship & AI Systems',
+  '/': 'HK DigiVerse LLP – 360° Tech & Digital Partner for Startups',
   '/our-story': 'Our Story | HariKrushn DigiVerse LLP',
   '/our-people': 'Our People | HariKrushn DigiVerse LLP',
   '/our-culture': 'Our Culture | HariKrushn DigiVerse LLP',
@@ -261,6 +283,10 @@ const PAGE_TITLES = {
   '/portfolio': 'Portfolio & Featured Projects | HariKrushn DigiVerse LLP',
   '/ventures': 'Ventures | HariKrushn DigiVerse LLP',
   '/contact': 'Contact Us | HariKrushn DigiVerse LLP',
+  '/franchise': 'HK DigiVerse LLP — Franchise Opportunity',
+  '/franchise.html': 'HK DigiVerse LLP — Franchise Opportunity',
+  '/franchise-enquiry': 'Franchise Enquiry — HK DigiVerse LLP',
+  '/franchise-enquiry.html': 'Franchise Enquiry — HK DigiVerse LLP',
   '/service-web': 'Web Development Services | HariKrushn DigiVerse LLP',
   '/service-app': 'Mobile App Development | HariKrushn DigiVerse LLP',
   '/service-custom-software': 'Custom Software & SaaS Development | HariKrushn DigiVerse LLP',
@@ -299,12 +325,27 @@ function getNormalizedLocation() {
 }
 
 function App() {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const loc = getNormalizedLocation();
+      const base = loc.split('?')[0];
+      if (base.startsWith('/franchise') || base.startsWith('#franchise') || base === '/admin' || base === '#admin') {
+        return true;
+      }
+      if (sessionStorage.getItem('hk_site_loaded') === 'true') {
+        return true;
+      }
+    }
+    return false;
+  });
   const [currentRoute, setCurrentRoute] = useState(getNormalizedLocation());
 
   useEffect(() => {
     const handleLocationChange = () => {
       const newRoute = getNormalizedLocation();
+      if (newRoute.startsWith('/franchise') || newRoute.startsWith('#franchise')) {
+        setIsLoaded(true);
+      }
       setCurrentRoute((prevRoute) => {
         if (prevRoute !== newRoute) {
           window.scrollTo({ top: 0, behavior: 'instant' });
@@ -313,13 +354,13 @@ function App() {
       });
 
       if (!newRoute.startsWith('#preview')) {
-        document.title = PAGE_TITLES[newRoute] || 'HariKrushn DigiVerse LLP';
+        document.title = PAGE_TITLES[newRoute] || 'HK DigiVerse LLP – 360° Tech & Digital Partner for Startups';
       }
     };
 
     const initRoute = getNormalizedLocation();
     if (!initRoute.startsWith('#preview')) {
-      document.title = PAGE_TITLES[initRoute] || 'HariKrushn DigiVerse LLP';
+      document.title = PAGE_TITLES[initRoute] || 'HK DigiVerse LLP – 360° Tech & Digital Partner for Startups';
     }
 
     window.addEventListener('popstate', handleLocationChange);
@@ -332,11 +373,15 @@ function App() {
 
   const handlePreloadComplete = useCallback(() => {
     setIsLoaded(true);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('hk_site_loaded', 'true');
+    }
   }, []);
 
   const baseRoute = currentRoute.split('?')[0];
   const isPreviewMode = baseRoute.startsWith('#preview');
-  const isSubpage = baseRoute !== '/' && baseRoute !== '/home' && baseRoute !== '/admin' && baseRoute !== '#' && baseRoute !== '#home' && !isPreviewMode;
+  const isFranchiseStandalone = baseRoute === '/franchise' || baseRoute === '#franchise' || baseRoute === '/franchise.html' || baseRoute === '/franchise-enquiry' || baseRoute === '#franchise-enquiry' || baseRoute === '/franchise-enquiry.html' || baseRoute === '/franchise-received' || baseRoute === '#franchise-received' || baseRoute === '/franchise-received.html' || baseRoute === '/1.html';
+  const isSubpage = baseRoute !== '/' && baseRoute !== '/home' && baseRoute !== '/admin' && baseRoute !== '#' && baseRoute !== '#home' && !isPreviewMode && !isFranchiseStandalone;
 
   const renderPageContent = () => {
     if (baseRoute.startsWith('#preview')) {
@@ -392,6 +437,19 @@ function App() {
       case '/contact':
       case '#contact':
         return <Contact />;
+      case '/franchise':
+      case '#franchise':
+      case '/franchise.html':
+        return <Franchise />;
+      case '/franchise-enquiry':
+      case '#franchise-enquiry':
+      case '/franchise-enquiry.html':
+        return <FranchiseEnquiry />;
+      case '/franchise-received':
+      case '#franchise-received':
+      case '/franchise-received.html':
+      case '/1.html':
+        return <FranchiseReceived />;
       case '/service-web':
       case '#service-web':
         return <ServiceWeb />;
@@ -418,18 +476,18 @@ function App() {
     }
   };
 
-  const isAdminOrPreview = baseRoute === '/admin' || baseRoute === '#admin' || isPreviewMode;
+  const isAdminOrPreview = baseRoute === '/admin' || baseRoute === '#admin' || isPreviewMode || isFranchiseStandalone;
 
   return (
     <ContentProvider>
       {/* Desktop custom cursor - hidden in admin and preview modes for cleaner UX */}
       {!isAdminOrPreview && <CustomCursor />}
 
-      {/* Cinematic preloader screen - bypassed in preview mode */}
-      {!isLoaded && !isPreviewMode && <Preloader onComplete={handlePreloadComplete} />}
+      {/* Cinematic preloader screen - bypassed in preview mode and franchise standalone */}
+      {!isLoaded && !isPreviewMode && !isFranchiseStandalone && <Preloader onComplete={handlePreloadComplete} />}
 
       {/* Main website layout */}
-      <div className={`transition-opacity duration-1000 ${(isLoaded || isPreviewMode) ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`transition-opacity duration-1000 ${(isLoaded || isPreviewMode || isFranchiseStandalone) ? 'opacity-100' : 'opacity-0'}`}>
         {!isAdminOrPreview && <Navbar />}
 
         {isSubpage ? (

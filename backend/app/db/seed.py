@@ -35,7 +35,8 @@ DEFAULT_SITE_SETTINGS = {
         { "label": "Case Study", "href": "#case-study", "show": True },
         { "label": "Portfolio", "href": "#portfolio", "show": True },
         { "label": "Ventures", "href": "#ventures", "show": True },
-        { "label": "Contact", "href": "#contact", "show": True }
+        { "label": "Contact", "href": "#contact", "show": True },
+        { "label": "Franchise", "href": "/franchise", "show": True }
     ],
     "section_visibility": {},
     "footer": {
