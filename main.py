@@ -2600,7 +2600,8 @@ async def clear_all_submissions(req: ClearSubmissionsRequest):
 @app.post("/api/franchise/enquiry")
 async def submit_franchise_enquiry(req: dict, background_tasks: BackgroundTasks):
     doc = {**req}
-    doc["created_at"] = doc.get("created_at") or datetime.datetime.now().isoformat()
+    _IST = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
+    doc["created_at"] = doc.get("created_at") or datetime.datetime.now(_IST).isoformat()
     doc["status"] = doc.get("status", "New")
     
     # Try MongoDB first

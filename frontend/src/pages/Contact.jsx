@@ -377,7 +377,7 @@ export default function Contact() {
 
           {/* WhatsApp Quick Chat */}
           {(content?.contact_settings?.whatsapp_numbers || [
-            { label: "Chat on WhatsApp", subtext: "Instant response • Available 24/7", number: "919876543210" }
+            { label: "Chat on WhatsApp", subtext: "Instant response • Available 24/7", number: "9213488596" }
           ]).map((wa, idx) => (
             <motion.a 
               key={idx}

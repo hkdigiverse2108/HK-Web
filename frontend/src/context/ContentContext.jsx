@@ -275,6 +275,11 @@ export const DEFAULT_CONTENT = {
       ]
     }
   },
+  contact_settings: {
+    whatsapp_numbers: [
+      { label: "Chat on WhatsApp", subtext: "Instant response • Available 24/7", number: "9213488596" }
+    ]
+  },
   about_us: {
     philosophy: {
       title: "Why We Exist",

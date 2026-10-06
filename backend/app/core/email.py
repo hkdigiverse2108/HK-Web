@@ -7,6 +7,9 @@ from email.mime.text import MIMEText
 from email.utils import formataddr, formatdate, make_msgid
 from app.core.config import settings
 
+# Indian Standard Time (UTC+05:30) — all email timestamps use IST
+IST = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
+
 
 def send_smtp_email(to_email: str, subject: str, html_body: str, text_body: str = None) -> bool:
     """
@@ -84,12 +87,14 @@ def get_applicant_confirmation_html(doc: dict) -> str:
         strengths_str = str(strengths)
 
     ref_short = reference_id[:12] if len(reference_id) > 12 else reference_id
-    current_year = datetime.datetime.now().year
-    submitted_date = doc.get("created_at", datetime.datetime.now().strftime("%d %b %Y, %I:%M %p"))
+    now_ist = datetime.datetime.now(IST)
+    current_year = now_ist.year
+    submitted_date = doc.get("created_at", now_ist.strftime("%d %b %Y, %I:%M %p IST"))
     if isinstance(submitted_date, str) and "T" in submitted_date:
         try:
             dt = datetime.datetime.fromisoformat(submitted_date.replace("Z", "+00:00"))
-            submitted_date = dt.strftime("%d %b %Y, %I:%M %p")
+            dt_ist = dt.astimezone(IST)
+            submitted_date = dt_ist.strftime("%d %b %Y, %I:%M %p IST")
         except Exception:
             pass
 
@@ -345,7 +350,7 @@ def get_admin_notification_html(doc: dict) -> str:
     background = doc.get("background") or "No background details provided."
     goals = doc.get("goals") or "No goals provided."
     source = doc.get("source") or "Website Direct"
-    created_at = doc.get("created_at") or datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    created_at = doc.get("created_at") or datetime.datetime.now(IST).strftime("%Y-%m-%d %H:%M:%S")
     reference_id = str(doc.get("_id") or doc.get("id") or "NEW-INQUIRY")
 
     strengths = doc.get("strengths", [])
@@ -354,16 +359,18 @@ def get_admin_notification_html(doc: dict) -> str:
     else:
         strengths_str = str(strengths)
 
-    # Format date nicely
+    # Format date nicely — always in IST
     display_date = created_at
     if isinstance(created_at, str) and "T" in created_at:
         try:
             dt = datetime.datetime.fromisoformat(created_at.replace("Z", "+00:00"))
-            display_date = dt.strftime("%d %b %Y, %I:%M %p")
+            dt_ist = dt.astimezone(IST)
+            display_date = dt_ist.strftime("%d %b %Y, %I:%M %p IST")
         except Exception:
             display_date = created_at
 
-    current_year = datetime.datetime.now().year
+    now_ist = datetime.datetime.now(IST)
+    current_year = now_ist.year
 
     designation_line = f"{designation}"
     if company and company != "Not Specified":

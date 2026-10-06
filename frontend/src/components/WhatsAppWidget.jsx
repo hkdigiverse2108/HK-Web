@@ -23,7 +23,7 @@ export default function WhatsAppWidget() {
       return footerPhone.replace(/\+/g, '').replace(/\s/g, '');
     }
     // 4. Default fallback admin number
-    return "919876543210";
+    return "9213488596";
   };
 
   const number = getWhatsAppNumber();
