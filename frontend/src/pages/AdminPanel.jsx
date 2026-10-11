@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useContent, DEFAULT_CONTENT } from '../context/ContentContext';
 import { navigateTo } from '../utils/navigation';
+import ServicesSubpagesCMS from '../components/admin/ServicesSubpagesCMS';
+import PortfolioSubpagesCMS from '../components/admin/PortfolioSubpagesCMS';
+import ClientsRosterCMS from '../components/admin/ClientsRosterCMS';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
@@ -2526,6 +2529,7 @@ export default function AdminPanel() {
     {
       title: "4. Pages: Services & Capabilities",
       items: [
+        { label: "All 50 Service Subpages CMS", tab: "services_subpages_cms", route: "#preview/services", icon: "📑", badge: "CMS 50+", badgeStyle: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" },
         { label: "Services Main Page", tab: "services_main", route: "#preview/services", icon: "⚙️", badge: "PAGE", badgeStyle: "bg-purple-500/10 text-purple-400 border border-purple-500/20" },
         ...(currentContent.services || []).map((s, idx) => {
           // Normalize href from e.g. '#service-web' to '#preview/service-web'
@@ -2573,6 +2577,8 @@ export default function AdminPanel() {
     {
       title: "8. Pages: Portfolio Work",
       items: [
+        { label: "All 17 Portfolio Subpages CMS", tab: "portfolio_subpages_cms", route: "#preview/portfolio", icon: "📂", badge: "CMS 17+", badgeStyle: "bg-purple-500/10 text-purple-400 border border-purple-500/20" },
+        { label: "Our Clients Logo Wall CMS", tab: "clients_roster_cms", route: "#preview/our-clients", icon: "🏛️", badge: "CLIENTS", badgeStyle: "bg-amber-500/10 text-amber-400 border border-amber-500/20" },
         { label: "Portfolio Project Grid", tab: "portfolio", route: "#preview/portfolio", icon: "🎨", badge: "PAGE", badgeStyle: "bg-white/5 text-neutral-400 border border-white/10" }
       ]
     },
@@ -10484,6 +10490,54 @@ export default function AdminPanel() {
             </div>
           )}
 
+          {/* 17. SERVICES SUBPAGES CMS VIEW */}
+          {activeTab === 'services_subpages_cms' && (
+            <div className="p-5 bg-white/[0.02] border border-white/5 rounded-xl space-y-4 text-left">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-emerald-400">// Services CMS Engine</span>
+              <p className="text-xs text-neutral-400 font-light leading-relaxed">
+                Full visual management studio for all 50 service capabilities is open in the main view. Select any capability, update hero headings, capabilities, milestones, tech stacks, or FAQs, and save directly to cloud.
+              </p>
+              <button
+                onClick={() => window.open('/services', '_blank')}
+                className="w-full py-2.5 border border-emerald-500/20 hover:bg-emerald-500/10 rounded-xl font-mono text-[9px] uppercase tracking-widest text-emerald-400 transition-colors font-medium text-center cursor-pointer"
+              >
+                ↗ Open Services Live Hub
+              </button>
+            </div>
+          )}
+
+          {/* 18. PORTFOLIO SUBPAGES CMS VIEW */}
+          {activeTab === 'portfolio_subpages_cms' && (
+            <div className="p-5 bg-white/[0.02] border border-white/5 rounded-xl space-y-4 text-left">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-purple-400">// Portfolio Sectors Studio</span>
+              <p className="text-xs text-neutral-400 font-light leading-relaxed">
+                Full visual editor for all 17 portfolio industry verticals is open in the main view. Update flagship case studies, metrics, outcomes, and tech ecosystems.
+              </p>
+              <button
+                onClick={() => window.open('/portfolio', '_blank')}
+                className="w-full py-2.5 border border-purple-500/20 hover:bg-purple-500/10 rounded-xl font-mono text-[9px] uppercase tracking-widest text-purple-400 transition-colors font-medium text-center cursor-pointer"
+              >
+                ↗ Open Portfolio Live Grid
+              </button>
+            </div>
+          )}
+
+          {/* 19. CLIENTS ROSTER CMS VIEW */}
+          {activeTab === 'clients_roster_cms' && (
+            <div className="p-5 bg-white/[0.02] border border-white/5 rounded-xl space-y-4 text-left">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-amber-400">// Client Partners Wall</span>
+              <p className="text-xs text-neutral-400 font-light leading-relaxed">
+                Client logos and brand showcase manager is open in the main view. Add new clients, upload brand emblems, reorder, or toggle active status.
+              </p>
+              <button
+                onClick={() => window.open('/our-clients', '_blank')}
+                className="w-full py-2.5 border border-amber-500/20 hover:bg-amber-500/10 rounded-xl font-mono text-[9px] uppercase tracking-widest text-amber-400 transition-colors font-medium text-center cursor-pointer"
+              >
+                ↗ Open Client Wall Live
+              </button>
+            </div>
+          )}
+
             </section>
           </>
         )}
@@ -10553,10 +10607,16 @@ export default function AdminPanel() {
 
       </aside>
 
-      {/* RIGHT PANEL: LIVE PREVIEW CONTAINER OR SUBMISSIONS HUB */}
+      {/* RIGHT PANEL: LIVE PREVIEW CONTAINER OR FULL CMS STUDIOS */}
       <main className="flex-1 bg-[#0d0d0d] flex flex-col h-full overflow-hidden relative z-10">
         
-        {activeTab === 'submissions' ? (
+        {activeTab === 'services_subpages_cms' ? (
+          <ServicesSubpagesCMS adminPassword={password} />
+        ) : activeTab === 'portfolio_subpages_cms' ? (
+          <PortfolioSubpagesCMS adminPassword={password} />
+        ) : activeTab === 'clients_roster_cms' ? (
+          <ClientsRosterCMS adminPassword={password} />
+        ) : activeTab === 'submissions' ? (
           /* ==========================================
              PREMIUM SUBMISSIONS HUB (FULL SCREEN VIEW)
              ========================================== */

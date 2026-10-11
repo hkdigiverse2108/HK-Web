@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Lenis from 'lenis';
 import Magnetic from '../components/Magnetic';
 import { useContent } from '../context/ContentContext';
 
@@ -31,29 +30,6 @@ export default function HeroSection({ isLoaded, overrideContent }) {
 
   useEffect(() => {
     if (!isLoaded || !framesAvailable) return;
-
-    // 1. Initialize Lenis Smooth Scroll
-    const lenis = new Lenis({
-      duration: 1.8, // Heavy, luxurious scroll inertia
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-      wheelMultiplier: 0.9,
-    });
-
-    let animFrameId;
-    function raf(time) {
-      lenis.raf(time);
-      animFrameId = requestAnimationFrame(raf);
-    }
-    animFrameId = requestAnimationFrame(raf);
-
-    // Sync Lenis with GSAP ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
-    const tickerUpdate = (time) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(tickerUpdate);
-    gsap.ticker.lagSmoothing(0);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -112,7 +88,7 @@ export default function HeroSection({ isLoaded, overrideContent }) {
         start: "top top",
         end: "+=500%", // 500% viewport scroll track for smooth scrub
         pin: true,
-        scrub: 0.5,
+        scrub: 0.1,
         onUpdate: (self) => {
           // Map scroll progress (0 to 1) directly to total frame indices
           targetFrameRef.current = self.progress * (totalFrames - 1);
@@ -134,7 +110,7 @@ export default function HeroSection({ isLoaded, overrideContent }) {
     let lastRenderedIndex = -1;
 
     const updateFrame = () => {
-      const lerpFactor = 0.18; // Smooth scroll tracking lerp
+      const lerpFactor = 0.35; // Responsive, crisp tracking
       const diff = targetFrameRef.current - currentFrameRef.current;
 
       if (Math.abs(diff) > 0.005) {
@@ -163,9 +139,6 @@ export default function HeroSection({ isLoaded, overrideContent }) {
         ScrollTrigger.getAll().forEach(t => t.kill(true));
         ctx.revert();
       } catch {}
-      if (lenis) lenis.destroy();
-      gsap.ticker.remove(tickerUpdate);
-      if (animFrameId) cancelAnimationFrame(animFrameId);
       if (frameRenderAnimFrameId) cancelAnimationFrame(frameRenderAnimFrameId);
     };
   }, [isLoaded, framesAvailable, totalFrames]);

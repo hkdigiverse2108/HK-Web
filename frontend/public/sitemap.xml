@@ -1,135 +1,501 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://hkdigiverse.com/</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/our-people</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/services</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/about-us</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/portfolio</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/case-study</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/our-clients</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/about-us</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/our-story</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/our-story</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/our-culture</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/our-people</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/our-culture</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/services</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/career</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/portfolio</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://hkdigiverse.com/case-study</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://hkdigiverse.com/industry</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/contact</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/career</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://hkdigiverse.com/blogs</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/blogs</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/our-gallery</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/industry</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/our-gallery</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/awards-achievements</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/awards-achievements</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/ventures</loc>
-    <lastmod>2026-09-16</lastmod>
+    <loc>https://harikrushndigiverse.com/ventures</loc>
+    <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/contact</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://harikrushndigiverse.com/services/software-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/service-web</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://harikrushndigiverse.com/services/digital-marketing</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/ai-automation</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/design-and-branding</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/consulting</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/startup-solutions</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/web-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/service-app</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://harikrushndigiverse.com/services/web-application-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/service-custom-software</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://harikrushndigiverse.com/services/mobile-app-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/service-digital-marketing</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://harikrushndigiverse.com/services/custom-software-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/service-social-media-management</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://harikrushndigiverse.com/services/saas-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/service-ai-consulting</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://harikrushndigiverse.com/services/erp-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hkdigiverse.com/service-it-consulting</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://harikrushndigiverse.com/services/crm-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/api-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/ecommerce-web-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/seo</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/local-seo</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/technical-seo</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/ai-seo</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/generative-engine-optimization</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/google-ads-ppc</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/meta-ads</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/social-media-marketing</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/content-marketing</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/lead-generation</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/marketing-automation</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/ai-consulting</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/ai-strategy</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/generative-ai-solutions</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/ai-integration</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/ai-agent-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/llm-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/ai-chatbot-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/business-automation</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/branding</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/logo-design</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/graphic-design</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/ui-ux-design</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/product-design</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/website-design</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/it-consulting</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/software-consulting</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/technology-consulting</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/digital-transformation-consulting</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/startup-consulting</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/mvp-development</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/startup-branding</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/product-strategy</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/startup-technology-solutions</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/services/startup-digital-growth</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/digital-transformation</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/ai-work</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/industrial-ecommerce-solutions</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/international-work</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/ecommerce-work</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/iot-work</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/supply-chain-management</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/social-communities</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/mobile-solutions</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/devops-cloud-security</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/automobile-solutions</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/digital</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/apparel-ecommerce</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/fmcg-ecommerce</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/ux-ui-work</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/healthcare-solutions</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://harikrushndigiverse.com/portfolio/media-entertainment-solutions</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
 </urlset>

@@ -5,6 +5,112 @@ import { navigateTo } from '../utils/navigation';
 
 const API_URL = import.meta.env.VITE_API_URL || '';
 
+export const getCategoryUrl = (catName) => {
+  if (!catName) return '/services';
+  const norm = catName.toLowerCase();
+  if (norm.includes('portfolio')) return '/portfolio';
+  if (norm.includes('success') || norm.includes('stories')) return '/case-study';
+  if (norm.includes('software')) return '/services/software-development';
+  if (norm.includes('marketing')) return '/services/digital-marketing';
+  if (norm.includes('ai') || norm.includes('automation')) return '/services/ai-automation';
+  if (norm.includes('design') || norm.includes('brand')) return '/services/design-and-branding';
+  if (norm.includes('consulting')) return '/services/consulting';
+  if (norm.includes('startup')) return '/services/startup-solutions';
+  return '/services';
+};
+
+function MegaMenuDropdown({ megaMenu, styles, isDropdownOpen }) {
+  const [activeTab, setActiveTab] = useState(0);
+  const activeCategory = megaMenu[activeTab] || megaMenu[0] || {};
+  const activeCategoryUrl = activeCategory.href || getCategoryUrl(activeCategory.category);
+
+  return (
+    <div 
+      className={cn(
+        "absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[840px] max-w-[92vw] transition-all duration-300 ease-out z-50",
+        isDropdownOpen 
+          ? "opacity-100 translate-y-0 pointer-events-auto" 
+          : "opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto"
+      )}
+    >
+      <div className="bg-[#050508]/95 backdrop-blur-xl border border-white/10 p-0 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] flex flex-row overflow-hidden min-h-[320px]">
+        {/* Left Sidebar - Core Categories */}
+        <div className="flex flex-col w-[38%] bg-white/[0.02] border-r border-white/10 p-3 space-y-1">
+          <div className="px-3 pt-2 pb-1 text-[9px] font-mono uppercase tracking-[0.2em] text-neutral-500">
+            // Core Domains
+          </div>
+          {megaMenu.map((cat, idx) => {
+            const catUrl = cat.href || getCategoryUrl(cat.category);
+            return (
+              <button
+                key={idx}
+                onMouseEnter={() => setActiveTab(idx)}
+                onClick={() => {
+                  if (catUrl) navigateTo(catUrl);
+                }}
+                className={cn(
+                  "text-left flex items-center justify-between py-2.5 px-3.5 rounded-xl transition-all duration-200 text-xs font-light uppercase tracking-wider cursor-pointer group/cat",
+                  activeTab === idx ? "bg-white/10 text-white font-medium" : "text-neutral-400 hover:bg-white/5 hover:text-white"
+                )}
+              >
+                <span className="truncate">{cat.category}</span>
+                <svg className={cn("w-3 h-3 transition-transform text-white/50 group-hover/cat:text-white", activeTab === idx ? "translate-x-0.5 opacity-100" : "opacity-0 -translate-x-1")} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Right Content - Sub-services with Main Category Header */}
+        <div className="flex-1 p-7 bg-gradient-to-br from-transparent to-white/[0.02] flex flex-col">
+          <div className="flex items-center justify-between mb-5 border-b border-white/10 pb-3">
+            <div>
+              <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 block">Pillar Overview</span>
+              <h3 className="text-white text-sm font-display uppercase tracking-widest font-bold">
+                {activeCategory?.category}
+              </h3>
+            </div>
+            <button
+              onClick={() => {
+                if (activeCategoryUrl) navigateTo(activeCategoryUrl);
+              }}
+              className="px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-[9px] font-mono text-neutral-300 hover:text-white uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer group/explore"
+            >
+              <span>Explore Pillar Page</span>
+              <svg className="w-2.5 h-2.5 group-hover/explore:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-6 gap-y-3.5 flex-grow content-start">
+            {activeCategory?.items?.map((subItem, idx) => {
+              const isSubFranchise = (subItem.label || subItem.name)?.toLowerCase().includes('franchise');
+              return (
+                <a
+                  key={idx}
+                  href={isSubFranchise ? "/franchise" : subItem.href}
+                  onClick={(e) => {
+                    if (!isSubFranchise) {
+                      e.preventDefault();
+                      navigateTo(subItem.href);
+                    }
+                  }}
+                  className="uppercase tracking-[0.08em] font-light transition-all duration-200 text-neutral-400 hover:text-white text-[10px] cursor-pointer flex items-center gap-2 group/sub py-1 hover:translate-x-1"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/20 group-hover/sub:bg-blue-400 transition-colors" />
+                  <span className="truncate">{subItem.label || subItem.name}</span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Navbar() {
   const { content } = useContent();
   const [isHidden, setIsHidden] = useState(false);
@@ -161,8 +267,17 @@ export default function Navbar() {
   const rawLinks = content?.site_settings?.navbar_links || [];
   
   const activeNavigationItems = rawLinks
-    .filter(item => item.show !== false)
+    .filter(item => {
+      if (item.show === false) return false;
+      const key = (item.label || item.name || '').toLowerCase();
+      if (key === 'industry') return false;
+      return true;
+    })
     .map(item => {
+      // Career is a single unified page with no dropdown
+      if ((item.label || item.name)?.toLowerCase() === 'career') {
+        return { ...item, href: '/career', dropdown: null, megaMenu: null };
+      }
       if (item.dropdown) {
         const filteredDropdown = item.dropdown.filter(subItem => subItem.show !== false);
         return { ...item, dropdown: filteredDropdown };
@@ -212,6 +327,46 @@ export default function Navbar() {
             {activeNavigationItems.map((item, index) => {
               const itemKey = item.label || item.name;
               const isDropdownOpen = openDesktopDropdown === itemKey;
+
+              if (item.megaMenu && item.megaMenu.length > 0) {
+                return (
+                  <div 
+                    key={itemKey} 
+                    className="relative group py-1"
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
+                    <button 
+                      type="button"
+                      aria-haspopup="true" 
+                      aria-expanded={isDropdownOpen} 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenDesktopDropdown(prev => prev === itemKey ? null : itemKey);
+                      }}
+                      className="flex items-center gap-1.5 uppercase tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer select-none"
+                      style={{
+                        fontSize: styles.fontSize || '12px',
+                        color: (hoveredIndex === index || isDropdownOpen) ? (styles.hoverColor || '#ffffff') : (styles.color || '#a3a3a3')
+                      }}
+                    >
+                      <span>{itemKey}</span>
+                      <svg 
+                        className={cn(
+                          "w-2.5 h-2.5 transition-transform duration-300", 
+                          isDropdownOpen ? "rotate-180 text-white" : "group-hover:rotate-180"
+                        )} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    <MegaMenuDropdown megaMenu={item.megaMenu} styles={styles} isDropdownOpen={isDropdownOpen} />
+                  </div>
+                );
+              }
 
               if (item.dropdown && item.dropdown.length > 0) {
                 return (
@@ -348,6 +503,95 @@ export default function Navbar() {
       >
         <div className="flex flex-col gap-6 w-full max-w-sm px-6 text-center">
           {activeNavigationItems.map((item, index) => {
+            if (item.megaMenu) {
+              const isDropdownOpen = !!mobileDropdowns[item.label || item.name];
+              return (
+                <div 
+                  key={item.label || item.name} 
+                  className="flex flex-col items-center"
+                  style={{ 
+                    transitionDelay: isMobileMenuOpen ? `${index * 50}ms` : '0ms',
+                    transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(30px)',
+                    opacity: isMobileMenuOpen ? 1 : 0,
+                    transition: 'all 0.5s ease-out'
+                  }}
+                >
+                  <button 
+                    onClick={() => toggleMobileDropdown(item.label || item.name)}
+                    aria-expanded={isDropdownOpen}
+                    aria-haspopup="true"
+                    className="flex items-center justify-center gap-2 text-2xl uppercase tracking-[0.25em] font-light text-neutral-400 hover:text-white transition-all duration-300 cursor-pointer"
+                  >
+                    <span>{item.label || item.name}</span>
+                    <svg 
+                      className={cn(
+                        "w-4 h-4 transition-transform duration-300", 
+                        isDropdownOpen ? "rotate-180 text-white" : "text-neutral-500"
+                      )} 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div 
+                    className={cn(
+                      "flex flex-col gap-3 transition-all duration-500 ease-in-out overflow-hidden mt-3 w-full bg-white/[0.02] border border-white/5 rounded-xl px-4",
+                      isDropdownOpen ? "max-h-[800px] py-4 opacity-100" : "max-h-0 py-0 opacity-0 border-none"
+                    )}
+                  >
+                    {item.megaMenu.map((cat, catIdx) => {
+                      const catUrl = cat.href || getCategoryUrl(cat.category);
+                      return (
+                        <div key={catIdx} className="flex flex-col gap-2 mb-4 last:mb-0 text-left">
+                          <div className="flex items-center justify-between border-b border-white/10 pb-1">
+                            <button
+                              onClick={() => {
+                                setIsMobileMenuOpen(false);
+                                if (catUrl) navigateTo(catUrl);
+                              }}
+                              className="text-white text-xs font-semibold uppercase tracking-widest text-left hover:text-blue-400 transition-colors cursor-pointer"
+                            >
+                              {cat.category}
+                            </button>
+                            <button
+                              onClick={() => {
+                                setIsMobileMenuOpen(false);
+                                if (catUrl) navigateTo(catUrl);
+                              }}
+                              className="text-[9px] font-mono text-neutral-400 hover:text-white uppercase tracking-wider cursor-pointer"
+                            >
+                              View All →
+                            </button>
+                          </div>
+                          {cat.items.map((subItem, idx) => {
+                            const isSubFranchise = (subItem.label || subItem.name)?.toLowerCase().includes('franchise');
+                            return (
+                              <a
+                                key={idx}
+                                href={isSubFranchise ? "/franchise" : subItem.href}
+                                onClick={(e) => {
+                                  if (!isSubFranchise) {
+                                    e.preventDefault();
+                                    setIsMobileMenuOpen(false);
+                                    navigateTo(subItem.href);
+                                  }
+                                }}
+                                className="text-[10px] uppercase tracking-[0.2em] font-light text-neutral-500 hover:text-white transition-colors duration-300 py-1.5 cursor-pointer block"
+                              >
+                                {subItem.label || subItem.name}
+                              </a>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            }
+
             if (item.dropdown) {
               const isDropdownOpen = !!mobileDropdowns[item.label || item.name];
               return (

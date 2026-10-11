@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 import json
 import subprocess
 import threading
@@ -11,10 +12,11 @@ try:
 except ImportError:
     cv2 = None
 
-from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, Header, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Request, UploadFile, File, Depends, Header, BackgroundTasks
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
@@ -34,28 +36,13 @@ load_dotenv(override=True)  # Loads .env from the root directory
 from app.core.config import settings
 
 # 2. Define FastAPI Application
-app = FastAPI(
-    title="HariKrushn Digiverse API",
-    description="API Backend for HariKrushn Digiverse LLP Platform",
-    version="1.0.0",
-)
-
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Pre-warm MongoDB connection on startup so first request doesn't block
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     """Pre-warm MongoDB connection in background thread to avoid cold-start timeouts."""
     def _warmup():
         try:
             print("[Startup] Pre-warming MongoDB connection...")
+            # We import get_mongo_collection here or rely on it being globally defined later
             coll = get_mongo_collection()
             if coll is not None:
                 print("[Startup] MongoDB connection ready!")
@@ -66,6 +53,23 @@ async def startup_event():
     
     warmup_thread = threading.Thread(target=_warmup, daemon=True)
     warmup_thread.start()
+    yield
+
+app = FastAPI(
+    title="HariKrushn Digiverse API",
+    description="API Backend for HariKrushn Digiverse LLP Platform",
+    version="1.0.0",
+    lifespan=lifespan,
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Pydantic models for admin auth and content
@@ -1746,13 +1750,12 @@ DEFAULT_CONTENT = {
         { "value": "98%", "label": "Client Retention" }
     ],
     "services": [
-        { "num": "01/07", "title": "Web Engineering", "desc": "Creating high-fidelity, cinematic, and fast-loading web applications that captivate and convert.", "tags": ["FRONTEND", "DESIGN"], "href": "#service-web", "img": "/media/images/gallery/design_sprint.png", "gradient": "from-blue-500 via-indigo-500 to-cyan-500" },
-        { "num": "02/07", "title": "Mobile Applications", "desc": "Building bespoke native-feeling iOS and Android solutions with fluid gestures and offline sync.", "tags": ["IOS", "ANDROID"], "href": "#service-app", "img": "/media/images/gallery/digiverse_workspace.png", "gradient": "from-emerald-500 via-teal-500 to-cyan-500" },
-        { "num": "03/07", "title": "Custom Software", "desc": "Constructing robust backend panels, CRM matrices, SaaS dashboards, and multi-tenant systems.", "tags": ["CRM", "ERP"], "href": "#service-custom-software", "img": "/media/images/quantum_banking.png", "gradient": "from-amber-500 via-orange-500 to-yellow-500" },
-        { "num": "04/07", "title": "Digital Marketing", "desc": "Driving traffic and client acquisitions using data-backed strategies, SEO, and paid ads.", "tags": ["SEO", "GROWTH"], "href": "#service-digital-marketing", "img": "/media/images/gallery/launch_celebration.png", "gradient": "from-rose-500 via-pink-500 to-purple-500" },
-        { "num": "05/07", "title": "Social Media Management", "desc": "Crafting brand presence, graphic design guides, and content calendars to elevate recognition.", "tags": ["BRANDING", "CONTENT"], "href": "#service-social-media-management", "img": "/media/images/gallery/cinematic_review.png", "gradient": "from-pink-500 via-fuchsia-500 to-violet-500" },
-        { "num": "06/07", "title": "AI Consulting", "desc": "Developing automated AI agents, vector database search pipelines, and custom LLM integrations.", "tags": ["LLM", "AGENTS"], "href": "#service-ai-consulting", "img": "/media/images/gallery/ai_orchestrator.png", "gradient": "from-purple-500 via-violet-500 to-indigo-500" },
-        { "num": "07/07", "title": "IT Consulting", "desc": "Designing Cloud migrations, Docker orchestration files, hardened security, and CI/CD pipelines.", "tags": ["CLOUD", "DEVOPS"], "href": "#service-it-consulting", "img": "/media/images/gallery/hardware_calibration.png", "gradient": "from-sky-500 via-blue-500 to-indigo-500" }
+        { "num": "01/06", "title": "Software Development", "desc": "Architecting high-performance enterprise platforms, custom SaaS dashboards, scalable cloud microservices, and mobile applications.", "tags": ["ENTERPRISE", "WEB & MOBILE"], "href": "/services/software-development", "img": "/media/images/gallery/digiverse_workspace.png", "gradient": "from-blue-500 via-indigo-500 to-cyan-500" },
+        { "num": "02/06", "title": "Digital Marketing", "desc": "Data-driven SEO, Google Ads / PPC, Meta ads, generative engine optimization (GEO), and high-ROI performance marketing campaigns.", "tags": ["SEO", "GROWTH & ADS"], "href": "/services/digital-marketing", "img": "/media/images/gallery/launch_celebration.png", "gradient": "from-rose-500 via-pink-500 to-purple-500" },
+        { "num": "03/06", "title": "AI & Automation", "desc": "Developing autonomous AI agents, enterprise LLM pipelines, intelligent chatbots, and end-to-end robotic process automations.", "tags": ["AI AGENTS", "AUTOMATION"], "href": "/services/ai-automation", "img": "/media/images/gallery/ai_orchestrator.png", "gradient": "from-purple-500 via-violet-500 to-indigo-500" },
+        { "num": "04/06", "title": "Design & Branding", "desc": "Creating visually stunning design systems, immersive UI/UX experiences, distinctive logos, and iconic brand identities that convert.", "tags": ["UI/UX", "BRANDING"], "href": "/services/design-and-branding", "img": "/media/images/gallery/design_sprint.png", "gradient": "from-pink-500 via-rose-500 to-amber-500" },
+        { "num": "05/06", "title": "Consulting", "desc": "Strategic technology advisory, enterprise software audits, cloud migration roadmaps, and digital transformation consulting.", "tags": ["IT STRATEGY", "CLOUD ADVISORY"], "href": "/services/consulting", "img": "/media/images/quantum_banking.png", "gradient": "from-emerald-500 via-teal-500 to-cyan-500" },
+        { "num": "06/06", "title": "Startup Solutions", "desc": "Accelerating startup lifecycles with rapid MVP engineering, scalable architecture foundations, tech advisory, and digital growth playbooks.", "tags": ["MVP", "STARTUP GROWTH"], "href": "/services/startup-solutions", "img": "/media/images/gallery/cinematic_review.png", "gradient": "from-amber-500 via-orange-500 to-yellow-500" }
     ],
     "caseStudy": {
         "show": True,
@@ -2718,14 +2721,17 @@ async def update_franchise_enquiry_status(req: UpdateFranchiseStatusReq):
 
 from app.core.security import verify_password, create_session_token, verify_session_token
 
-async def get_current_user(authorization: str = Header(None)):
-    if not authorization:
-        raise HTTPException(status_code=401, detail="Missing authorization header")
-    token = authorization.replace("Bearer ", "")
-    user = verify_session_token(token)
-    if not user:
-        raise HTTPException(status_code=401, detail="Session expired or invalid")
-    return user
+async def get_current_user(authorization: str = Header(None), x_admin_password: str = Header(None)):
+    if authorization:
+        token = authorization.replace("Bearer ", "").strip()
+        user = verify_session_token(token)
+        if user:
+            return user
+        if verify_admin_password(token):
+            return {"username": "admin", "role": "super_admin", "permissions": ["all"]}
+    if x_admin_password and verify_admin_password(x_admin_password):
+        return {"username": "admin", "role": "super_admin", "permissions": ["all"]}
+    raise HTTPException(status_code=401, detail="Session expired or invalid")
 
 # Helper to write activity log
 def log_action(username: str, role: str, action: str, details: dict):
@@ -2811,6 +2817,87 @@ async def update_site_content(req: ContentUpdateRequest):
         return {"status": "success", "message": "Content updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save content: {str(e)}")
+
+# ==========================================
+# PUBLIC SUBPAGES & CLIENTS ENDPOINTS
+# ==========================================
+
+@app.get("/api/public/services-subpages")
+async def get_public_services_subpages():
+    coll = get_collection("services_subpages")
+    if coll is None:
+        return []
+    try:
+        return list(coll.find({"deleted_at": None}, {"_id": 0}))
+    except Exception as e:
+        logger.error(f"Error fetching services subpages: {e}")
+        return []
+
+@app.get("/api/public/services-subpages/{identifier}")
+async def get_public_service_subpage(identifier: str):
+    coll = get_collection("services_subpages")
+    if coll is None:
+        raise HTTPException(status_code=404, detail="Service not found")
+    try:
+        norm_title = identifier.replace("-", " ")
+        doc = coll.find_one({
+            "$or": [
+                {"identifier": identifier},
+                {"slug": f"/services/{identifier}"},
+                {"slug": identifier},
+                {"title": {"$regex": f"^{re.escape(norm_title)}$", "$options": "i"}}
+            ],
+            "deleted_at": None
+        }, {"_id": 0})
+        if not doc:
+            raise HTTPException(status_code=404, detail="Service not found")
+        return doc
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/public/portfolio-subpages")
+async def get_public_portfolio_subpages():
+    coll = get_collection("portfolio_subpages")
+    if coll is None:
+        return []
+    try:
+        return list(coll.find({"deleted_at": None}, {"_id": 0}))
+    except Exception as e:
+        logger.error(f"Error fetching portfolio subpages: {e}")
+        return []
+
+@app.get("/api/public/portfolio-subpages/{identifier}")
+async def get_public_portfolio_subpage(identifier: str):
+    coll = get_collection("portfolio_subpages")
+    if coll is None:
+        raise HTTPException(status_code=404, detail="Portfolio not found")
+    try:
+        norm_name = identifier.replace("-", " ")
+        doc = coll.find_one({
+            "$or": [
+                {"identifier": identifier},
+                {"slug": f"/portfolio/{identifier}"},
+                {"slug": identifier},
+                {"name": {"$regex": f"^{re.escape(norm_name)}$", "$options": "i"}}
+            ],
+            "deleted_at": None
+        }, {"_id": 0})
+        if not doc:
+            raise HTTPException(status_code=404, detail="Portfolio not found")
+        return doc
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/public/clients")
+async def get_public_clients():
+    coll = get_collection("clients_roster")
+    if coll is None:
+        return []
+    try:
+        return list(coll.find({"deleted_at": None, "isActive": {"$ne": False}}, {"_id": 0}).sort("sortOrder", 1))
+    except Exception as e:
+        logger.error(f"Error fetching clients: {e}")
+        return []
 
 # GET collection items (Read)
 @app.get("/api/collections/{collection_name}")
@@ -3172,6 +3259,19 @@ from fastapi.responses import FileResponse
 # All static images and uploads are consolidated under the single 'media' folder.
 root_media_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "media"))
 os.makedirs(root_media_dir, exist_ok=True)
+
+from fastapi.responses import JSONResponse
+@app.exception_handler(404)
+async def custom_404_handler(request: Request, exc: HTTPException):
+    if request.url.path.startswith("/media/"):
+        fallback_path = os.path.join(root_media_dir, "images", "uploads", "img_20260801_100033.png")
+        if os.path.exists(fallback_path):
+            return FileResponse(fallback_path)
+    if request.url.path.startswith("/api/"):
+        return JSONResponse(status_code=404, content={"detail": "Not Found"})
+    # Let standard FastAPI handle it, or we could redirect, but raising gives it back to FastAPI SPA logic if any
+    return JSONResponse(status_code=404, content={"detail": "Not Found"})
+
 app.mount("/media", StaticFiles(directory=root_media_dir), name="root_media")
 
 env_mode = os.getenv("ENV", "development")
@@ -3330,13 +3430,13 @@ if __name__ == "__main__":
         while True:
             time.sleep(1)
             if backend_proc.poll() is not None:
-                print(f"[System] Backend stopped with code {backend_proc.returncode}")
+                print(f"[System] Backend stopped with code {backend_proc.returncode}", flush=True)
                 break
             if frontend_proc and frontend_proc.poll() is not None:
-                print(f"[System] Frontend stopped with code {frontend_proc.returncode}")
+                print(f"[System] Frontend stopped with code {frontend_proc.returncode}", flush=True)
                 break
 
     except KeyboardInterrupt:
-        pass
+        print("\n[System] KeyboardInterrupt (CTRL+C) received. Stopping services...", flush=True)
     finally:
         cleanup()

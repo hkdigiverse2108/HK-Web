@@ -36,74 +36,64 @@ export const DEFAULT_CONTENT = {
   ],
   services: [
     {
-      num: "01/07",
-      title: "Web Engineering",
-      desc: "Creating high-fidelity, cinematic, and fast-loading web applications that captivate and convert.",
-      description: "Creating high-fidelity, cinematic, and fast-loading web applications that captivate and convert.",
-      tags: ["FRONTEND", "DESIGN"],
-      href: "/service-web",
-      img: "/media/images/gallery/design_sprint.png",
+      num: "01/06",
+      title: "Software Development",
+      desc: "Architecting high-performance enterprise platforms, custom SaaS dashboards, scalable cloud microservices, and mobile applications.",
+      description: "Architecting high-performance enterprise platforms, custom SaaS dashboards, scalable cloud microservices, and mobile applications.",
+      tags: ["ENTERPRISE", "WEB & MOBILE"],
+      href: "/services/software-development",
+      img: "/media/images/gallery/digiverse_workspace.png",
       gradient: "from-blue-500 via-indigo-500 to-cyan-500"
     },
     {
-      num: "02/07",
-      title: "Mobile Applications",
-      desc: "Building bespoke native-feeling iOS and Android solutions with fluid gestures and offline sync.",
-      description: "Building bespoke native-feeling iOS and Android solutions with fluid gestures and offline sync.",
-      tags: ["IOS", "ANDROID"],
-      href: "/service-app",
-      img: "/media/images/gallery/digiverse_workspace.png",
-      gradient: "from-emerald-500 via-teal-500 to-cyan-500"
-    },
-    {
-      num: "03/07",
-      title: "Custom Software",
-      desc: "Constructing robust backend panels, CRM matrices, SaaS dashboards, and multi-tenant systems.",
-      description: "Constructing robust backend panels, CRM matrices, SaaS dashboards, and multi-tenant systems.",
-      tags: ["CRM", "ERP"],
-      href: "/service-custom-software",
-      img: "/media/images/quantum_banking.png",
-      gradient: "from-amber-500 via-orange-500 to-yellow-500"
-    },
-    {
-      num: "04/07",
+      num: "02/06",
       title: "Digital Marketing",
-      desc: "Driving traffic and client acquisitions using data-backed strategies, SEO, and paid ads.",
-      description: "Driving traffic and client acquisitions using data-backed strategies, SEO, and paid ads.",
-      tags: ["SEO", "GROWTH"],
-      href: "/service-digital-marketing",
+      desc: "Data-driven SEO, Google Ads / PPC, Meta ads, generative engine optimization (GEO), and high-ROI performance marketing campaigns.",
+      description: "Data-driven SEO, Google Ads / PPC, Meta ads, generative engine optimization (GEO), and high-ROI performance marketing campaigns.",
+      tags: ["SEO", "GROWTH & ADS"],
+      href: "/services/digital-marketing",
       img: "/media/images/gallery/launch_celebration.png",
       gradient: "from-rose-500 via-pink-500 to-purple-500"
     },
     {
-      num: "05/07",
-      title: "Social Media Management",
-      desc: "Crafting brand presence, graphic design guides, and content calendars to elevate recognition.",
-      description: "Crafting brand presence, graphic design guides, and content calendars to elevate recognition.",
-      tags: ["BRANDING", "CONTENT"],
-      href: "/service-social-media-management",
-      img: "/media/images/gallery/cinematic_review.png",
-      gradient: "from-pink-500 via-fuchsia-500 to-violet-500"
-    },
-    {
-      num: "06/07",
-      title: "AI Consulting",
-      desc: "Developing automated AI agents, vector database search pipelines, and custom LLM integrations.",
-      description: "Developing automated AI agents, vector database search pipelines, and custom LLM integrations.",
-      tags: ["LLM", "AGENTS"],
-      href: "/service-ai-consulting",
+      num: "03/06",
+      title: "AI & Automation",
+      desc: "Developing autonomous AI agents, enterprise LLM pipelines, intelligent chatbots, and end-to-end robotic process automations.",
+      description: "Developing autonomous AI agents, enterprise LLM pipelines, intelligent chatbots, and end-to-end robotic process automations.",
+      tags: ["AI AGENTS", "AUTOMATION"],
+      href: "/services/ai-automation",
       img: "/media/images/gallery/ai_orchestrator.png",
       gradient: "from-purple-500 via-violet-500 to-indigo-500"
     },
     {
-      num: "07/07",
-      title: "IT Consulting",
-      desc: "Designing Cloud migrations, Docker orchestration files, hardened security, and CI/CD pipelines.",
-      description: "Designing Cloud migrations, Docker orchestration files, hardened security, and CI/CD pipelines.",
-      tags: ["CLOUD", "DEVOPS"],
-      href: "/service-it-consulting",
-      img: "/media/images/gallery/hardware_calibration.png",
-      gradient: "from-sky-500 via-blue-500 to-indigo-500"
+      num: "04/06",
+      title: "Design & Branding",
+      desc: "Creating visually stunning design systems, immersive UI/UX experiences, distinctive logos, and iconic brand identities that convert.",
+      description: "Creating visually stunning design systems, immersive UI/UX experiences, distinctive logos, and iconic brand identities that convert.",
+      tags: ["UI/UX", "BRANDING"],
+      href: "/services/design-and-branding",
+      img: "/media/images/gallery/design_sprint.png",
+      gradient: "from-pink-500 via-rose-500 to-amber-500"
+    },
+    {
+      num: "05/06",
+      title: "Consulting",
+      desc: "Strategic technology advisory, enterprise software audits, cloud migration roadmaps, and digital transformation consulting.",
+      description: "Strategic technology advisory, enterprise software audits, cloud migration roadmaps, and digital transformation consulting.",
+      tags: ["IT STRATEGY", "CLOUD ADVISORY"],
+      href: "/services/consulting",
+      img: "/media/images/quantum_banking.png",
+      gradient: "from-emerald-500 via-teal-500 to-cyan-500"
+    },
+    {
+      num: "06/06",
+      title: "Startup Solutions",
+      desc: "Accelerating startup lifecycles with rapid MVP engineering, scalable architecture foundations, tech advisory, and digital growth playbooks.",
+      description: "Accelerating startup lifecycles with rapid MVP engineering, scalable architecture foundations, tech advisory, and digital growth playbooks.",
+      tags: ["MVP", "STARTUP GROWTH"],
+      href: "/services/startup-solutions",
+      img: "/media/images/gallery/cinematic_review.png",
+      gradient: "from-amber-500 via-orange-500 to-yellow-500"
     }
   ],
   caseStudy: {
@@ -237,7 +227,6 @@ export const DEFAULT_CONTENT = {
         ]
       },
       { label: "Services", href: "/services", show: true },
-      { label: "Industry", href: "/industry", show: true },
       { label: "Career", href: "/career", show: true },
       { label: "Case Study", href: "/case-study", show: true },
       { label: "Portfolio", href: "/portfolio", show: true },

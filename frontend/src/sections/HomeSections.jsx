@@ -85,6 +85,30 @@ const cardVariants = {
 
 /* ───────────────────── SERVICE PREVIEWS DATA ───────────────────── */
 const servicePreviews = {
+  "01/06": {
+    img: "/media/images/gallery/digiverse_workspace.png",
+    gradient: "from-blue-500 via-indigo-500 to-cyan-500"
+  },
+  "02/06": {
+    img: "/media/images/gallery/launch_celebration.png",
+    gradient: "from-rose-500 via-pink-500 to-purple-500"
+  },
+  "03/06": {
+    img: "/media/images/gallery/ai_orchestrator.png",
+    gradient: "from-purple-500 via-violet-500 to-indigo-500"
+  },
+  "04/06": {
+    img: "/media/images/gallery/design_sprint.png",
+    gradient: "from-pink-500 via-rose-500 to-amber-500"
+  },
+  "05/06": {
+    img: "/media/images/quantum_banking.png",
+    gradient: "from-emerald-500 via-teal-500 to-cyan-500"
+  },
+  "06/06": {
+    img: "/media/images/gallery/cinematic_review.png",
+    gradient: "from-amber-500 via-orange-500 to-yellow-500"
+  },
   "01/07": {
     img: "/media/images/gallery/design_sprint.png",
     gradient: "from-blue-500 via-indigo-500 to-cyan-500"
@@ -174,6 +198,7 @@ export default function HomeSections({ overrideContent }) {
   const [activeTestimonial, setActiveTestimonial] = useState(1);
   const [isTestimonialPaused, setIsTestimonialPaused] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [openFaq, setOpenFaq] = useState(null);
 
   // Framer Motion values for 3D card tilt
   const xValue = useMotionValue(0);
@@ -379,46 +404,53 @@ export default function HomeSections({ overrideContent }) {
           </div>
         </div>
 
-        <div className="border-t border-white/5 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 relative">
           {visibleServices.map((service, idx) => {
             const preview = getServicePreview(service.num, idx);
             return (
               <a 
                 key={service.num || idx} 
                 href={service.href}
-                className="group py-10 border-b border-white/5 grid grid-cols-12 gap-6 items-center hover:bg-white/[0.01] transition-colors duration-300 px-4 -mx-4 rounded-xl cursor-pointer block relative overflow-hidden"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo(service.href);
+                }}
+                className="group p-8 border border-white/10 hover:border-[#a8ce38]/60 rounded-2xl bg-[#0e0e13]/50 hover:bg-[#a8ce38]/[0.02] transition-all duration-500 flex flex-col relative overflow-hidden cursor-pointer shadow-lg hover:shadow-[0_20px_50px_rgba(168,206,56,0.18)]"
                 onMouseEnter={() => setActiveImage(service.img || preview.img)}
                 onMouseLeave={() => setActiveImage(null)}
               >
-                {/* 1. Slide Number to Arrow Animation */}
-                <div className="col-span-2 font-mono text-xs text-neutral-500 font-light overflow-hidden h-5 relative">
-                  <div className="transition-transform duration-500 ease-in-out transform group-hover:-translate-y-full">
-                    {service.num}
-                  </div>
-                  <div className="transition-transform duration-500 ease-in-out transform absolute top-0 left-0 translate-y-full group-hover:translate-y-0 text-white font-bold">
-                    →
-                  </div>
-                </div>
+                {/* Floating Glow Effect */}
+                <div className={`absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-[#a8ce38]/25 via-emerald-500/15 to-transparent rounded-full filter blur-[50px] opacity-10 group-hover:opacity-70 transition-opacity duration-500 pointer-events-none`} />
 
-                <div className="col-span-10 md:col-span-4 font-display text-base sm:text-lg font-semibold text-white group-hover:text-neutral-200 transition-colors">
+                {/* Icon Placeholder */}
+                <div className="w-14 h-14 rounded-xl bg-white/[0.03] border border-white/10 group-hover:border-[#a8ce38]/60 group-hover:bg-[#a8ce38]/10 group-hover:text-[#a8ce38] flex items-center justify-center mb-8 text-neutral-300 group-hover:scale-110 transition-all duration-500 relative z-10">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                </div>
+                
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-white mb-4 group-hover:text-[#a8ce38] transition-colors duration-300 relative z-10">
                   {service.title}
-                </div>
-                <div className="col-span-12 md:col-span-4 font-light text-neutral-400 text-xs sm:text-sm leading-relaxed">
+                </h3>
+                
+                <p className="font-light text-neutral-400 text-sm sm:text-base leading-relaxed mb-10 flex-grow relative z-10">
                   {service.desc}
-                </div>
-                <div className="col-span-12 md:col-span-2 flex flex-wrap gap-2 md:justify-end z-10">
-                  {service.tags && service.tags.map((tag) => (
-                    <span key={tag} className="px-3 py-1 border border-white/10 rounded bg-white/[0.01] text-[9px] font-mono tracking-widest text-neutral-400 font-light">
-                      {tag}
-                    </span>
-                  ))}
+                </p>
+                
+                <div className="mt-auto flex items-center gap-2 group-hover:gap-4 transition-all duration-300 relative z-10">
+                  <span className="font-mono text-xs uppercase tracking-widest text-white border-b border-white/30 group-hover:text-[#a8ce38] group-hover:border-[#a8ce38] pb-1 transition-colors">
+                    Explore Capability
+                  </span>
+                  <svg className="w-4 h-4 text-white group-hover:text-[#a8ce38] opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-x-4 group-hover:translate-x-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
                 </div>
 
-                {/* 2. Neon Underline Animation */}
+                {/* Bottom Neon Line in Logo Green */}
                 <div 
-                  className={`absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r ${service.gradient || preview.gradient} transition-all duration-500 group-hover:w-full z-10`}
+                  className="absolute bottom-0 left-0 w-0 h-[2.5px] bg-gradient-to-r from-[#a8ce38] via-[#c4f042] to-emerald-400 transition-all duration-500 group-hover:w-full z-10"
                   style={{
-                    boxShadow: '0 0 10px rgba(255, 255, 255, 0.1)'
+                    boxShadow: '0 0 16px rgba(168, 206, 56, 0.7)'
                   }}
                 />
               </a>
@@ -740,6 +772,148 @@ export default function HomeSections({ overrideContent }) {
         );
       })()}
       </>}
+
+      {/* Industry Section */}
+      {sv.home_industry !== false && (() => {
+        const industryData = [
+          { title: "FinTech", desc: "Transforming financial services with secure, AI-driven solutions.", link: "Upgrade Financial Tech", img: "/media/images/gallery/digiverse_workspace.png" },
+          { title: "HealthTech", desc: "Building compliant, data-secure, and patient-focused solutions.", link: "Advance Healthcare Tech", img: "/media/images/gallery/design_sprint.png" },
+          { title: "HRTech", desc: "Empowering workforce management with AI-driven HR platforms.", link: "Reimagine HR Solutions", img: "/media/images/gallery/cinematic_review.png" },
+          { title: "Cleantech", desc: "Driving sustainability with intelligent, tech-enabled clean energy and resource solutions.", link: "Drive Clean Innovation", img: "/media/images/quantum_banking.png" },
+          { title: "EdTech", desc: "Scalable digital learning solutions for modern education.", link: "Empower Education", img: "/media/images/gallery/launch_celebration.png" },
+          { title: "InsurTech", desc: "Automating underwriting, claims, & risk management.", link: "Optimize Insurance", img: "/media/images/gallery/ai_orchestrator.png" },
+          { title: "Retail & eCommerce", desc: "Omnichannel experiences, automation, and AI-powered commerce.", link: "Elevate Retail", img: "/media/images/gallery/hardware_calibration.png" },
+          { title: "Travel & Hospitality", desc: "Personalized customer experiences with AI and digital automation.", link: "Transform Travel", img: "/media/images/gallery/digiverse_workspace.png" },
+        ];
+        
+        return (
+          <section id="industry-section" className="py-32 px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1600px] w-full mx-auto relative border-t border-white/5">
+            <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
+              <div className="space-y-4 max-w-2xl">
+                <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-tight">
+                  Software Engineering Expertise<br/>Across Key Industries
+                </h2>
+              </div>
+              <div>
+                <a href="#industries" className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg transition-colors shadow-lg shadow-blue-500/20">
+                  View All Industries
+                </a>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {industryData.map((ind, idx) => (
+                <div key={idx} className="group flex flex-col bg-[#0e0e13]/50 border border-white/10 hover:border-[#a8ce38]/60 hover:shadow-[0_15px_40px_rgba(168,206,56,0.15)] rounded-2xl overflow-hidden hover:bg-[#121612]/60 transition-all duration-300">
+                  <div className="h-48 overflow-hidden bg-neutral-800 relative">
+                    <img src={resolveImgUrl(ind.img)} alt={ind.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => { e.target.style.display = 'none'; }} />
+                  </div>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:text-[#a8ce38] transition-colors">{ind.title}</h3>
+                    <p className="font-light text-neutral-400 text-sm leading-relaxed mb-6 flex-grow">{ind.desc}</p>
+                    <a href="#" className="font-mono text-xs text-[#a8ce38] hover:text-[#c2e848] underline underline-offset-4 decoration-[#a8ce38]/40 hover:decoration-[#a8ce38] transition-colors">
+                      {ind.link}
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* FAQ Section */}
+      {sv.home_faq !== false && (() => {
+        const faqs = [
+          { q: "What software engineering services does HariKrushn offer?", a: "We provide end-to-end software development, including custom enterprise solutions, cloud architectures, AI integration, and UI/UX design." },
+          { q: "How does HariKrushn integrate AI into enterprise software systems?", a: "Our team utilizes advanced machine learning models and AI orchestration frameworks to securely embed intelligent capabilities directly into your workflows." },
+          { q: "How does HariKrushn ensure software quality, security, and compliance?", a: "We adhere to rigorous testing protocols, CI/CD pipelines, and industry-standard security compliance to ensure enterprise-grade reliability." },
+          { q: "Does HariKrushn support legacy system modernization and digital transformation?", a: "Yes, we specialize in rewriting and migrating legacy monoliths to modern, scalable, cloud-native microservices architectures." }
+        ];
+        
+        return (
+          <section id="faq-section" className="py-32 px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1600px] w-full mx-auto relative border-t border-white/5">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+              <div className="lg:col-span-1">
+                <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-tight">
+                  Frequently Asked<br/>Questions
+                </h2>
+              </div>
+              <div className="lg:col-span-2 space-y-4">
+                {faqs.map((faq, idx) => {
+                  const isOpen = openFaq === idx;
+                  return (
+                    <div key={idx} className="border border-white/10 rounded-xl bg-[#0e0e13]/50 overflow-hidden transition-colors duration-300">
+                      <button 
+                        onClick={() => setOpenFaq(isOpen ? null : idx)}
+                        className="w-full text-left px-6 py-6 flex items-center gap-4 hover:bg-white/[0.02] transition-colors"
+                      >
+                        <div className={`flex-shrink-0 w-6 h-6 rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 ${isOpen ? 'rotate-45 border-white text-white bg-white/10' : 'text-neutral-400'}`}>
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
+                        </div>
+                        <span className="font-display text-lg font-medium text-white">{faq.q}</span>
+                      </button>
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <div className="px-6 pb-6 pl-16 font-light text-neutral-400 text-sm leading-relaxed">
+                              {faq.a}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* Blog Section */}
+      {sv.home_blog !== false && (() => {
+        const blogs = [
+          { title: "Replacing Legacy Systems with AI: What, When & How to Start", link: "Read More", img: "/media/images/gallery/design_sprint.png" },
+          { title: "Operationalizing Intelligence Engineering: What Tech Buyers Must Demand Beyond the Proposal Deck", link: "Read More", img: "/media/images/gallery/cinematic_review.png" },
+          { title: "Why Tech Leaders Must Invest in Intelligence Engineering, Not Just More Software", link: "Read More", img: "/media/images/gallery/ai_orchestrator.png" }
+        ];
+
+        return (
+          <section id="blog-section" className="py-32 px-4 sm:px-6 md:px-8 lg:px-12 max-w-[1600px] w-full mx-auto relative border-t border-white/5">
+            <div className="text-center mb-16">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-tight">
+                Latest Insights & Industry Trends
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {blogs.map((blog, idx) => (
+                <div key={idx} className="group flex flex-col bg-[#0e0e13]/50 border border-white/10 rounded-2xl overflow-hidden hover:bg-[#15151a] transition-all duration-300 shadow-lg">
+                  <div className="h-56 overflow-hidden bg-neutral-800 relative">
+                    <img src={resolveImgUrl(blog.img)} alt={blog.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => { e.target.style.display = 'none'; }} />
+                    <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md p-1.5 rounded-md border border-white/10 flex items-center justify-center">
+                      <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
+                    </div>
+                  </div>
+                  <div className="p-8 flex flex-col flex-grow">
+                    <h3 className="font-display text-lg font-bold text-white mb-6 group-hover:text-blue-400 transition-colors leading-snug flex-grow">
+                      {blog.title}
+                    </h3>
+                    <a href="#" className="font-mono text-xs text-blue-400 hover:text-blue-300 underline underline-offset-4 decoration-blue-500/30 hover:decoration-blue-400 transition-colors mt-auto inline-block">
+                      {blog.link}
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Bottom CTA */}
       {sv.home_cta !== false && (() => {
