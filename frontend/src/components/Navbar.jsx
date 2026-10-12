@@ -27,7 +27,7 @@ function MegaMenuDropdown({ megaMenu, styles, isDropdownOpen }) {
   return (
     <div 
       className={cn(
-        "absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[840px] max-w-[92vw] transition-all duration-300 ease-out z-50",
+        "absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[820px] max-w-[calc(100vw-36px)] transition-all duration-300 ease-out z-50",
         isDropdownOpen 
           ? "opacity-100 translate-y-0 pointer-events-auto" 
           : "opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto"
@@ -298,23 +298,29 @@ export default function Navbar() {
       >
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a href="#" onClick={handleLogoClick} aria-label="Homepage and Admin Portal Trigger" className="flex items-center gap-3 group relative cursor-pointer z-50">
+          <a href="#" onClick={handleLogoClick} aria-label="Homepage and Admin Portal Trigger" className="flex items-center gap-3 group relative cursor-pointer z-50 shrink-0">
             <img 
               src="/media/images/hk-logo.png" 
               alt="HK Logo" 
-              className="w-9 h-9 object-contain transition-transform duration-500 group-hover:scale-110"
+              className="w-9 h-9 object-contain transition-transform duration-500 group-hover:scale-110 shrink-0"
             />
-            <div className="flex flex-col md:flex-row md:items-baseline md:gap-1.5 leading-none">
+            <div className="flex flex-col md:flex-row md:items-baseline md:gap-1.5 leading-none shrink-0">
               <span 
-                className="font-display tracking-[0.15em] text-xs sm:text-sm font-semibold text-white" 
-                style={{ fontSize: styles.logoSize || '14px', color: styles.logoColor || '#ffffff' }}
+                className="font-display tracking-[0.15em] text-xs sm:text-sm font-semibold text-white whitespace-nowrap" 
+                style={{ 
+                  fontSize: styles.logoSize ? `clamp(12px, 0.95vw, ${styles.logoSize})` : 'clamp(12px, 0.95vw, 14px)', 
+                  color: styles.logoColor || '#ffffff' 
+                }}
               >
                 {logoTextFirst}
               </span>
               {logoTextRest && (
                 <span 
-                  className="font-display font-light opacity-80 tracking-[0.15em] text-[8px] sm:text-[9px] md:text-xs text-white uppercase md:normal-case mt-0.5 md:mt-0" 
-                  style={{ fontSize: `calc(${styles.logoSize || '14px'} - 2px)`, color: styles.logoColor || '#ffffff' }}
+                  className="font-display font-light opacity-80 tracking-[0.15em] text-[8px] sm:text-[9px] md:text-xs text-white uppercase md:normal-case mt-0.5 md:mt-0 whitespace-nowrap" 
+                  style={{ 
+                    fontSize: styles.logoSize ? `clamp(10px, 0.8vw, calc(${styles.logoSize} - 2px))` : 'clamp(10px, 0.8vw, 12px)', 
+                    color: styles.logoColor || '#ffffff' 
+                  }}
                 >
                   {logoTextRest}
                 </span>
@@ -322,8 +328,8 @@ export default function Navbar() {
             </div>
           </a>
 
-          {/* Desktop & Tablet Navigation */}
-          <div ref={desktopNavRef} className="hidden md:flex items-center md:gap-3 lg:gap-6 xl:gap-8">
+          {/* Desktop & Laptop Fluid Dynamic Navigation */}
+          <div ref={desktopNavRef} className="hidden xl:flex items-center gap-3 xl:gap-5 2xl:gap-8 shrink-0">
             {activeNavigationItems.map((item, index) => {
               const itemKey = item.label || item.name;
               const isDropdownOpen = openDesktopDropdown === itemKey;
@@ -344,9 +350,9 @@ export default function Navbar() {
                         e.stopPropagation();
                         setOpenDesktopDropdown(prev => prev === itemKey ? null : itemKey);
                       }}
-                      className="flex items-center gap-1.5 uppercase tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer select-none"
+                      className="flex items-center gap-1.5 uppercase tracking-[0.12em] 2xl:tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer select-none whitespace-nowrap"
                       style={{
-                        fontSize: styles.fontSize || '12px',
+                        fontSize: styles.fontSize ? `clamp(10.5px, 0.82vw, ${styles.fontSize})` : 'clamp(10.5px, 0.82vw, 12px)',
                         color: (hoveredIndex === index || isDropdownOpen) ? (styles.hoverColor || '#ffffff') : (styles.color || '#a3a3a3')
                       }}
                     >
@@ -384,9 +390,9 @@ export default function Navbar() {
                         e.stopPropagation();
                         setOpenDesktopDropdown(prev => prev === itemKey ? null : itemKey);
                       }}
-                      className="flex items-center gap-1.5 uppercase tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer select-none"
+                      className="flex items-center gap-1.5 uppercase tracking-[0.12em] 2xl:tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer select-none whitespace-nowrap"
                       style={{
-                        fontSize: styles.fontSize || '12px',
+                        fontSize: styles.fontSize ? `clamp(10.5px, 0.82vw, ${styles.fontSize})` : 'clamp(10.5px, 0.82vw, 12px)',
                         color: (hoveredIndex === index || isDropdownOpen) ? (styles.hoverColor || '#ffffff') : (styles.color || '#a3a3a3')
                       }}
                     >
@@ -403,16 +409,15 @@ export default function Navbar() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    {/* Glassmorphic Dropdown Wrapper (Supports Touch/Click on Tablet & Hover on Desktop) */}
+                    {/* Glassmorphic Dropdown Wrapper */}
                     <div 
                       className={cn(
-                        "absolute top-full left-1/2 -translate-x-1/2 pt-2 w-64 transition-all duration-300 ease-out z-50",
+                        "absolute top-full left-1/2 -translate-x-1/2 pt-2 w-64 max-w-[calc(100vw-36px)] transition-all duration-300 ease-out z-50",
                         isDropdownOpen 
                           ? "opacity-100 translate-y-0 pointer-events-auto" 
                           : "opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto"
                       )}
                     >
-                      {/* Actual Styled Dropdown Box */}
                       <div className="bg-[#050505]/95 backdrop-blur-md border border-white/10 p-3 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col gap-1">
                         {item.dropdown.map((subItem) => {
                           const isSubFranchise = (subItem.label || subItem.name)?.toLowerCase().includes('franchise') || subItem.href?.toLowerCase().includes('franchise');
@@ -449,9 +454,9 @@ export default function Navbar() {
                   target={isFranchise ? "_blank" : undefined}
                   rel={isFranchise ? "noopener noreferrer" : undefined}
                   onClick={(e) => handleLinkClick(isFranchise ? '/franchise' : item.href, e, isFranchise)}
-                  className="relative uppercase tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer group"
+                  className="relative uppercase tracking-[0.12em] 2xl:tracking-[0.15em] font-light transition-colors duration-300 cursor-pointer group whitespace-nowrap py-1"
                   style={{
-                    fontSize: styles.fontSize || '12px',
+                    fontSize: styles.fontSize ? `clamp(10.5px, 0.82vw, ${styles.fontSize})` : 'clamp(10.5px, 0.82vw, 12px)',
                     color: hoveredIndex === index ? (styles.hoverColor || '#ffffff') : (styles.color || '#a3a3a3')
                   }}
                   onMouseEnter={() => setHoveredIndex(index)}
@@ -464,10 +469,10 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile & Tablet Hamburger Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-[5px] relative z-50 cursor-pointer focus:outline-none"
+            className="xl:hidden flex flex-col justify-center items-center w-8 h-8 gap-[5px] relative z-50 cursor-pointer focus:outline-none"
             aria-label="Toggle Menu"
           >
             <span
@@ -501,7 +506,7 @@ export default function Navbar() {
             : "opacity-0 -translate-y-full pointer-events-none"
         )}
       >
-        <div className="flex flex-col gap-6 w-full max-w-sm px-6 text-center">
+        <div className="flex flex-col gap-6 w-full max-w-md xl:max-w-lg px-6 text-center">
           {activeNavigationItems.map((item, index) => {
             if (item.megaMenu) {
               const isDropdownOpen = !!mobileDropdowns[item.label || item.name];
