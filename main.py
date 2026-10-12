@@ -3356,7 +3356,8 @@ if __name__ == "__main__":
             python_exe, "-m", "uvicorn", "main:app",
             "--host", "0.0.0.0",
             "--port", backend_port,
-            "--reload"
+            "--reload",
+            "--reload-dir", backend_dir
         ]
         frontend_cmd = [npm_cmd, "run", "dev", "--", "--port", frontend_port]
 
@@ -3403,11 +3404,12 @@ if __name__ == "__main__":
                 pass
 
     # Register signals for graceful termination (non-Windows)
-    try:
-        signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
-        signal.signal(signal.SIGTERM, lambda sig, frame: sys.exit(0))
-    except Exception:
-        pass
+    if os.name != 'nt':
+        try:
+            signal.signal(signal.SIGINT, lambda sig, frame: sys.exit(0))
+            signal.signal(signal.SIGTERM, lambda sig, frame: sys.exit(0))
+        except Exception:
+            pass
 
     try:
         print("[System] Starting Backend (FastAPI)...")

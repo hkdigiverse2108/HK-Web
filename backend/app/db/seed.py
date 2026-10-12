@@ -29,11 +29,116 @@ DEFAULT_SITE_SETTINGS = {
                 { "label": "Our Gallery", "href": "#our-gallery", "show": True }
             ]
         },
-        { "label": "Services", "href": "#services", "show": True },
-        { "label": "Industry", "href": "#industry", "show": True },
-        { "label": "Career", "href": "#career", "show": True },
+        {
+            "label": "Services",
+            "href": "/services",
+            "show": True,
+            "megaMenu": [
+                {
+                    "category": "Software Development",
+                    "items": [
+                        { "label": "Web Development", "href": "/services/web-development" },
+                        { "label": "Web Application Dev", "href": "/services/web-application-development" },
+                        { "label": "Mobile App Dev", "href": "/services/mobile-app-development" },
+                        { "label": "Custom Software Dev", "href": "/services/custom-software-development" },
+                        { "label": "SaaS Development", "href": "/services/saas-development" },
+                        { "label": "ERP Development", "href": "/services/erp-development" },
+                        { "label": "CRM Development", "href": "/services/crm-development" },
+                        { "label": "API Development", "href": "/services/api-development" },
+                        { "label": "Ecommerce Dev", "href": "/services/ecommerce-web-development" }
+                    ]
+                },
+                {
+                    "category": "Digital Marketing",
+                    "items": [
+                        { "label": "SEO", "href": "/services/seo" },
+                        { "label": "Local SEO", "href": "/services/local-seo" },
+                        { "label": "Technical SEO", "href": "/services/technical-seo" },
+                        { "label": "AI SEO", "href": "/services/ai-seo" },
+                        { "label": "Generative Engine Opt (GEO)", "href": "/services/generative-engine-optimization" },
+                        { "label": "Google Ads / PPC", "href": "/services/google-ads-ppc" },
+                        { "label": "Meta Ads", "href": "/services/meta-ads" },
+                        { "label": "Social Media Marketing", "href": "/services/social-media-marketing" },
+                        { "label": "Content Marketing", "href": "/services/content-marketing" },
+                        { "label": "Lead Generation", "href": "/services/lead-generation" },
+                        { "label": "Marketing Automation", "href": "/services/marketing-automation" }
+                    ]
+                },
+                {
+                    "category": "AI & Automation",
+                    "items": [
+                        { "label": "AI Consulting", "href": "/services/ai-consulting" },
+                        { "label": "AI Strategy", "href": "/services/ai-strategy" },
+                        { "label": "Generative AI Solutions", "href": "/services/generative-ai-solutions" },
+                        { "label": "AI Integration", "href": "/services/ai-integration" },
+                        { "label": "AI Agent Development", "href": "/services/ai-agent-development" },
+                        { "label": "LLM Development", "href": "/services/llm-development" },
+                        { "label": "AI Chatbot Development", "href": "/services/ai-chatbot-development" },
+                        { "label": "Business Automation", "href": "/services/business-automation" }
+                    ]
+                },
+                {
+                    "category": "Design & Branding",
+                    "items": [
+                        { "label": "Branding", "href": "/services/branding" },
+                        { "label": "Logo Design", "href": "/services/logo-design" },
+                        { "label": "Graphic Design", "href": "/services/graphic-design" },
+                        { "label": "UI/UX Design", "href": "/services/ui-ux-design" },
+                        { "label": "Product Design", "href": "/services/product-design" },
+                        { "label": "Website Design", "href": "/services/website-design" }
+                    ]
+                },
+                {
+                    "category": "Consulting",
+                    "items": [
+                        { "label": "IT Consulting", "href": "/services/it-consulting" },
+                        { "label": "Software Consulting", "href": "/services/software-consulting" },
+                        { "label": "Technology Consulting", "href": "/services/technology-consulting" },
+                        { "label": "Digital Transformation Consulting", "href": "/services/digital-transformation-consulting" }
+                    ]
+                },
+                {
+                    "category": "Startup Solutions",
+                    "items": [
+                        { "label": "Startup Consulting", "href": "/services/startup-consulting" },
+                        { "label": "MVP Development", "href": "/services/mvp-development" },
+                        { "label": "Startup Branding", "href": "/services/startup-branding" },
+                        { "label": "Product Strategy", "href": "/services/product-strategy" },
+                        { "label": "Startup Technology Solutions", "href": "/services/startup-technology-solutions" },
+                        { "label": "Startup Digital Growth", "href": "/services/startup-digital-growth" }
+                    ]
+                }
+            ]
+        },
+        { "label": "Career", "href": "/career", "show": True },
         { "label": "Case Study", "href": "#case-study", "show": True },
-        { "label": "Portfolio", "href": "#portfolio", "show": True },
+        {
+            "label": "Our Work",
+            "href": "#our-work",
+            "show": True,
+            "megaMenu": [
+                {
+                    "category": "Portfolio",
+                    "items": [
+                        { "label": "Software Development", "href": "/portfolio/software-development" },
+                        { "label": "Digital Marketing", "href": "/portfolio/digital-marketing" },
+                        { "label": "AI & Automation", "href": "/portfolio/ai-automation" },
+                        { "label": "Design & Branding", "href": "/portfolio/design-and-branding" },
+                        { "label": "Consulting", "href": "/portfolio/consulting" },
+                        { "label": "Startup Solutions", "href": "/portfolio/startup-solutions" }
+                    ],
+                    "href": "/portfolio"
+                },
+                {
+                    "category": "Success Stories",
+                    "items": [
+                        { "label": "Case Studies", "href": "/case-study" },
+                        { "label": "Our Clients", "href": "/our-clients" }
+                    ],
+                    "href": "/case-study"
+                }
+            ]
+        },
         { "label": "Ventures", "href": "#ventures", "show": True },
         { "label": "Contact", "href": "#contact", "show": True },
         { "label": "Franchise", "href": "/franchise", "show": True }
@@ -2095,6 +2200,10 @@ def seed_database():
         pass
 
     print("\nDatabase initialization and seeding completed successfully!")
+    try:
+        client.close()
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":

@@ -152,7 +152,33 @@ if db is not None:
                 ]
             },
             { "label": "Case Study", "href": "#case-study", "show": True },
-            { "label": "Portfolio", "href": "#portfolio", "show": True },
+            {
+                "label": "Our Work",
+                "href": "#our-work",
+                "show": True,
+                "megaMenu": [
+                    {
+                        "category": "Portfolio",
+                        "items": [
+                            { "label": "Software Development", "href": "/portfolio/software-development" },
+                            { "label": "Digital Marketing", "href": "/portfolio/digital-marketing" },
+                            { "label": "AI & Automation", "href": "/portfolio/ai-automation" },
+                            { "label": "Design & Branding", "href": "/portfolio/design-and-branding" },
+                            { "label": "Consulting", "href": "/portfolio/consulting" },
+                            { "label": "Startup Solutions", "href": "/portfolio/startup-solutions" }
+                        ],
+                        "href": "/portfolio"
+                    },
+                    {
+                        "category": "Success Stories",
+                        "items": [
+                            { "label": "Case Studies", "href": "/case-study" },
+                            { "label": "Our Clients", "href": "/our-clients" }
+                        ],
+                        "href": "/case-study"
+                    }
+                ]
+            },
             { "label": "Ventures", "href": "#ventures", "show": True },
             { "label": "Contact", "href": "#contact", "show": True },
             { "label": "Franchise", "href": "/franchise", "show": True }

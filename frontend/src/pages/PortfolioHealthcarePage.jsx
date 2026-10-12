@@ -39,6 +39,21 @@ export default function PortfolioHealthcarePage() {
         "React",
         "Tailwind"
       ]
+    },
+    {
+      "title": "HIPAA Care-Management Data Security Enclave",
+      "client": "Leading Healthcare Organization",
+      "impact": "Zero PHI Exposure / 100% HIPAA Ready",
+      "desc": "Architected role-based access control, military-grade AES-256 encryption, tamper-evident audit trails, and secure EHR/FHIR interoperability conduits.",
+      "link": "/case-studies/hipaa-compliant-healthcare-platform-security",
+      "tech": [
+        "HIPAA AWS VPC",
+        "AES-256 GCM",
+        "HL7 / FHIR R4",
+        "RBAC Engine",
+        "FastAPI",
+        "React"
+      ]
     }
   ],
   "techStack": [
@@ -125,10 +140,10 @@ export default function PortfolioHealthcarePage() {
               Initiate Project Discussion →
             </button>
             <button
-              onClick={() => navigateTo('/case-study')}
+              onClick={() => navigateTo('/case-studies/hipaa-compliant-healthcare-platform-security')}
               className="px-8 py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#a8ce38]/50 text-white font-medium text-sm transition-all hover:text-[#a8ce38] cursor-pointer"
             >
-              View Client Case Studies
+              Explore HIPAA Security Case Study →
             </button>
           </div>
         </div>
@@ -166,7 +181,8 @@ export default function PortfolioHealthcarePage() {
             <motion.div
               key={idx}
               whileHover={{ y: -8, scale: 1.018, borderColor: "rgba(168, 206, 56, 0.55)", boxShadow: "0 25px 50px -12px rgba(168, 206, 56, 0.22)" }}
-              className="p-8 rounded-3xl bg-[#0a0a0f] border border-white/5 hover:border-[#a8ce38]/60 hover:bg-[#121612]/30 transition-all flex flex-col justify-between group cursor-default relative overflow-hidden"
+              onClick={() => proj.link && navigateTo(proj.link)}
+              className={`p-8 rounded-3xl bg-[#0a0a0f] border border-white/5 hover:border-[#a8ce38]/60 hover:bg-[#121612]/30 transition-all flex flex-col justify-between group relative overflow-hidden ${proj.link ? 'cursor-pointer' : 'cursor-default'}`}
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#a8ce38]/10 rounded-full blur-2xl group-hover:bg-[#a8ce38]/20 transition-all pointer-events-none" />
               
@@ -187,6 +203,13 @@ export default function PortfolioHealthcarePage() {
                 <p className="text-neutral-400 text-sm font-light leading-relaxed mb-6">
                   {proj.desc}
                 </p>
+
+                {proj.link && (
+                  <div className="inline-flex items-center gap-1.5 text-xs font-mono text-[#a8ce38] group-hover:translate-x-1 transition-transform">
+                    <span>Read Full Case Study</span>
+                    <span>&rarr;</span>
+                  </div>
+                )}
               </div>
 
               <div className="relative z-10 pt-4 border-t border-white/5">

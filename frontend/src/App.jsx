@@ -99,6 +99,14 @@ import ProductStrategyPage from './pages/ProductStrategyPage';
 import StartupTechnologySolutionsPage from './pages/StartupTechnologySolutionsPage';
 import StartupDigitalGrowthPage from './pages/StartupDigitalGrowthPage';
 
+// Portfolio 6 Core Services Subpages
+import PortfolioSoftwareDevelopmentPage from './pages/PortfolioSoftwareDevelopmentPage';
+import PortfolioDigitalMarketingPage from './pages/PortfolioDigitalMarketingPage';
+import PortfolioAiAutomationPage from './pages/PortfolioAiAutomationPage';
+import PortfolioDesignBrandingPage from './pages/PortfolioDesignBrandingPage';
+import PortfolioConsultingPage from './pages/PortfolioConsultingPage';
+import PortfolioStartupSolutionsPage from './pages/PortfolioStartupSolutionsPage';
+
 // Portfolio & Success Stories Subpages
 import PortfolioDigitalTransformationPage from './pages/PortfolioDigitalTransformationPage';
 import PortfolioAiWorkPage from './pages/PortfolioAiWorkPage';
@@ -118,6 +126,7 @@ import PortfolioUxUiWorkPage from './pages/PortfolioUxUiWorkPage';
 import PortfolioHealthcarePage from './pages/PortfolioHealthcarePage';
 import PortfolioMediaEntertainmentPage from './pages/PortfolioMediaEntertainmentPage';
 import OurClientsPage from './pages/OurClients';
+import { findCaseStudy } from './data/caseStudiesData';
 
 import HomeSections from './sections/HomeSections';
 
@@ -207,6 +216,11 @@ function PreviewContainer({ currentHash }) {
   const subpage = rawSubpage.startsWith('/') ? rawSubpage : '/' + rawSubpage;
 
   const renderPreviewPage = () => {
+    if (subpage.startsWith('/case-study/') || subpage.startsWith('/case-studies/')) {
+      const slug = subpage.replace(/^\/(?:case-study|case-studies)\//, '').split('?')[0];
+      return <CaseStudy dynamicSlug={slug} />;
+    }
+
     switch (subpage) {
       case '':
       case '/':
@@ -238,8 +252,27 @@ function PreviewContainer({ currentHash }) {
       case '/career':
         return <Career />;
       case '/case-study':
+      case '/case-studies':
         return <CaseStudy />;
-            case '/portfolio/digital-transformation':
+      case '/portfolio/software-development':
+      case '#portfolio/software-development':
+        return <PortfolioSoftwareDevelopmentPage />;
+      case '/portfolio/digital-marketing':
+      case '#portfolio/digital-marketing':
+        return <PortfolioDigitalMarketingPage />;
+      case '/portfolio/ai-automation':
+      case '#portfolio/ai-automation':
+        return <PortfolioAiAutomationPage />;
+      case '/portfolio/design-and-branding':
+      case '#portfolio/design-and-branding':
+        return <PortfolioDesignBrandingPage />;
+      case '/portfolio/consulting':
+      case '#portfolio/consulting':
+        return <PortfolioConsultingPage />;
+      case '/portfolio/startup-solutions':
+      case '#portfolio/startup-solutions':
+        return <PortfolioStartupSolutionsPage />;
+      case '/portfolio/digital-transformation':
       case '#portfolio/digital-transformation':
         return <PortfolioDigitalTransformationPage />;
       case '/portfolio/ai-work':
@@ -414,6 +447,9 @@ const PAGE_TITLES = {
   '/industry': 'Industries We Serve | HariKrushn DigiVerse LLP',
   '/career': 'Careers | HariKrushn DigiVerse LLP',
   '/case-study': 'Case Studies | HariKrushn DigiVerse LLP',
+  '/case-studies/hipaa-compliant-healthcare-platform-security': 'HIPAA-Aligned Healthcare Data Security Case Study | HariKrushn DigiVerse LLP',
+  '/case-study/hipaa-compliant-healthcare-platform-security': 'HIPAA-Aligned Healthcare Data Security Case Study | HariKrushn DigiVerse LLP',
+  '/case-study/hipaa-healthcare': 'HIPAA-Aligned Healthcare Data Security Case Study | HariKrushn DigiVerse LLP',
   '/portfolio': 'Portfolio & Featured Projects | HariKrushn DigiVerse LLP',
   '/ventures': 'Ventures | HariKrushn DigiVerse LLP',
   '/contact': 'Contact Us | HariKrushn DigiVerse LLP',
@@ -488,6 +524,13 @@ const PAGE_TITLES = {
   '/services/product-strategy': 'Startup Product Strategy & Roadmap Planning | HK DigiVerse LLP',
   '/services/startup-technology-solutions': 'Cost-Effective Startup Cloud Tech Architecture | HK DigiVerse LLP',
   '/services/startup-digital-growth': 'Startup Growth Hacking & Customer Acquisition | HK DigiVerse LLP',
+  // Portfolio 6 Core Services Subpages
+  '/portfolio/software-development': 'Software Development Portfolio & Shipped Platforms | HK DigiVerse LLP',
+  '/portfolio/digital-marketing': 'Digital Marketing Portfolio, Campaigns & ROAS Case Studies | HK DigiVerse LLP',
+  '/portfolio/ai-automation': 'AI & Automation Engineering Portfolio & Agent Deployments | HK DigiVerse LLP',
+  '/portfolio/design-and-branding': 'Design & Branding Portfolio, UI/UX & Systems | HK DigiVerse LLP',
+  '/portfolio/consulting': 'Technology Consulting Portfolio, Audits & Cloud Modernization | HK DigiVerse LLP',
+  '/portfolio/startup-solutions': 'Startup Solutions Portfolio, MVPs & Founder Acceleration | HK DigiVerse LLP',
   // Portfolio Subpages & Success Stories
   '/portfolio/digital-transformation': 'Digital Transformation Case Studies | HK DigiVerse LLP',
   '/portfolio/ai-work': 'AI & Machine Learning Engineering Portfolio | HK DigiVerse LLP',
@@ -522,6 +565,9 @@ const PAGE_DESCRIPTIONS = {
   '/industry': 'Tailored digital solutions engineered for Fintech, Healthcare, E-Commerce, Logistics, Automotive, Media, and Industrial manufacturing.',
   '/career': 'Join HariKrushn DigiVerse LLP. Explore open software engineering, AI research, cloud architecture, and UI/UX design positions.',
   '/case-study': 'In-depth case studies showcasing how we solved mission-critical engineering challenges, accelerated pipelines, and generated exponential ROI.',
+  '/case-studies/hipaa-compliant-healthcare-platform-security': 'Technical deep-dive on how HK DigiVerse engineered a HIPAA-aligned healthcare platform with role-based access, AES-256 encryption, tamper-evident audit trails, and secure EHR/FHIR integrations.',
+  '/case-study/hipaa-compliant-healthcare-platform-security': 'Technical deep-dive on how HK DigiVerse engineered a HIPAA-aligned healthcare platform with role-based access, AES-256 encryption, tamper-evident audit trails, and secure EHR/FHIR integrations.',
+  '/case-study/hipaa-healthcare': 'Technical deep-dive on how HK DigiVerse engineered a HIPAA-aligned healthcare platform with role-based access, AES-256 encryption, tamper-evident audit trails, and secure EHR/FHIR integrations.',
   '/portfolio': 'Explore our featured portfolio of enterprise software platforms, mobile applications, autonomous AI agents, and custom SaaS products.',
   '/our-clients': 'Explore our verified global client roster of forward-thinking enterprises, funded startups, and industry leaders across 18 countries.',
   '/ventures': 'Incubating, co-founding, and scaling proprietary disruptive tech startups and venture studios backed by HariKrushn DigiVerse.',
@@ -582,6 +628,13 @@ const PAGE_DESCRIPTIONS = {
   '/services/product-strategy': 'Data-backed product roadmapping, user persona identification, competitive moat analysis, and sprint prioritization.',
   '/services/startup-technology-solutions': 'Cost-effective, serverless cloud architectures engineered for rapid scaling without premature infrastructure burn.',
   '/services/startup-digital-growth': 'Growth hacking, organic acquisition funnels, and performance marketing engineered for startup velocity.',
+  // Portfolio 6 Core Services Subpages
+  '/portfolio/software-development': 'Production case work archive: high-concurrency custom software, multi-tenant enterprise ERPs, and cloud microservices shipped by HK DigiVerse.',
+  '/portfolio/digital-marketing': 'Empirical performance marketing case work: technical SEO authority clusters, algorithmic PPC ad funnels, and ROAS benchmarks.',
+  '/portfolio/ai-automation': 'Autonomous AI case work: multi-agent task orchestration, private VPC enterprise RAG, and robotic process automation deployments.',
+  '/portfolio/design-and-branding': 'Visual design portfolio: editorial brand identities, tokenized design systems, and conversion-engineered luxury UI/UX interfaces.',
+  '/portfolio/consulting': 'Senior advisory case work: enterprise architecture audits, cloud cost optimization, and zero-downtime monolithic refactoring.',
+  '/portfolio/startup-solutions': 'Venture acceleration case work: rapid MVP engineering delivered in 4 to 6 weeks and scalable seed-stage tech foundations.',
   // Portfolio Subpages
   '/portfolio/digital-transformation': 'Case study archive of enterprise cloud migrations, monolithic refactorings, and digital transformation initiatives.',
   '/portfolio/ai-work': 'Featured engineering portfolio of autonomous AI agents, LLM pipelines, computer vision models, and predictive analytics.',
@@ -607,8 +660,22 @@ function updatePageSEO(route) {
   if (typeof document === 'undefined' || !route || route.startsWith('#preview')) return;
 
   const cleanRoute = route.split('?')[0].replace('#', '/').replace('//', '/');
-  const title = PAGE_TITLES[route] || PAGE_TITLES[cleanRoute] || 'HK DigiVerse LLP – 360° Tech & Digital Partner for Startups';
-  const description = PAGE_DESCRIPTIONS[route] || PAGE_DESCRIPTIONS[cleanRoute] || 'HariKrushn DigiVerse LLP builds custom software, AI systems, mobile applications, and digital growth platforms for ambitious global enterprises.';
+  
+  // Dynamic SEO lookup for case studies
+  let title = PAGE_TITLES[route] || PAGE_TITLES[cleanRoute];
+  let description = PAGE_DESCRIPTIONS[route] || PAGE_DESCRIPTIONS[cleanRoute];
+
+  if ((!title || !description) && (cleanRoute.startsWith('/case-study/') || cleanRoute.startsWith('/case-studies/'))) {
+    const slug = cleanRoute.replace(/^\/(?:case-study|case-studies)\//, '').split('?')[0];
+    const caseData = findCaseStudy(null, slug);
+    if (caseData) {
+      title = `${caseData.title} | HariKrushn DigiVerse LLP`;
+      description = caseData.lede || description;
+    }
+  }
+
+  title = title || 'HK DigiVerse LLP – 360° Tech & Digital Partner for Startups';
+  description = description || 'HariKrushn DigiVerse LLP builds custom software, AI systems, mobile applications, and digital growth platforms for ambitious global enterprises.';
   const canonicalUrl = `https://harikrushndigiverse.com${cleanRoute === '/' ? '' : cleanRoute}`;
 
   // Title
@@ -777,6 +844,18 @@ function App() {
     if (baseRoute.startsWith('#preview')) {
       return <PreviewContainer currentHash={baseRoute} />;
     }
+
+    // Dynamic Case Study Deep-Dive Routes (/case-study/:slug or /case-studies/:slug)
+    if (
+      baseRoute.startsWith('/case-study/') ||
+      baseRoute.startsWith('/case-studies/') ||
+      baseRoute.startsWith('#case-study/') ||
+      baseRoute.startsWith('#case-studies/')
+    ) {
+      const slug = baseRoute.replace(/^#?\/(?:case-study|case-studies)\//, '').split('?')[0];
+      return <CaseStudy dynamicSlug={slug} />;
+    }
+
     switch (baseRoute) {
       case '/admin':
       case '#admin':
@@ -821,6 +900,8 @@ function App() {
         return <Career />;
       case '/case-study':
       case '#case-study':
+      case '/case-studies':
+      case '#case-studies':
         return <CaseStudy />;
       case '/portfolio':
       case '#portfolio':
@@ -1021,6 +1102,31 @@ function App() {
       case '/services/startup-digital-growth':
       case '#service-startup-digital-growth':
         return <StartupDigitalGrowthPage />;
+      // Portfolio 6 Core Services Subpages
+      case '/portfolio/software-development':
+      case '#portfolio/software-development':
+      case '#portfolio-software-development':
+        return <PortfolioSoftwareDevelopmentPage />;
+      case '/portfolio/digital-marketing':
+      case '#portfolio/digital-marketing':
+      case '#portfolio-digital-marketing':
+        return <PortfolioDigitalMarketingPage />;
+      case '/portfolio/ai-automation':
+      case '#portfolio/ai-automation':
+      case '#portfolio-ai-automation':
+        return <PortfolioAiAutomationPage />;
+      case '/portfolio/design-and-branding':
+      case '#portfolio/design-and-branding':
+      case '#portfolio-design-and-branding':
+        return <PortfolioDesignBrandingPage />;
+      case '/portfolio/consulting':
+      case '#portfolio/consulting':
+      case '#portfolio-consulting':
+        return <PortfolioConsultingPage />;
+      case '/portfolio/startup-solutions':
+      case '#portfolio/startup-solutions':
+      case '#portfolio-startup-solutions':
+        return <PortfolioStartupSolutionsPage />;
       // Portfolio Subpages & Success Stories
       case '/portfolio/digital-transformation':
       case '#portfolio/digital-transformation':

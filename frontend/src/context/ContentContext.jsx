@@ -226,10 +226,116 @@ export const DEFAULT_CONTENT = {
           { label: "Our Gallery", href: "/our-gallery", show: true }
         ]
       },
-      { label: "Services", href: "/services", show: true },
+      {
+        label: "Services",
+        href: "/services",
+        show: true,
+        megaMenu: [
+          {
+            category: "Software Development",
+            items: [
+              { label: "Web Development", href: "/services/web-development" },
+              { label: "Web Application Dev", href: "/services/web-application-development" },
+              { label: "Mobile App Dev", href: "/services/mobile-app-development" },
+              { label: "Custom Software Dev", href: "/services/custom-software-development" },
+              { label: "SaaS Development", href: "/services/saas-development" },
+              { label: "ERP Development", href: "/services/erp-development" },
+              { label: "CRM Development", href: "/services/crm-development" },
+              { label: "API Development", href: "/services/api-development" },
+              { label: "Ecommerce Dev", href: "/services/ecommerce-web-development" }
+            ]
+          },
+          {
+            category: "Digital Marketing",
+            items: [
+              { label: "SEO", href: "/services/seo" },
+              { label: "Local SEO", href: "/services/local-seo" },
+              { label: "Technical SEO", href: "/services/technical-seo" },
+              { label: "AI SEO", href: "/services/ai-seo" },
+              { label: "Generative Engine Opt (GEO)", href: "/services/generative-engine-optimization" },
+              { label: "Google Ads / PPC", href: "/services/google-ads-ppc" },
+              { label: "Meta Ads", href: "/services/meta-ads" },
+              { label: "Social Media Marketing", href: "/services/social-media-marketing" },
+              { label: "Content Marketing", href: "/services/content-marketing" },
+              { label: "Lead Generation", href: "/services/lead-generation" },
+              { label: "Marketing Automation", href: "/services/marketing-automation" }
+            ]
+          },
+          {
+            category: "AI & Automation",
+            items: [
+              { label: "AI Consulting", href: "/services/ai-consulting" },
+              { label: "AI Strategy", href: "/services/ai-strategy" },
+              { label: "Generative AI Solutions", href: "/services/generative-ai-solutions" },
+              { label: "AI Integration", href: "/services/ai-integration" },
+              { label: "AI Agent Development", href: "/services/ai-agent-development" },
+              { label: "LLM Development", href: "/services/llm-development" },
+              { label: "AI Chatbot Development", href: "/services/ai-chatbot-development" },
+              { label: "Business Automation", href: "/services/business-automation" }
+            ]
+          },
+          {
+            category: "Design & Branding",
+            items: [
+              { label: "Branding", href: "/services/branding" },
+              { label: "Logo Design", href: "/services/logo-design" },
+              { label: "Graphic Design", href: "/services/graphic-design" },
+              { label: "UI/UX Design", href: "/services/ui-ux-design" },
+              { label: "Product Design", href: "/services/product-design" },
+              { label: "Website Design", href: "/services/website-design" }
+            ]
+          },
+          {
+            category: "Consulting",
+            items: [
+              { label: "IT Consulting", href: "/services/it-consulting" },
+              { label: "Software Consulting", href: "/services/software-consulting" },
+              { label: "Technology Consulting", href: "/services/technology-consulting" },
+              { label: "Digital Transformation Consulting", href: "/services/digital-transformation-consulting" }
+            ]
+          },
+          {
+            category: "Startup Solutions",
+            items: [
+              { label: "Startup Consulting", href: "/services/startup-consulting" },
+              { label: "MVP Development", href: "/services/mvp-development" },
+              { label: "Startup Branding", href: "/services/startup-branding" },
+              { label: "Product Strategy", href: "/services/product-strategy" },
+              { label: "Startup Technology Solutions", href: "/services/startup-technology-solutions" },
+              { label: "Startup Digital Growth", href: "/services/startup-digital-growth" }
+            ]
+          }
+        ]
+      },
       { label: "Career", href: "/career", show: true },
       { label: "Case Study", href: "/case-study", show: true },
-      { label: "Portfolio", href: "/portfolio", show: true },
+      {
+        label: "Our Work",
+        href: "#our-work",
+        show: true,
+        megaMenu: [
+          {
+            category: "Portfolio",
+            items: [
+              { label: "Software Development", href: "/portfolio/software-development" },
+              { label: "Digital Marketing", href: "/portfolio/digital-marketing" },
+              { label: "AI & Automation", href: "/portfolio/ai-automation" },
+              { label: "Design & Branding", href: "/portfolio/design-and-branding" },
+              { label: "Consulting", href: "/portfolio/consulting" },
+              { label: "Startup Solutions", href: "/portfolio/startup-solutions" }
+            ],
+            href: "/portfolio"
+          },
+          {
+            category: "Success Stories",
+            items: [
+              { label: "Case Studies", href: "/case-study" },
+              { label: "Our Clients", href: "/our-clients" }
+            ],
+            href: "/case-study"
+          }
+        ]
+      },
       { label: "Ventures", href: "/ventures", show: true },
       { label: "Contact", href: "/contact", show: true },
       { label: "Franchise", href: "/franchise", show: true }

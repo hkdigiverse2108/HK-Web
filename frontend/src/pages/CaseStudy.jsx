@@ -1,345 +1,492 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useContent } from '../context/ContentContext';
 import { navigateTo } from '../utils/navigation';
+import { DEFAULT_CASE_STUDIES, normalizeCaseStudy, findCaseStudy } from '../data/caseStudiesData';
 
-/* ────────────────────────── CONSULTANCY CASE STUDIES ────────────────────────── */
-const DEFAULT_CASES = [
-  {
-    id: 'vesper',
-    client: 'Vesper Luxury Living',
-    title: 'Cinematic Visual Sales Engine',
-    industry: 'Real Estate',
-    summary: 'We transformed Vesper\'s high-end property portal by integrating custom canvas scrubbing transitions, rendering 4K frame sequences that scroll smoothly on desktop and mobile. The cinematic experience increased buyer engagement dramatically.',
-    challenge: 'Vesper needed a property showcase that felt like a luxury brand experience, not a generic listing site. Their existing platform had poor mobile performance and lacked visual storytelling.',
-    solution: 'Built a custom canvas-based scroll scrub engine with optimized frame preloading, lazy-loaded 4K imagery, and GPU-accelerated transitions. Integrated interactive floor plans and virtual walkthrough modules.',
-    tech: ['React', 'Canvas API', 'GSAP', 'Vite', 'Three.js'],
-    img: '/media/images/casestudies/vesper.png',
-    metrics: [
-      { label: 'Conversion Rate', value: '+142%' },
-      { label: 'Avg. Time on Page', value: '4m 12s' },
-      { label: 'Load Time', value: '0.8s' }
-    ],
-    duration: '4 months',
-    color: 'amber',
-    accentColor: '#f59e0b',
-    glowColor: 'rgba(245,158,11,0.15)'
-  },
-  {
-    id: 'aerocrm',
-    client: 'AeroCRM Aviation',
-    title: 'Automated Operations Platform',
-    industry: 'Aviation',
-    summary: 'Replaced a fragmented array of legacy software sheets with a custom high-performance CRM, featuring automated emailers, booking schedules, vector notifications, and daily backups.',
-    challenge: 'AeroCRM was managing fleet operations across spreadsheets and disconnected tools, causing booking conflicts, delayed communications, and zero audit trails.',
-    solution: 'Architected a unified CRM with real-time booking conflict detection, automated email/SMS triggers, role-based dashboards, and end-to-end encrypted data backups running every 6 hours.',
-    tech: ['React', 'FastAPI', 'PostgreSQL', 'Docker', 'Redis'],
-    img: '/media/images/casestudies/aerocrm.png',
-    metrics: [
-      { label: 'Operational Efficiency', value: '+400%' },
-      { label: 'Booking Failures', value: '0%' },
-      { label: 'Manual Input Time', value: '-85%' }
-    ],
-    duration: '6 months',
-    color: 'blue',
-    accentColor: '#3b82f6',
-    glowColor: 'rgba(59,130,246,0.15)'
-  },
-  {
-    id: 'novadefi',
-    client: 'Nova DeFi',
-    title: 'Web3 Trading Platform & UX Overhaul',
-    industry: 'Fintech / Web3',
-    summary: 'Co-architected the complete user flow for Nova\'s decentralized finance platform, designing intuitive swap interfaces, wallet connectivity, and real-time portfolio dashboards.',
-    challenge: 'Nova\'s existing DeFi interface had a 60% user drop-off at the wallet connection step. Complex transaction flows confused first-time crypto users.',
-    solution: 'Redesigned the entire UX flow with progressive disclosure patterns, one-click wallet connect, real-time gas estimation, and visual transaction confirmations with animated feedback.',
-    tech: ['Next.js', 'Ethers.js', 'Solidity', 'The Graph', 'Framer Motion'],
-    img: '/media/images/casestudies/novadefi.png',
-    metrics: [
-      { label: 'Transaction Success', value: '+40%' },
-      { label: 'User Drop-off', value: '-60%' },
-      { label: 'Daily Active Users', value: '3x' }
-    ],
-    duration: '5 months',
-    color: 'purple',
-    accentColor: '#a855f7',
-    glowColor: 'rgba(168,85,247,0.15)'
-  },
-  {
-    id: 'corelogistics',
-    client: 'Core Logistics',
-    title: 'AI-Driven Supply Chain Matrix',
-    industry: 'Logistics',
-    summary: 'Constructed a custom supply chain optimization system from scratch, integrating AI-driven route prediction, real-time fleet tracking, and automated warehouse inventory management.',
-    challenge: 'Core Logistics was losing 20% of delivery efficiency due to manual route planning and lack of real-time visibility into fleet locations and warehouse stock levels.',
-    solution: 'Built an AI route optimizer using historical traffic and weather data, integrated GPS fleet tracking with geofence alerts, and automated inventory scanning with barcode/QR integration.',
-    tech: ['Python', 'TensorFlow', 'React', 'Google Maps API', 'PostgreSQL'],
-    img: '/media/images/casestudies/corelogistics.png',
-    metrics: [
-      { label: 'Delivery Efficiency', value: '+38%' },
-      { label: 'Fuel Cost Savings', value: '₹12L/yr' },
-      { label: 'Real-time Accuracy', value: '99.7%' }
-    ],
-    duration: '7 months',
-    color: 'emerald',
-    accentColor: '#10b981',
-    glowColor: 'rgba(16,185,129,0.15)'
-  },
-  {
-    id: 'pulsehealth',
-    client: 'Pulse MedTech',
-    title: 'HIPAA-Compliant Patient Portal',
-    industry: 'Healthcare',
-    summary: 'Designed and built a secure doctor-patient portal with encrypted medical records, automated appointment scheduling, video consultations, and digital prescription management.',
-    challenge: 'Pulse MedTech needed a patient management system that met strict HIPAA compliance while being intuitive enough for elderly patients to navigate without assistance.',
-    solution: 'Created an accessibility-first portal with large-text modes, voice-guided navigation, E2E encrypted data at rest and in transit, and automated appointment reminders via SMS and WhatsApp.',
-    tech: ['React', 'Express', 'MongoDB', 'WebRTC', 'Twilio'],
-    img: '/media/images/casestudies/pulsehealth.png',
-    metrics: [
-      { label: 'Patient Satisfaction', value: '4.9/5' },
-      { label: 'Booking Efficiency', value: '+200%' },
-      { label: 'Data Breach Incidents', value: '0' }
-    ],
-    duration: '5 months',
-    color: 'sky',
-    accentColor: '#0ea5e9',
-    glowColor: 'rgba(14,165,233,0.15)'
-  },
-  {
-    id: 'learnverse',
-    client: 'LearnVerse Academy',
-    title: 'Full-Stack LMS with Live Classrooms',
-    industry: 'EdTech',
-    summary: 'Built a scalable Learning Management System with live video classrooms, adaptive quiz engines, real-time progress tracking, and automated certificate generation for 50,000+ students.',
-    challenge: 'LearnVerse was using Zoom for classes and Google Sheets for tracking, losing student engagement data and unable to personalize the learning experience.',
-    solution: 'Developed a custom LMS with WebRTC-based live classrooms, adaptive quizzing that adjusts difficulty based on performance, gamified progress dashboards, and auto-generated PDF certificates.',
-    tech: ['Next.js', 'WebRTC', 'FastAPI', 'PostgreSQL', 'Redis'],
-    img: '/media/images/casestudies/learnverse.png',
-    metrics: [
-      { label: 'Student Retention', value: '+65%' },
-      { label: 'Course Completion', value: '94%' },
-      { label: 'Students Onboarded', value: '50K+' }
-    ],
-    duration: '6 months',
-    color: 'rose',
-    accentColor: '#f43f5e',
-    glowColor: 'rgba(244,63,94,0.15)'
-  }
-];
-
-export default function CaseStudy() {
+export default function CaseStudy({ dynamicSlug }) {
   const { content } = useContent();
   const sv = content?.site_settings?.section_visibility || {};
   if (sv.casestudy_list === false) return null;
 
-  const cases = (content?.case_studies || DEFAULT_CASES).map(c => {
-    const styleFallback = DEFAULT_CASES.find(x => x.id === c.slug || x.id === c.id) || DEFAULT_CASES[0];
-    return {
-      ...styleFallback,
-      ...c,
-      id: c.slug || c.id
-    };
+  // Merge CMS dynamic case studies with default case studies
+  const allCases = useMemo(() => {
+    const cmsList = Array.isArray(content?.case_studies) ? content.case_studies : [];
+    if (cmsList.length === 0) {
+      return DEFAULT_CASE_STUDIES.map(c => normalizeCaseStudy(c));
+    }
+
+    const combined = [...cmsList.map(c => normalizeCaseStudy(c))];
+    DEFAULT_CASE_STUDIES.forEach(def => {
+      const exists = combined.some(c => c.slug === def.slug || c.id === def.id || (c.aliases && c.aliases.includes(def.slug)));
+      if (!exists) {
+        combined.push(normalizeCaseStudy(def));
+      }
+    });
+    return combined;
+  }, [content?.case_studies]);
+
+  // Determine active slug from prop, search param, hash, or pathname
+  const [activeSlug, setActiveSlug] = useState(() => {
+    if (dynamicSlug) return dynamicSlug;
+    if (typeof window === 'undefined') return null;
+
+    const path = window.location.pathname || '';
+    const match = path.match(/^\/(?:case-study|case-studies)\/([^/?#]+)/);
+    if (match) return match[1];
+
+    const search = window.location.search;
+    if (search.includes('case=')) {
+      return new URLSearchParams(search).get('case');
+    }
+
+    const hash = window.location.hash;
+    if (hash.includes('?case=')) {
+      return hash.split('?case=')[1].split('&')[0];
+    }
+    const hashMatch = hash.match(/^#(?:case-study|case-studies)\/([^/?#]+)/);
+    if (hashMatch) return hashMatch[1];
+
+    return null;
   });
 
-  const [selectedCase, setSelectedCase] = useState(null);
+  // State for Main Listing Filters & Search
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Sync active slug with URL navigation
+  useEffect(() => {
+    const updateSlugFromUrl = () => {
+      if (dynamicSlug) {
+        setActiveSlug(dynamicSlug);
+        return;
+      }
+      const path = window.location.pathname || '';
+      const match = path.match(/^\/(?:case-study|case-studies)\/([^/?#]+)/);
+      if (match) {
+        setActiveSlug(match[1]);
+        return;
+      }
+
+      const search = window.location.search;
+      if (search.includes('case=')) {
+        setActiveSlug(new URLSearchParams(search).get('case'));
+        return;
+      }
+
+      const hash = window.location.hash;
+      if (hash.includes('?case=')) {
+        setActiveSlug(hash.split('?case=')[1].split('&')[0]);
+        return;
+      }
+      const hashMatch = hash.match(/^#(?:case-study|case-studies)\/([^/?#]+)/);
+      if (hashMatch) {
+        setActiveSlug(hashMatch[1]);
+        return;
+      }
+
+      setActiveSlug(null);
+    };
+
+    updateSlugFromUrl();
+    window.addEventListener('popstate', updateSlugFromUrl);
+    window.addEventListener('hashchange', updateSlugFromUrl);
+    return () => {
+      window.removeEventListener('popstate', updateSlugFromUrl);
+      window.removeEventListener('hashchange', updateSlugFromUrl);
+    };
+  }, [dynamicSlug]);
+
+  const activeCase = useMemo(() => {
+    if (!activeSlug) return null;
+    return findCaseStudy(allCases, activeSlug);
+  }, [allCases, activeSlug]);
 
   useEffect(() => {
-    const handleUrlState = () => {
-      const search = window.location.search;
-      const hash = window.location.hash;
-      let caseId = null;
-      if (search.includes('case=')) {
-        caseId = new URLSearchParams(search).get('case');
-      } else if (hash.includes('?case=')) {
-        caseId = hash.split('?case=')[1];
-      }
+    if (activeCase) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }, [activeCase]);
 
-      if (caseId) {
-        setSelectedCase(caseId);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        setSelectedCase(null);
-      }
-    };
-    handleUrlState();
-    window.addEventListener('popstate', handleUrlState);
-    window.addEventListener('hashchange', handleUrlState);
-    return () => {
-      window.removeEventListener('popstate', handleUrlState);
-      window.removeEventListener('hashchange', handleUrlState);
-    };
-  }, []);
+  const handleOpenCase = (slug) => {
+    navigateTo(`/case-studies/${slug}`);
+  };
 
-  if (selectedCase) {
-    const item = cases.find(c => c.id === selectedCase);
-    if (item) {
-      return (
-        <motion.div
-          key="detail-page"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4 }}
-          className="relative text-neutral-300 font-sans max-w-6xl mx-auto px-4 py-16 text-left min-h-screen"
-        >
-          {/* Background ambience */}
-          <div className="absolute top-[10%] right-1/4 w-[35vw] h-[35vw] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none" />
-          <div className="absolute top-[60%] left-1/4 w-[30vw] h-[30vw] rounded-full bg-purple-500/5 blur-[100px] pointer-events-none" />
+  const handleBackToList = () => {
+    navigateTo('/case-study');
+  };
 
-          {/* Back button */}
-          <button
-            onClick={() => navigateTo('/case-study')}
-            className="group flex items-center gap-2 mb-10 text-xs font-mono uppercase tracking-widest text-neutral-400 hover:text-white cursor-pointer transition-colors"
-          >
-            <span>← Back to Case Studies</span>
-          </button>
+  // ─────────────────────────────────────────────────────────────────────────────
+  // RENDER DYNAMIC SINGLE CASE STUDY (CLEAN, CONCISE, EDITORIAL)
+  // ─────────────────────────────────────────────────────────────────────────────
+  if (activeCase) {
+    const relatedCases = allCases
+      .filter(c => c.slug !== activeCase.slug && c.id !== activeCase.id)
+      .slice(0, 3);
 
-          {/* Hero Header */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16 relative z-10">
-            <div className="space-y-6">
-              <div className="flex gap-2">
-                <span className={`font-mono text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-lg border bg-${item.color}-500/10 text-${item.color}-400 border-${item.color}-500/20`}>
-                  {item.industry}
-                </span>
-                <span className="font-mono text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-lg border bg-white/5 text-neutral-400 border-white/10">
-                  {item.duration}
-                </span>
-              </div>
-              <div className="space-y-2">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-neutral-500 block">{item.client}</span>
-                <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">{item.title}</h1>
-              </div>
-              <p className="font-light text-neutral-400 text-sm sm:text-base leading-relaxed">{item.summary}</p>
-            </div>
-            
-            {/* Poster / Cover Image */}
-            <div className="relative aspect-video lg:aspect-[4/3] rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-              <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-            </div>
+    return (
+      <div className="bg-[#050508] text-neutral-300 font-sans min-h-screen relative overflow-hidden selection:bg-[#a8ce38] selection:text-black">
+        {/* Subtle Ambient Glow */}
+        <div className="fixed inset-0 bg-[url('/noise.png')] opacity-[0.03] pointer-events-none mix-blend-overlay z-50" />
+        <div className="absolute top-0 right-1/4 w-[50vw] h-[50vw] bg-blue-600/10 rounded-full filter blur-[140px] pointer-events-none -translate-y-1/2" />
+        <div className="absolute top-[40%] left-0 w-[45vw] h-[45vw] bg-emerald-600/5 rounded-full filter blur-[130px] pointer-events-none -translate-x-1/3" />
+
+        {/* Breadcrumb Navigation */}
+        <nav aria-label="Breadcrumb" className="pt-32 pb-6 px-6 max-w-5xl mx-auto relative z-20">
+          <ol className="flex items-center flex-wrap gap-2 text-xs font-mono text-neutral-500">
+            <li>
+              <button onClick={() => navigateTo('/')} className="hover:text-white transition-colors cursor-pointer">
+                Home
+              </button>
+            </li>
+            <li className="text-neutral-600">&gt;</li>
+            <li>
+              <button onClick={handleBackToList} className="hover:text-white transition-colors cursor-pointer">
+                Case Studies
+              </button>
+            </li>
+            <li className="text-neutral-600">&gt;</li>
+            <li className="text-[#a8ce38] font-semibold truncate max-w-xs sm:max-w-md">
+              {activeCase.title}
+            </li>
+          </ol>
+        </nav>
+
+        {/* HERO / HEADER */}
+        <header className="px-6 max-w-5xl mx-auto pb-12 relative z-10">
+          <div className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 mb-4 flex items-center gap-2">
+            <span>Case Study</span>
+            <span className="text-neutral-600">&middot;</span>
+            <span className="text-[#a8ce38]">{activeCase.industry}</span>
           </div>
 
-          {/* Metrics Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 border-t border-b border-white/5 py-10 relative z-10">
-            {(item.metrics || []).map((metric) => (
-              <div key={metric.label} className="p-6 rounded-2xl bg-white/[0.01] border border-white/5 hover:border-white/10 transition-colors text-center">
-                <span className={`font-display text-3xl sm:text-4xl font-extrabold text-${item.color}-400 block`}>{metric.value}</span>
-                <span className="font-mono text-[9px] uppercase tracking-wider text-neutral-500 mt-2 block">{metric.label}</span>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-[1.18] mb-6">
+            {activeCase.title}
+          </h1>
+
+          <p className="text-neutral-300 font-light text-base sm:text-lg leading-relaxed max-w-3xl mb-8">
+            {activeCase.lede}
+          </p>
+
+          {/* Clean Meta Strip */}
+          <div className="flex items-center gap-8 py-4 border-t border-b border-white/10">
+            <div>
+              <span className="text-[10px] uppercase font-mono text-neutral-500 block">Client</span>
+              <span className="text-sm font-medium text-white">{activeCase.client}</span>
+            </div>
+            <div className="w-px h-8 bg-white/10" />
+            <div>
+              <span className="text-[10px] uppercase font-mono text-neutral-500 block">Industry</span>
+              <span className="text-sm font-medium text-blue-400">{activeCase.industry}</span>
+            </div>
+          </div>
+        </header>
+
+        {/* HERO COVER MEDIA */}
+        {activeCase.coverImage && (
+          <section className="px-6 max-w-5xl mx-auto mb-16 relative z-10">
+            <div className="rounded-2xl overflow-hidden border border-white/10 bg-[#0c0d14] shadow-2xl">
+              <img
+                src={activeCase.coverImage}
+                alt={activeCase.title}
+                className="w-full h-auto object-cover max-h-[460px]"
+                loading="eager"
+              />
+            </div>
+          </section>
+        )}
+
+        {/* MAIN EDITORIAL CONTENT */}
+        <main className="px-6 max-w-5xl mx-auto space-y-16 pb-20 relative z-10">
+          {/* 01. CHALLENGE */}
+          <section className="border-t border-white/5 pt-12">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="font-mono text-xs font-bold text-[#a8ce38] bg-[#a8ce38]/10 px-2 py-0.5 rounded border border-[#a8ce38]/30">
+                01
+              </span>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                Challenge
+              </h2>
+            </div>
+
+            <div className="space-y-4 text-neutral-300 font-light text-base leading-relaxed max-w-3xl mb-8">
+              {activeCase.challenge.paragraphs.map((p, idx) => (
+                <p key={idx}>{p}</p>
+              ))}
+            </div>
+
+            {/* Optional Diagram */}
+            {activeCase.challenge.diagram && (
+              <div className="rounded-xl overflow-hidden border border-white/10 bg-[#0a0a0f] p-3 max-w-3xl shadow-lg">
+                <img
+                  src={activeCase.challenge.diagram}
+                  alt={activeCase.challenge.diagramAlt || "Challenge Architecture"}
+                  className="w-full h-auto rounded object-contain bg-black/40"
+                />
               </div>
-            ))}
-          </div>
+            )}
+          </section>
 
-          {/* Detailed Narrative */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-16 relative z-10">
-            <div className="space-y-4">
-              <h3 className="font-mono text-[10px] uppercase tracking-widest text-neutral-400 font-bold">// The Challenge</h3>
-              <p className="font-light text-neutral-300 text-sm leading-relaxed whitespace-pre-wrap">{item.challenge}</p>
+          {/* 02. OUR SOLUTION */}
+          <section className="border-t border-white/5 pt-12">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="font-mono text-xs font-bold text-[#a8ce38] bg-[#a8ce38]/10 px-2 py-0.5 rounded border border-[#a8ce38]/30">
+                02
+              </span>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                Our Solution
+              </h2>
             </div>
-            <div className="space-y-4">
-              <h3 className="font-mono text-[10px] uppercase tracking-widest text-neutral-400 font-bold">// Our Solution</h3>
-              <p className="font-light text-neutral-300 text-sm leading-relaxed whitespace-pre-wrap">{item.solution}</p>
-            </div>
-          </div>
 
-          {/* Tech Stack Used */}
-          <div className="space-y-4 border-t border-white/5 pt-10 relative z-10">
-            <h3 className="font-mono text-[10px] uppercase tracking-widest text-neutral-400 font-bold">// Technologies Utilized</h3>
-            <div className="flex flex-wrap gap-2.5">
-              {(item.tech || []).map(t => (
-                <span key={t} className={`font-mono text-[10px] uppercase tracking-widest text-${item.color}-400 bg-${item.color}-500/5 border border-${item.color}-500/15 px-4 py-2 rounded-xl`}>
-                  {t}
+            <p className="text-neutral-300 font-light text-base leading-relaxed mb-6 max-w-3xl">
+              {activeCase.solution.intro} The approach follows one principle:{' '}
+              <strong className="text-white font-semibold">{activeCase.solution.principle}</strong>
+            </p>
+
+            {/* Concise Glow-Bullet List */}
+            <ul className="space-y-3.5 max-w-3xl">
+              {activeCase.solution.points.map((pt, idx) => (
+                <li key={idx} className="flex items-start gap-3 text-sm sm:text-base text-neutral-300 font-light leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#a8ce38] mt-2 shrink-0 shadow-[0_0_8px_rgba(168,206,56,0.6)]" />
+                  <span>
+                    <strong className="text-white font-semibold">{pt.label}:</strong> {pt.text}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* 03. BUSINESS IMPACT */}
+          <section className="border-t border-white/5 pt-12">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="font-mono text-xs font-bold text-[#a8ce38] bg-[#a8ce38]/10 px-2 py-0.5 rounded border border-[#a8ce38]/30">
+                03
+              </span>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                Business Impact
+              </h2>
+            </div>
+
+            <p className="text-neutral-300 font-light text-base leading-relaxed mb-6 max-w-3xl">
+              {activeCase.businessImpact.intro}
+            </p>
+
+            <ul className="space-y-3.5 max-w-3xl">
+              {activeCase.businessImpact.points.map((pt, idx) => (
+                <li key={idx} className="flex items-start gap-3 text-sm sm:text-base text-neutral-300 font-light leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-2 shrink-0 shadow-[0_0_8px_rgba(96,165,250,0.6)]" />
+                  <span>{pt}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* 04. SERVICES DELIVERED */}
+          <section className="border-t border-white/5 pt-12">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="font-mono text-xs font-bold text-[#a8ce38] bg-[#a8ce38]/10 px-2 py-0.5 rounded border border-[#a8ce38]/30">
+                04
+              </span>
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                Services Delivered
+              </h2>
+            </div>
+
+            <div className="flex flex-wrap gap-2.5 max-w-3xl pt-2">
+              {activeCase.servicesDelivered.map((serv, idx) => (
+                <span
+                  key={idx}
+                  className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/10 text-neutral-200 text-xs sm:text-sm font-medium hover:border-[#a8ce38]/50 hover:text-white transition-colors cursor-default"
+                >
+                  {serv}
                 </span>
               ))}
             </div>
+          </section>
+        </main>
+
+        {/* RELATED WORK / MORE WORK LIKE THIS */}
+        {relatedCases.length > 0 && (
+          <section className="py-16 px-6 max-w-5xl mx-auto border-t border-white/10 relative z-10">
+            <div className="mb-8">
+              <span className="font-mono text-xs uppercase tracking-widest text-neutral-500 block mb-1">
+                + Related Case Studies
+              </span>
+              <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white">
+                More Work Like This
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {relatedCases.map((rc) => (
+                <div
+                  key={rc.slug}
+                  onClick={() => handleOpenCase(rc.slug)}
+                  className="rounded-2xl bg-[#090a10] border border-white/5 hover:border-white/20 transition-all overflow-hidden group cursor-pointer"
+                >
+                  <div className="h-40 overflow-hidden relative bg-black/60">
+                    <img
+                      src={rc.coverImage}
+                      alt={rc.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <span className="px-2 py-0.5 rounded bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white">
+                        {rc.industry}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-5">
+                    <h4 className="font-display text-base font-bold text-white mb-2 group-hover:text-[#a8ce38] transition-colors line-clamp-2">
+                      {rc.title}
+                    </h4>
+                    <p className="text-neutral-400 text-xs font-light leading-relaxed line-clamp-2 mb-4">
+                      {rc.lede}
+                    </p>
+                    <span className="text-xs font-mono text-[#a8ce38] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                      View Case Study &rarr;
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* CLEAN CTA */}
+        <section className="pb-24 px-6 max-w-5xl mx-auto relative z-10">
+          <div className="rounded-2xl p-8 sm:p-10 bg-gradient-to-r from-blue-950/30 via-[#0a0f18] to-emerald-950/30 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+              <h3 className="font-display text-xl sm:text-2xl font-bold text-white mb-1">
+                Have a similar project in mind?
+              </h3>
+              <p className="text-neutral-400 text-sm font-light">
+                Let&apos;s discuss how our engineering team can build your solution.
+              </p>
+            </div>
+            <button
+              onClick={() => navigateTo('/contact')}
+              className="px-7 py-3.5 rounded-xl bg-white text-black font-semibold text-sm hover:bg-[#a8ce38] transition-all shrink-0 cursor-pointer shadow-lg"
+            >
+              Get In Touch &rarr;
+            </button>
           </div>
-        </motion.div>
-      );
-    }
+        </section>
+      </div>
+    );
   }
 
-  return (
-    <div className="relative text-neutral-300 font-sans">
-      {/* Background ambience */}
-      <div className="absolute top-[10%] right-1/4 w-[35vw] h-[35vw] rounded-full bg-blue-500/5 blur-[120px] pointer-events-none" />
-      <div className="absolute top-[60%] left-1/4 w-[30vw] h-[30vw] rounded-full bg-purple-500/5 blur-[100px] pointer-events-none" />
+  // ─────────────────────────────────────────────────────────────────────────────
+  // RENDER MAIN CASE STUDIES DIRECTORY / HUB (WHEN NO SLUG SELECTED)
+  // ─────────────────────────────────────────────────────────────────────────────
+  const categories = ['All', ...Array.from(new Set(allCases.map(c => c.industry)))];
 
-      {/* ── Header ── */}
-      <div className="text-center mb-20 pt-8 relative z-10">
-        <span className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.4em] text-neutral-500 font-light block mb-3">
-          // Consultancy Impact
+  const filteredCases = allCases.filter(item => {
+    const matchesCategory = activeCategory === 'All' || item.industry === activeCategory;
+    const matchesSearch = searchQuery === ''
+      || item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      || item.client.toLowerCase().includes(searchQuery.toLowerCase())
+      || item.industry.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  return (
+    <div className="relative text-neutral-300 font-sans min-h-screen bg-[#050508] overflow-hidden selection:bg-[#a8ce38] selection:text-black pb-24">
+      {/* Background ambience */}
+      <div className="fixed inset-0 bg-[url('/noise.png')] opacity-[0.03] pointer-events-none mix-blend-overlay z-50" />
+      <div className="absolute top-[10%] right-1/4 w-[40vw] h-[40vw] rounded-full bg-blue-500/10 blur-[130px] pointer-events-none" />
+
+      {/* Header */}
+      <div className="text-center pt-28 pb-12 px-6 max-w-4xl mx-auto relative z-10">
+        <span className="font-mono text-xs uppercase tracking-widest text-[#a8ce38] block mb-3">
+          // Client Impact &amp; Engineering Case Work
         </span>
-        <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
+        <h1 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
           Case Studies
         </h1>
-        <p className="font-light text-neutral-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-          Deep dives into how our consultancy, design aesthetics, and custom engineering solved complex operational and brand challenges for our clients.
+        <p className="font-light text-neutral-400 text-base max-w-2xl mx-auto leading-relaxed">
+          Explore how we solved critical technical challenges, built compliant architectures, and accelerated digital growth for our clients.
         </p>
       </div>
 
-      {/* ── Case Study Cards ── */}
-      <div className="flex flex-col gap-16 max-w-[1600px] w-full mx-auto px-4 relative z-10 mb-20">
-        {cases.map((item, index) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="group"
-          >
-            <div 
-              onClick={() => navigateTo('/case-study?case=' + item.id)}
-              className="bg-[#050508]/60 backdrop-blur-md border border-white/5 rounded-3xl overflow-hidden hover:border-white/15 transition-all duration-500 shadow-2xl relative cursor-pointer text-left"
-              style={{ boxShadow: `0 20px 60px -20px ${item.glowColor}` }}
+      {/* Filter Tabs & Search */}
+      <section className="px-6 max-w-6xl mx-auto mb-10 relative z-10">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pb-6 border-b border-white/5">
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                  activeCategory === cat
+                    ? 'bg-white text-black font-semibold'
+                    : 'bg-white/5 hover:bg-white/10 text-neutral-400 hover:text-white border border-white/5'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div className="w-full sm:w-64">
+            <input
+              type="text"
+              placeholder="Search case studies..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-3.5 py-2 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-white placeholder-neutral-500 focus:outline-none focus:border-[#a8ce38]/50 transition-colors"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Case Studies Grid */}
+      <section className="px-6 max-w-6xl mx-auto relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCases.map((item) => (
+            <div
+              key={item.slug || item.id}
+              onClick={() => handleOpenCase(item.slug)}
+              className="group rounded-2xl bg-[#090a10] border border-white/5 hover:border-white/20 transition-all flex flex-col justify-between overflow-hidden cursor-pointer"
             >
-              {/* Image + Overlay */}
-              <div className="relative h-64 sm:h-80 overflow-hidden">
-                <img 
-                  src={item.img} 
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-[#050508]/60 to-transparent" />
-                <div className="absolute top-6 left-6 flex gap-2">
-                  <span className={`font-mono text-[8px] uppercase tracking-widest px-3 py-1.5 rounded-lg border bg-${item.color}-500/10 text-${item.color}-400 border-${item.color}-500/20`}>
-                    {item.industry}
-                  </span>
-                  <span className="font-mono text-[8px] uppercase tracking-widest px-3 py-1.5 rounded-lg border bg-white/5 text-neutral-400 border-white/10">
-                    {item.duration}
-                  </span>
+              <div>
+                <div className="h-44 overflow-hidden relative bg-black/60">
+                  <img
+                    src={item.coverImage}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span className="px-2.5 py-0.5 rounded bg-black/70 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white">
+                      {item.industry}
+                    </span>
+                  </div>
                 </div>
-                <div className="absolute bottom-6 left-6 right-6">
-                  <span className="font-mono text-[9px] uppercase tracking-widest text-neutral-400 block mb-2">{item.client}</span>
-                  <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{item.title}</h2>
+
+                <div className="p-6">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-neutral-500 block mb-1.5">
+                    {item.client}
+                  </span>
+                  <h3 className="font-display text-lg font-bold text-white mb-2.5 group-hover:text-[#a8ce38] transition-colors line-clamp-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-neutral-400 text-xs sm:text-sm font-light leading-relaxed line-clamp-3">
+                    {item.lede}
+                  </p>
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="p-8 space-y-6">
-                <p className="font-light text-neutral-300 text-sm leading-relaxed">{item.summary}</p>
-
-                {/* Metrics Row */}
-                <div className="grid grid-cols-3 gap-4">
-                  {(item.metrics || []).map((metric) => (
-                    <div key={metric.label} className="text-center p-4 rounded-xl bg-white/[0.02] border border-white/5">
-                      <span className={`font-display text-xl sm:text-2xl font-extrabold text-${item.color}-400 block`}>{metric.value}</span>
-                      <span className="font-mono text-[8px] uppercase tracking-wider text-neutral-500 mt-1 block">{metric.label}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Expand Button */}
-                <div
-                  className="font-mono text-[10px] uppercase tracking-widest text-white/60 hover:text-white transition-all flex items-center gap-2"
-                >
-                  <span>[ View Full Case Study ]</span>
-                  <span className="text-xs">→</span>
+              <div className="p-6 pt-0">
+                <div className="w-full py-2.5 rounded-lg bg-white/5 group-hover:bg-[#a8ce38] group-hover:text-black border border-white/10 text-white font-mono text-xs font-semibold transition-all flex items-center justify-center gap-2">
+                  <span>View Case Study</span>
+                  <span>&rarr;</span>
                 </div>
               </div>
             </div>
-          </motion.div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
