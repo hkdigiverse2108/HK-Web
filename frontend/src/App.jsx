@@ -241,7 +241,10 @@ function PreviewContainer({ currentHash }) {
         return <AboutUs />;
       case '/awards-achievements':
         return <Awards />;
+      case '/blog':
+      case '#blog':
       case '/blogs':
+      case '#blogs':
         return <Blogs />;
       case '/our-gallery':
         return <Gallery />;
@@ -441,7 +444,8 @@ const PAGE_TITLES = {
   '/our-culture': 'Our Culture | HariKrushn DigiVerse LLP',
   '/about-us': 'About Us | HariKrushn DigiVerse LLP',
   '/awards-achievements': 'Awards & Achievements | HariKrushn DigiVerse LLP',
-  '/blogs': 'Blogs & Insights | HariKrushn DigiVerse LLP',
+  '/blogs': 'Software Technology & Business Blogs | HariKrushn DigiVerse',
+  '/blog': 'Software Technology & Business Blogs | HariKrushn DigiVerse',
   '/our-gallery': 'Our Gallery | HariKrushn DigiVerse LLP',
   '/services': 'Services | HariKrushn DigiVerse LLP',
   '/industry': 'Industries We Serve | HariKrushn DigiVerse LLP',
@@ -559,7 +563,8 @@ const PAGE_DESCRIPTIONS = {
   '/our-culture': 'Explore the culture code, values, and engineering standards at HariKrushn DigiVerse LLP: high trust, absolute ownership, and zero generic code.',
   '/about-us': 'About HariKrushn DigiVerse LLP — a premier full-cycle technology partnership building transformative software and intelligent digital solutions.',
   '/awards-achievements': 'Awards, industry recognitions, and milestone achievements earned by HariKrushn DigiVerse across global digital engineering categories.',
-  '/blogs': 'Authoritative engineering articles, AI research breakthroughs, digital growth guides, and system design insights from the HK DigiVerse team.',
+  '/blogs': 'Stay updated with software engineering breakthroughs, enterprise AI, system design, and digital business transformation insights from HariKrushn DigiVerse.',
+  '/blog': 'Stay updated with software engineering breakthroughs, enterprise AI, system design, and digital business transformation insights from HariKrushn DigiVerse.',
   '/our-gallery': 'Visual tour of our state-of-the-art engineering studios, sprint review spaces, collaborative war rooms, and team events.',
   '/services': 'Comprehensive technology services index: enterprise software engineering, performance marketing, AI automation, and technology advisory.',
   '/industry': 'Tailored digital solutions engineered for Fintech, Healthcare, E-Commerce, Logistics, Automotive, Media, and Industrial manufacturing.',
@@ -856,6 +861,17 @@ function App() {
       return <CaseStudy dynamicSlug={slug} />;
     }
 
+    // Dynamic Blog Deep-Dive Routes (/blog/:slug or /blogs/:slug)
+    if (
+      baseRoute.startsWith('/blog/') ||
+      baseRoute.startsWith('/blogs/') ||
+      baseRoute.startsWith('#blog/') ||
+      baseRoute.startsWith('#blogs/')
+    ) {
+      const slug = baseRoute.replace(/^#?\/(?:blog|blogs)\//, '').split('?')[0];
+      return <Blogs initialSlug={slug} />;
+    }
+
     switch (baseRoute) {
       case '/admin':
       case '#admin':
@@ -879,6 +895,8 @@ function App() {
       case '/awards-achievements':
       case '#awards-achievements':
         return <Awards />;
+      case '/blog':
+      case '#blog':
       case '/blogs':
       case '#blogs':
         return <Blogs />;
