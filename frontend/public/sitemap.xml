@@ -73,6 +73,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://harikrushndigiverse.com/blog</loc>
+    <lastmod>2026-10-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://harikrushndigiverse.com/industry</loc>
     <lastmod>2026-10-11</lastmod>
     <changefreq>monthly</changefreq>

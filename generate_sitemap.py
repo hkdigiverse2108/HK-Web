@@ -13,6 +13,7 @@ pages = [
     ('/career', 0.8, 'weekly'),
     ('/contact', 0.9, 'monthly'),
     ('/blogs', 0.8, 'daily'),
+    ('/blog', 0.8, 'daily'),
     ('/industry', 0.8, 'monthly'),
     ('/our-gallery', 0.7, 'monthly'),
     ('/awards-achievements', 0.7, 'monthly'),
